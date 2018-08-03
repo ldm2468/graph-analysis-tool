@@ -1,65 +1,32 @@
-/*
- * Created by baneling100 on 2018-08-02.
- */
-
 #ifndef GRAPH_ANALYSIS_TOOL_GRAPH_H
 #define GRAPH_ANALYSIS_TOOL_GRAPH_H
 
+// TODO: stl의 unordered_map을 대체할 해시테이블 개발 필요
 // licensed under GNU General Public License v3.0
-#include <list>
-#include <hash_set>
-#include <hash_map>
-#include <string>
+#include <unordered_map>
 
-class DGraph; //   directed graph
-class UGraph; // undirected graph
-
-struct Vertex_Label;
-struct Edge_Label;
-struct Vertex;
-struct Edge;
+// TODO: 다른 종류의 graph도 추후에 개발 필요
+class DSGraph; // directed simple graph having no loop, no multiple edge
 
 
-struct Vertex_Label {
-	std::string label;
-	std::list <Vertex *> vertices;
-};
-
-struct Edge_Label {
-	std::string label;
-	std::list <Edge *> edges;
-};
-
-struct Vertex {
-	std::string id;
-	std::list <Vertex_Label *> labels;
-	std::list <Edge *> edges;
-};
-
-struct Edge {
-	std::string id;
-	std::list <Edge_Label *> labels;
-	Vertex from;
-	Vertex to;
-};
-
-class DGraph {
+class DSGraph { // directed simple graph
 private:
-	__gnu_cxx::hash_map <std::string, Vertex *> id_to_vertex;
-	__gnu_cxx::hash_map <std::string, Edge *>   id_to_edge;
+	unordered_map <VId, Vertex *> id_to_vertex;
+	unordered_map <EId, Edge *>   id_to_edge;
 
-	__gnu_cxx::hash_map <std::string, Vertex_Label *> vertex_label_table;
-	__gnu_cxx::hash_map <std::string, Edge_Label *>     edge_label_table;
+	unordered_map <VLbl, Vertex_Label *> vertex_label_table;
+	unordered_map <ELbl, Edge_Label *>     edge_label_table;
 
-	__gnu_cxx::hash_set <std::pair <std::string, std::string>> is_connected;
+	unordered_map <std::pair <VId, VId>, Edge *> id_pair_to_edge;
 
 public:
-	DGraph();
-	// TODO: 각종 함수들을 추가해야 함
-};
+	// TODO: 생성자, 파괴자, 복사 생성자, 각종 method들에 대한 생성 필요
+	DSGraph();
 
-// TODO: undirected graph에 대해서도 자료구조 선언이 필요
-class UGraph {
+	void insert_vertex(VId id, VLbl label);
+	void insert_edge(EId id, ELbl label, VId from, VId to, int wgt);
+	void delete_vertex(VId id);
+	void delete_edge(EId id);
 };
 
 #endif // GRAPH_ANALYSIS_TOOL_GRAPH_H
