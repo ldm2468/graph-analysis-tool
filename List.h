@@ -4,6 +4,10 @@
 // 템플릿으로 list 구현
 // 출처 : https://gist.github.com/harish-r/873ce92a91bb7b685b81
 
+
+// node class를 list class 내의 private struct로 선언해서 구현하는게 더 낫지 않을까?
+// 방법은?
+
 <template T>
 class Node
 {
