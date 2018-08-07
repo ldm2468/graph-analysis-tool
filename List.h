@@ -8,7 +8,7 @@
 class Node
 {
 public:
-    Node* next;
+    Node<T>* next;
     T data;
     
     Node(T data);
@@ -38,6 +38,7 @@ List<T>::List(){
     this->head = NULL;
 }
 
+// 앞에 삽입
 void List<T>::add(T data){
     Node* node = new Node(data);
     node->next = this->head;
