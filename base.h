@@ -1,5 +1,5 @@
-#ifndef GRAPH_ANALYSIS_TOOL_BASE_H
-#define GRAPH_ANALYSIS_TOOL_BASE_H
+#ifndef BASE_H
+#define BASE_H
 
 // TODO: stl의 list를 대체할 연결리스트 개발 필요
 // licensed under GNU General Public License v3.0
@@ -41,4 +41,4 @@ struct Edge {
 	IWgt weight; // TODO: 가중치에 대해서 int 뿐만 아니라 long long이나 double 등 여러 가지 구현 필요, typedef로 관리 필요
 };
 
-#endif //GRAPH_ANALYSIS_TOOL_BASE_H
+#endif // BASE_H

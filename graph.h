@@ -1,5 +1,5 @@
-#ifndef GRAPH_ANALYSIS_TOOL_GRAPH_H
-#define GRAPH_ANALYSIS_TOOL_GRAPH_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
 // TODO: stl의 unordered_map을 대체할 해시테이블 개발 필요
 // licensed under GNU General Public License v3.0
@@ -29,4 +29,4 @@ public:
 	void delete_edge(EId id);
 };
 
-#endif // GRAPH_ANALYSIS_TOOL_GRAPH_H
+#endif // GRAPH_H
