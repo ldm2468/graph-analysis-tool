@@ -8,7 +8,7 @@
 // node class를 list class 내의 private struct로 선언해서 구현하는게 더 낫지 않을까?
 // 방법은?
 
-<template T>
+template <typename T>
 class Node
 {
 public:
@@ -23,7 +23,7 @@ Node<T>::Node(T data) : data(data)
   next=NULL; 
 }
 
-<template T>
+template <typename T>
 class List
 {
 public:
@@ -43,13 +43,12 @@ List<T>::List(){
 }
 
 // 앞에 삽입
-void List<T>::add(T data){
+void List<T>::add(T data)
+{
     Node* node = new Node(data);
     node->next = this->head;
     this->head = node;
     this->length++;
 }
-
-
 
 #endif
