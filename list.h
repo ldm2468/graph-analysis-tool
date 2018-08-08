@@ -32,6 +32,7 @@ public:
 
     List();
     void add(T data);
+    void print();
     
     // iterator 구현 필요
     
@@ -49,6 +50,11 @@ void List<T>::add(T data)
     node->next = this->head;
     this->head = node;
     this->length++;
+}
+
+void print()
+{
+       
 }
 
 #endif
