@@ -2,6 +2,7 @@
 #define BASE_H
 
 // TODO: stl의 list를 대체할 연결리스트 개발 필요
+// stl의 list를 이용하여 구현해보기로 방향 전환
 // licensed under GNU General Public License v3.0
 #include <list>
 
