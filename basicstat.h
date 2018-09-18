@@ -3,7 +3,7 @@
 
 namespace snu {
 
-	void basicstat(Graph t);
+	int * basicstat(Graph graph, int stat[]);
 }
 
 #endif // BASICSTAT_H
