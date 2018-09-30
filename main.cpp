@@ -2,10 +2,11 @@
 
 int main(int argc, char **argv) {
 
-	// TODO: Pajek 파일을 입력받아 형식에 따라 적절히 Graph 클래스를 생성한다.
-	// TODO: console로 원하는 통계량을 입력받고 그 값을 출력한다.
+	// TODO: 이 함수에서 만든 라이브러리를 실험한다
+	snu::Graph *graph = new snu::Graph();
+	struct snu::basic_result result;
 
-	snu::Graph *t = new snu::DSGraph();
+	snu::basicstat(graph, result);
 
 	return 0;
 }

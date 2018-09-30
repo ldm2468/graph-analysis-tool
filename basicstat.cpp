@@ -2,11 +2,8 @@
 #include "graph.h"
 
 namespace snu {
-	void basicstat(Graph t, int[] stat) {
 	
-	
+	void basicstat(Graph* graph, int stat[]) {
+		
 	}
-
-
-
 }

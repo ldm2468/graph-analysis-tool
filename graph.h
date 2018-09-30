@@ -8,9 +8,9 @@ namespace snu {
 
 	class Graph; // graph interface
 
-	class DSGraph; //   directed simple graph
+	//class DSGraph; //   directed simple graph
 	//class DMGraph; //   directed multi  graph
-	class USGraph; // undirected simple graph
+	//class USGraph; // undirected simple graph
 	//class UMGraph; // undirected multi  graph
 	// simple: no multiple edges
 
@@ -34,28 +34,29 @@ namespace snu {
 		//class DEdge;
 
 		class Vertex {
-		private:
+		public:
 			VId id;
 			std::list <Vertex_Label *> labels;
 			std::list <Edge *> edges;
 		};
 
 		class Edge {
-		private:
+		public:
 			EId id;
 			std::list <Edge_Label *> labels;
+			Wgt wgt;
 			Vertex * from;
 			Vertex * to;
 		};
 
 		class Vertex_Label {
-		private:
+		public:
 			VLbl label;
 			std::list <Vertex *> vertices;
 		};
 
 		class Edge_Label {
-		private:
+		public:
 			ELbl label;
 			std::list <Edge *> edges;
 		};
@@ -69,13 +70,13 @@ namespace snu {
 		//std::unordered_map <std::pair <VId, VId>, Edge *> id_pair_to_edge;
 
 	public:
-		Graph(); // constructor
+		//Graph(); // do not need constructor
 		~Graph(); // destructor
 		void add_vertex(VId id, Lblc num, VLbl lbl[]); // add vertex
 		void add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt weight); // add edge
 
 		// friend function
-		friend int * basicstat(Graph graph, int stat[]);
+		friend void basicstat(Graph* graph, struct basic_result result);
 	};
 
 
