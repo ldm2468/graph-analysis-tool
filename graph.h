@@ -8,9 +8,9 @@ namespace snu {
 
 	class Graph; // graph interface
 
-	//class DSGraph; //   directed simple graph
+	class DSGraph; //   directed simple graph
 	//class DMGraph; //   directed multi  graph
-	//class USGraph; // undirected simple graph
+	class USGraph; // undirected simple graph
 	//class UMGraph; // undirected multi  graph
 	// simple: no multiple edges
 
@@ -21,7 +21,7 @@ namespace snu {
 		typedef int VLbl; // vertex label
 		typedef int ELbl; // edge   label
 		typedef int Wgt; // integer type weight
-		typedef int Lblc; // label count 
+		typedef int Lblc; // label count
 		//typedef long long LWgt; // long long type weight
 		//typedef double DWgt; // double type weight
 
@@ -76,19 +76,19 @@ namespace snu {
 		void add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt weight); // add edge
 
 		// friend function
-		friend void basicstat(Graph* graph, struct basic_result result);
+		friend void basicstat(Graph *graph, struct basic_result result);
 	};
 
 
 
-	/*class DSGraph: public Graph { // directed simple graph
-	};*/
+	class DSGraph: public Graph { // directed simple graph
+	};
 
 	/*class DMGraph: public Graph {
 	};*/
 
-	/*class USGraph: public Graph {
-	};*/
+	class USGraph: public Graph {
+	};
 
 	/*class UMGraph: public Graph {
 	};*/

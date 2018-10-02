@@ -53,5 +53,6 @@ namespace snu {
 		e->from = id_to_vertex[from]; // set from
 		e->to = id_to_vertex[to]; // set to
 		e->wgt = wgt; // set weight
+		e->from->edges.push_back(e); // insert edge in vertex
 	}
 }
