@@ -10,7 +10,9 @@ namespace snu {
 		for(auto it = edge_label_table.begin(); it != edge_label_table.end(); it++) delete it->second;
 	}
 
-	void Graph::add_vertex(VId id, Lblc num, VLbl lbl[]) {
+	int Graph::add_vertex(VId id, Lblc num, VLbl lbl[]) {
+		if(id_to_vertex.count(id)) return 1; // error: graph already has a vertex having same id
+
 		Vertex *v = new Vertex; // create vertex class
 		v->id = id; // set id
 		// set labels
@@ -28,10 +30,14 @@ namespace snu {
 			vl->vertices.push_back(v);
 			v->labels.push_back(vl);
 		}
+
+		return 0;
 	}
 
-	void Graph::add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt wgt) {
-		/* TODO: from과 to에 해당하는 vertex class가 존재하지 않을 경우 오류를 발생시켜야 한다. */
+	int Graph::add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt wgt) {
+		if(id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
+			return 1;
+		// error: already have edge having same id or no from or to vertex
 
 		Edge *e = new Edge; // create edge class
 		e->id = id; // set id
@@ -53,6 +59,17 @@ namespace snu {
 		e->from = id_to_vertex[from]; // set from
 		e->to = id_to_vertex[to]; // set to
 		e->wgt = wgt; // set weight
-		e->from->edges.push_back(e); // insert edge in vertex
+		e->from->edges.push_back(e); // insert edge in from vertex
+		
+		return 0;
+	}
+
+	int USGraph::add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt wgt) {
+		if(Graph::add_edge(id, num, lbl, from, to, wgt)) return 1; // there is error
+
+		Edge *e = id_to_edge[id];
+		e->to->edges.push_back(e); // insert edge in to vertex
+
+		return 0;
 	}
 }

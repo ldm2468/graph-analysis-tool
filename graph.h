@@ -9,8 +9,8 @@ namespace snu {
 	class Graph; // graph interface
 
 	class DSGraph; //   directed simple graph
-	//class DMGraph; //   directed multi  graph
 	class USGraph; // undirected simple graph
+	//class DMGraph; //   directed multi  graph
 	//class UMGraph; // undirected multi  graph
 	// simple: no multiple edges
 
@@ -18,8 +18,8 @@ namespace snu {
 	protected:
 		typedef int VId;  // vertex id
 		typedef int EId;  // edge   id
-		typedef int VLbl; // vertex label
-		typedef int ELbl; // edge   label
+		typedef std::string VLbl; // vertex label
+		typedef std::string ELbl; // edge   label
 		typedef int Wgt; // integer type weight
 		typedef int Lblc; // label count
 		//typedef long long LWgt; // long long type weight
@@ -29,9 +29,6 @@ namespace snu {
 		class Edge;
 		class Vertex_Label;
 		class Edge_Label;
-		//class IEdge;
-		//class LEdge;
-		//class DEdge;
 
 		class Vertex {
 		public:
@@ -44,9 +41,10 @@ namespace snu {
 		public:
 			EId id;
 			std::list <Edge_Label *> labels;
-			Wgt wgt;
 			Vertex * from;
 			Vertex * to;
+			Wgt wgt;
+			// If graph is undirected, then there is no difference between from and to.
 		};
 
 		class Vertex_Label {
@@ -60,7 +58,7 @@ namespace snu {
 			ELbl label;
 			std::list <Edge *> edges;
 		};
-		
+	
 		std::unordered_map <VId, Vertex *> id_to_vertex;
 		std::unordered_map <EId, Edge *>   id_to_edge;
 
@@ -69,26 +67,39 @@ namespace snu {
 
 		//std::unordered_map <std::pair <VId, VId>, Edge *> id_pair_to_edge;
 
-	public:
-		//Graph(); // do not need constructor
-		~Graph(); // destructor
-		void add_vertex(VId id, Lblc num, VLbl lbl[]); // add vertex
-		void add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt weight); // add edge
+	protected:
+		Graph(); // prevent from creating Graph class and allow creating graph in subclass
 
-		// friend function
-		friend void basicstat(Graph *graph, struct basic_result result);
+	public:
+		~Graph(); // destructor
+		int add_vertex(VId id, Lblc num, VLbl lbl[]); // add vertex
+		// if vertex is created normally, then return 0
+		// if error occurs, then return 1
+
+		// directed form of add_edge
+		int add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt weight); // add edge
+		// if edge is created normally, then return 0
+		// if error occurs, then return 1
 	};
 
 
 
 	class DSGraph: public Graph { // directed simple graph
+		public:
+		// friend function
+		//friend int basic_stat(DSGraph *graph, struct DSResult *result);
+	};
+
+	class USGraph: public Graph {
+		public:
+			int add_edge(EId id, Lblc num, ELbl lbl[], VId from, VId to, Wgt weight); // add edge
+
+		// friend function
+		//friend int basic_stat(USGraph *graph, struct USResult *result);
 	};
 
 	/*class DMGraph: public Graph {
 	};*/
-
-	class USGraph: public Graph {
-	};
 
 	/*class UMGraph: public Graph {
 	};*/
