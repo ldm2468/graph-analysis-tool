@@ -34,6 +34,10 @@ namespace snu {
 		return 0;
 	}
 
+	int Graph::add_vertex(Vid id, std::vector <Vlabel> lbl) {
+		 return add_vertex(id, lbl.size(), lbl.data());
+	}
+
 	int Graph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
 		if(id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
 			return 1;
@@ -64,6 +68,10 @@ namespace snu {
 		return 0;
 	}
 
+	int Graph::add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt) {
+		return add_edge(id, lbl.size(), lbl.data(), from, to, wgt);
+	}
+
 	int USGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
 		if(Graph::add_edge(id, num, lbl, from, to, wgt)) return 1; // there is error
 
@@ -72,5 +80,9 @@ namespace snu {
 		// be careful of switching from and to in this case
 
 		return 0;
+	}
+
+	int USGraph::add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt) {
+		return add_edge(id, lbl.size(), lbl.data(), from, to, wgt);
 	}
 }
