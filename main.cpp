@@ -1,9 +1,9 @@
-#include "snugal.h"
 #include <stdio.h>
+#include "snugal.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
 
-	// TODO: 이 함수에서 만든 라이브러리를 실험한다
+	// test library
 	snu::DSGraph *graph = new snu::DSGraph();
 	struct snu::DSResult result;
 

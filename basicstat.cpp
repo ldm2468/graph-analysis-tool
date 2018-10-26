@@ -3,17 +3,10 @@
 #include <unordered_set>
 
 namespace snu {
-	/*
-	int size; // number of vertices
-	int volume; // number of edges
-	double avg_degree; // average degree
-	double fill; // based on directed graph, m / n^2, loop? yes, nultiedge? no
-	int max_degree; // maximum degree
-	int lcc; // largest connected component
-	int diameter; // diameter of graph */
 
-	void basicstat(Graph *graph, struct basic_result result) {
-		std::unordered_set <Graph::Vertex *> check;
+	int basic_stat(DSGraph *graph, DSResult *result) {
+		
+		/*std::unordered_set <Graph::Vertex *> check;
 		
 		int n = graph->id_to_vertex.size();
 		int m = graph->id_to_edge.size();
@@ -26,6 +19,39 @@ namespace snu {
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++) {
 			Graph::Vertex *v = it->second;
 			v->edges.size();
-		}
+		}*/
+		*result = {
+			.size = 0,
+			.volume = 0,
+			.avg_degree = 0,
+			.fill = 0,
+			.max_indegree = 0,
+			.max_outdegree = 0,
+			.reciprocity = 0,
+			.negativity = 0,
+			.lcc = 0,
+			.four_tour_count = 0,
+			.diameter = 0,
+		};
+		return 0;
+	}
+
+	int basic_stat(USGraph *graph, USResult *result) {
+		*result = {
+			.size = 0,
+			.volume = 0,
+			.avg_degree = 0,
+			.fill = 0,
+			.max_degree = 0,
+			.negativity = 0,
+			.lcc = 0,
+			.wedge_count = 0,
+			.claw_count = 0,
+			.triangle_count = 0,
+			.square_count = 0,
+			.four_tour_count = 0,
+			.diameter = 0,
+		};
+		return 0;
 	}
 }
