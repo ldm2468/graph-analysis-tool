@@ -84,6 +84,8 @@ namespace snu {
 	public:
 		// friend function
 		friend int basic_stat(DSGraph *graph, struct DSResult *result);
+		friend static DSGraph *parse_snu_DSGraph(std::string file_path);
+		friend static DSGraph *parse_net_DSGraph(std::string file_path);
 	};
 
 	class USGraph: public Graph { // undirected simple graph
@@ -94,6 +96,7 @@ namespace snu {
 		// friend function
 		friend int basic_stat(USGraph *graph, struct USResult *result);
 	};
+
 
 	// class DMGraph: public Graph {};
 	// class UMGraph: public Graph {};

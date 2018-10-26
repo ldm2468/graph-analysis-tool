@@ -9,4 +9,7 @@
 // graph analysis algorithms
 #include "basicstat.h"
 
+// graph parsing
+#include "parse.h"
+
 #endif // SNUGAL_H
