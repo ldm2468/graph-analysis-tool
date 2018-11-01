@@ -2,6 +2,8 @@
 
 namespace snu {
 
+	Graph::Graph() {}
+
 	Graph::~Graph() {
 		// delete vertex, edge, vertex_label, edge_label;
 		for(auto it = id_to_vertex.begin(); it != id_to_vertex.end(); it++) delete it->second;
@@ -14,6 +16,7 @@ namespace snu {
 		if(id_to_vertex.count(id)) return 1; // error: graph already has a vertex having same id
 
 		Vertex *v = new Vertex; // create vertex class
+		id_to_vertex[id] = v;
 		v->id = id; // set id
 		// set labels
 		// if no vertex label class then create it
@@ -23,6 +26,7 @@ namespace snu {
 
 			if(it == vlabel_to_class.end()) { // no vertex label class
 				vl = new Label_of_Vertices;
+				vlabel_to_class[lbl[i]] = vl;
 				vl->label = lbl[i];
 			}
 			else vl = it->second;
@@ -33,9 +37,17 @@ namespace snu {
 
 		return 0;
 	}
+	/*
+	
+		std::unordered_map <Vid, Vertex *> id_to_vertex;
+		std::unordered_map <Eid, Edge *>   id_to_edge;
 
-	int Graph::add_vertex(Vid id, std::vector <Vlabel> lbl) {
-		 return add_vertex(id, lbl.size(), lbl.data());
+		std::unordered_map <Vlabel, Label_of_Vertices *> vlabel_to_class;
+		std::unordered_map <Elabel, Label_of_Edges *>    elabel_to_class;
+		*/
+
+	int Graph::add_vertex(Vid id, std::vector <Vlabel> *lbl) {
+		return add_vertex(id, lbl->size(), lbl->data());
 	}
 
 	int Graph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
@@ -44,6 +56,7 @@ namespace snu {
 		// error: already have edge having same id or no from or to vertex
 
 		Edge *e = new Edge; // create edge class
+		id_to_edge[id] = e;
 		e->id = id; // set id
 		// set edge labels
 		// if no edge label class then create it
@@ -53,6 +66,7 @@ namespace snu {
 
 			if(it == elabel_to_class.end()) { // no edge label class
 				el = new Label_of_Edges;
+				elabel_to_class[lbl[i]] = el;
 				el->label = lbl[i];
 			}
 			else el = it->second;
@@ -68,8 +82,8 @@ namespace snu {
 		return 0;
 	}
 
-	int Graph::add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt) {
-		return add_edge(id, lbl.size(), lbl.data(), from, to, wgt);
+	int Graph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt) {
+		return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
 	}
 
 	int USGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
@@ -82,7 +96,7 @@ namespace snu {
 		return 0;
 	}
 
-	int USGraph::add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt) {
-		return add_edge(id, lbl.size(), lbl.data(), from, to, wgt);
+	int USGraph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt) {
+		return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
 	}
 }

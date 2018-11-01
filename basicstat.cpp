@@ -21,8 +21,8 @@ namespace snu {
 			v->edges.size();
 		}*/
 		*result = {
-			.size = 0,
-			.volume = 0,
+			.size = graph->id_to_vertex.size(),
+			.volume = graph->id_to_edge.size(),
 			.avg_degree = 0,
 			.fill = 0,
 			.max_indegree = 0,

@@ -69,13 +69,13 @@ namespace snu {
 	public:
 		~Graph(); // destructor
 		int add_vertex(Vid id, unsigned int num, Vlabel lbl[]); // add vertex, array version
-		int add_vertex(Vid id, std::vector <Vlabel> lbl); // vector version
+		int add_vertex(Vid id, std::vector <Vlabel> *lbl); // vector version
 		// if vertex is created normally, then return 0
 		// if error occurs, then return 1
 
 		// directed form of add_edge
 		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // add edge, array version
-		int add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt); // vector version
+		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
 		// if edge is created normally, then return 0
 		// if error occurs, then return 1
 	};
@@ -84,14 +84,14 @@ namespace snu {
 	public:
 		// friend function
 		friend int basic_stat(DSGraph *graph, struct DSResult *result);
-		friend static DSGraph *parse_snu_DSGraph(std::string file_path);
-		friend static DSGraph *parse_net_DSGraph(std::string file_path);
+		friend DSGraph *parse_snu_DSGraph(std::string file_path);
+		friend DSGraph *parse_net_DSGraph(std::string file_path);
 	};
 
 	class USGraph: public Graph { // undirected simple graph
 	public:
 		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // add edge
-		int add_edge(Eid id, std::vector <Elabel> lbl, Vid from, Vid to, Weight wgt); // vector version
+		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
 
 		// friend function
 		friend int basic_stat(USGraph *graph, struct USResult *result);

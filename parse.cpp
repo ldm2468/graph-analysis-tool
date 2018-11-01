@@ -5,22 +5,13 @@
 
 namespace snu {
 
-	// parsing DSGraph version follows
-	DSGraph *parse_DSGraph(std::string file_path) {
-		if(file_path.rfind(".snu") == file_path.length - 4)
-			return parse_snu_DSGraph(file_path);
-		else if(file_path.rfind(".net") == file_path.length - 4)
-			return parse_net_DSGraph(file_path);
-		// else if
-		return NULL; // failed
-	}
-
-	static DSGraph *parse_snu_DSGraph(std::string file_path) {
+	DSGraph *parse_snu_DSGraph(std::string file_path) {
 		std::ifstream infile(file_path);
 		std::string line;
 		DSGraph *graph = new DSGraph();
 		Graph::Eid eid = 0;
 
+		int cnt = 0;
 		while(getline(infile, line)) {
 			std::istringstream iss(line);
 
@@ -34,7 +25,7 @@ namespace snu {
 
 				iss >> id;
 				while(iss >> label) label_vector.push_back(label);
-				if(graph->add_vertex(id, label_vector)) { // error
+				if(graph->add_vertex(id, &label_vector)) { // error
 					delete graph;
 					return NULL;
 				}
@@ -43,10 +34,10 @@ namespace snu {
 				Graph::Vid from, to;
 				Graph::Elabel label;
 				std::vector<Graph::Elabel> label_vector;
-				
+					
 				iss >> from >> to;
 				while(iss >> label) label_vector.push_back(label);
-				if(graph->add_edge(eid++, label_vector, from, to, 1)) { // error
+				if(graph->add_edge(eid++, &label_vector, from, to, 1)) { // error
 					delete graph;
 					return NULL;
 				}
@@ -60,8 +51,8 @@ namespace snu {
 		return graph;
 	}
 
-	static DSGraph *parse_net_DSGraph(std::string file_path) {
-		DSGraph *graph = new snu::DSGraph();
+	DSGraph *parse_net_DSGraph(std::string file_path) {
+		DSGraph *graph = new DSGraph();
 		std::ifstream infile(file_path);
 		std::string line;
 		int check_vertex = 0;
@@ -91,7 +82,7 @@ namespace snu {
 					label.erase(std::remove(label.begin(), label.end(), '\"'), label.end());
 					label_vector.push_back(label);
 				}
-				graph->add_vertex(id, label_vector);
+				graph->add_vertex(id, &label_vector);
 			}
 
 			if(check_edge==1) {
@@ -109,18 +100,28 @@ namespace snu {
 					label.erase(std::remove(label.begin(), label.end(), '\"'), label.end());
 					label_vector.push_back(label);
 				}
-				graph->add_edge(id, label_vector, from, to, 1);
- 			}
+				graph->add_edge(id, &label_vector, from, to, 1);
+			}
 		}
 		return graph;
 	}
 
+	// parsing DSGraph version follows
+	DSGraph *parse_DSGraph(std::string file_path) {
+		if(file_path.rfind(".snu") == file_path.length() - 4)
+			return parse_snu_DSGraph(file_path);
+		else if(file_path.rfind(".net") == file_path.length() - 4)
+			return parse_net_DSGraph(file_path);
+		// else if
+		return NULL; // failed
+	}
+
 	// parsing USGraph version follows
 	USGraph *parse_USGraph(std::string file_path) {
-		if(file_path.rfind(".snu") == file_path.length - 4) {
+		if(file_path.rfind(".snu") == file_path.length() - 4) {
 			return NULL; // error
 		}
-		else if(file_path.rfind(".net") == file_path.length - 4) {
+		else if(file_path.rfind(".net") == file_path.length() - 4) {
 			return NULL; // error
 		}
 		// else if
