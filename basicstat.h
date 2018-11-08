@@ -4,38 +4,43 @@
 namespace snu {
 
 	struct DSResult {
-		unsigned int size; // number of vertices
-		unsigned int volume; // number of edges
+		/* basic_stat */
+		unsigned long long size; // number of vertices
+		unsigned long long volume; // number of edges
 		double avg_degree; // not defined well but calculate it as m / n
 		double fill; // m / n^2, directed graph with loops
-		unsigned int max_indegree; // maximum indegree
-		unsigned int max_outdegree; // maximum outdegree
+		unsigned long long max_indegree; // maximum indegree
+		unsigned long long max_outdegree; // maximum outdegree
 		double reciprocity; // only defined in directed graph
 		double negativity;
-		unsigned int lcc; // largest connected component
+		unsigned long long lcc; // largest connected component
+		unsigned long long diameter; // diameter of graph
+
+		/* count_stat */
 		unsigned long long four_tour_count;
-		unsigned int diameter; // diameter of graph
 	};
 
 	struct USResult {
-		unsigned int size;
-		unsigned int volume;
+		/* basic_stat */
+		unsigned long long size;
+		unsigned long long volume;
 		double avg_degree; // average degree, 2m / n
 		double fill; // 2m / (N * (N + 1)), undirected graph with loops
-		unsigned int max_degree; // maximum degree
+		unsigned long long max_degree; // maximum degree
 		double negativity;
-		unsigned int lcc;
+		unsigned long long lcc;
+		unsigned long long diameter;
+
+		/* count_stat */
 		unsigned long long wedge_count;
 		unsigned long long claw_count;
 		unsigned long long triangle_count;
 		unsigned long long square_count;
 		unsigned long long four_tour_count;
-		unsigned int diameter;
 	};
 
-	int basic_stat(class DSGraph *graph, DSResult *result);
-
-	int basic_stat(class USGraph *graph, USResult *result);
+	void basic_stat(class DSGraph *graph, DSResult *result);
+	void basic_stat(class USGraph *graph, USResult *result);
 }
 
 #endif // BASICSTAT_H

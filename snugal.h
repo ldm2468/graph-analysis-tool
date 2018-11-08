@@ -8,6 +8,7 @@
 
 // graph analysis algorithms
 #include "basicstat.h"
+#include "countstat.h"
 
 // graph parsing
 #include "parse.h"
