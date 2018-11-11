@@ -1,12 +1,13 @@
-CC = g++
+CXX = g++
 TARGET = main
 OBJECTS = main.o graph.o parse.o basicstat.o countstat.o
-CXXFLAG = -std=c++11 -Wall -O3
+CXXFLAGS = -std=c++11 -Wall -O3
+LDFLAGS =
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CXXFLAG) -o $@ $^
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -rf $(TARGET) $(OBJECTS)

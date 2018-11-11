@@ -1,6 +1,7 @@
 #include "basicstat.h"
 #include "graph.h"
 #include <unordered_set>
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 namespace snu {
 
@@ -16,8 +17,8 @@ namespace snu {
 		unsigned long long max_indegree = 0;
 		unsigned long long max_outdegree = 0;
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++) {
-			max_indegree = std::max(max_indegree, it->second->indegree);
-			max_outdegree = std::max(max_outdegree, it->second->edges.size());
+			max_indegree = MAX(max_indegree, it->second->indegree);
+			max_outdegree = MAX(max_outdegree, it->second->edges.size());
 		}
 		result->max_indegree = max_indegree;
 		result->max_outdegree = max_outdegree;
@@ -40,7 +41,7 @@ namespace snu {
 		// indegree == outdegree
 		unsigned long long max_degree = 0;
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++)
-			max_degree = std::max(max_degree, it->second->indegree);
+			max_degree = MAX(max_degree, it->second->indegree);
 		result->max_degree = max_degree;
 
 		result->negativity = (double)graph->negative_edge_num / m;

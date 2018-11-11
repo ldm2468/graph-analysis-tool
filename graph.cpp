@@ -33,7 +33,7 @@ namespace snu {
 		v->id = id; // set id
 		// set labels
 		// if no vertex label class then create it
-		for(int i = 0; i < num; i++) {
+		for(unsigned int i = 0; i < num; i++) {
 			auto it = vlabel_to_class.find(lbl[i]);
 			Label_of_Vertices *vl;
 
@@ -67,7 +67,7 @@ namespace snu {
 		e->id = id; // set id
 		// set edge labels
 		// if no edge label class then create it
-		for(int i = 0; i < num; i++) {
+		for(unsigned int i = 0; i < num; i++) {
 			auto it = elabel_to_class.find(lbl[i]);
 			Label_of_Edges *el;
 
