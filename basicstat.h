@@ -1,6 +1,8 @@
 #ifndef BASICSTAT_H
 #define BASICSTAT_H
 
+#include "graph.h"
+
 namespace snu {
 
 	struct DSResult {
@@ -39,8 +41,11 @@ namespace snu {
 		unsigned long long four_tour_count;
 	};
 
-	void basic_stat(class DSGraph *graph, DSResult *result);
-	void basic_stat(class USGraph *graph, USResult *result);
+	void init_stat(DSResult *result);
+	void init_stat(USResult *result);
+
+	void basic_stat(DSGraph *graph, DSResult *result);
+	void basic_stat(USGraph *graph, USResult *result);
 }
 
 #endif // BASICSTAT_H

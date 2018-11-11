@@ -91,6 +91,7 @@ namespace snu {
 		friend void count_stat(DSGraph *graph, struct DSResult *result);
 		friend DSGraph *parse_snu_DSGraph(std::string file_path);
 		friend DSGraph *parse_net_DSGraph(std::string file_path);
+		friend void make_plot(DSGraph *graph);
 	};
 
 	class USGraph: public Graph { // undirected simple graph
@@ -101,6 +102,7 @@ namespace snu {
 		// friend function
 		friend void basic_stat(USGraph *graph, struct USResult *result);
 		friend void count_stat(USGraph *graph, struct USResult *result);
+		friend void make_plot(USGraph *graph);
 	};
 
 

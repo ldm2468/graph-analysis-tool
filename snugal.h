@@ -13,4 +13,10 @@
 // graph parsing
 #include "parse.h"
 
+// graph plots
+#include "plot.h"
+
+// make html file to show statistics
+#include "html.h"
+
 #endif // SNUGAL_H
