@@ -6,6 +6,7 @@ namespace snu {
 	void make_plot(DSGraph *graph) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
+		// descending order
 		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++)
 			fprintf(fp, "%s %d\n", (*it->second).label, (*it->second).vertices.size());
 		
@@ -29,6 +30,7 @@ namespace snu {
 	void make_plot(USGraph *graph) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
+		// descending order
 		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++)
 			fprintf(fp, "%s %d\n", (*it->second).label, (*it->second).vertices.size());
 		
