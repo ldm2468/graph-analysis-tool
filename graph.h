@@ -32,6 +32,7 @@ namespace snu {
 			Vid id;
 			std::list <Label_of_Vertices *> labels;
 			std::list <Edge *> edges;
+			unsigned long long indegree;
 		};
 
 		class Edge {
@@ -62,39 +63,46 @@ namespace snu {
 		std::unordered_map <Vlabel, Label_of_Vertices *> vlabel_to_class;
 		std::unordered_map <Elabel, Label_of_Edges *>    elabel_to_class;
 
+		unsigned long long negative_edge_num;
+
 		//std::unordered_map <std::pair <VId, VId>, Edge *> id_pair_to_edge;
 
 		Graph(); // prevent from creating Graph class and allow creating graph in subclass
-
-	public:
 		~Graph(); // destructor
+
 		int add_vertex(Vid id, unsigned int num, Vlabel lbl[]); // add vertex, array version
 		int add_vertex(Vid id, std::vector <Vlabel> *lbl); // vector version
 		// if vertex is created normally, then return 0
 		// if error occurs, then return 1
 
 		// directed form of add_edge
-		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // add edge, array version
-		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
+		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // array version
 		// if edge is created normally, then return 0
 		// if error occurs, then return 1
 	};
 
 	class DSGraph: public Graph { // directed simple graph
 	public:
+		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // array version
+		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
+
 		// friend function
-		friend int basic_stat(DSGraph *graph, struct DSResult *result);
+		friend void basic_stat(DSGraph *graph, struct DSResult *result);
+		friend void count_stat(DSGraph *graph, struct DSResult *result);
 		friend DSGraph *parse_snu_DSGraph(std::string file_path);
 		friend DSGraph *parse_net_DSGraph(std::string file_path);
+		friend void make_plot(DSGraph *graph);
 	};
 
 	class USGraph: public Graph { // undirected simple graph
 	public:
-		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // add edge
+		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // array version
 		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
 
 		// friend function
-		friend int basic_stat(USGraph *graph, struct USResult *result);
+		friend void basic_stat(USGraph *graph, struct USResult *result);
+		friend void count_stat(USGraph *graph, struct USResult *result);
+		friend void make_plot(USGraph *graph);
 	};
 
 

@@ -11,7 +11,6 @@ namespace snu {
 		DSGraph *graph = new DSGraph();
 		Graph::Eid eid = 0;
 
-		int cnt = 0;
 		while(getline(infile, line)) {
 			std::istringstream iss(line);
 

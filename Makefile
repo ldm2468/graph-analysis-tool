@@ -1,12 +1,16 @@
-CC = g++
+CXX = g++
 TARGET = main
-OBJECTS = main.o basicstat.o graph.o parse.o
-CXXFLAG = -std=c++11 -Wall -O3
+OBJECTS = main.o graph.o parse.o basicstat.o countstat.o
+CXXFLAGS = -std=c++11 -Wall -O3
+LDFLAGS =
 
-all: $(TARGET)
+all: $(TARGET) plot
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CXXFLAG) -o $@ $^
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+plot: plot.m
+	mcc -m $^
 
 clean:
 	rm -rf $(TARGET) $(OBJECTS)
