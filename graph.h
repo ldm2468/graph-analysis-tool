@@ -91,6 +91,7 @@ namespace snu {
 		friend void count_stat(DSGraph *graph, struct DSResult *result);
 		friend DSGraph *parse_snu_DSGraph(std::string file_path);
 		friend DSGraph *parse_net_DSGraph(std::string file_path);
+		friend DSGraph *parse_snap_DSGraph(std::string file_path);
 		friend void make_plot(DSGraph *graph);
 	};
 
