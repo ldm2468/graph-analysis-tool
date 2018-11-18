@@ -1,5 +1,4 @@
-%%
-clc; close all;
+function []=graph_plot()
 % label
 file=fopen('./label-vertex.txt', 'r');
 if ( file > 0)
@@ -25,7 +24,7 @@ ylabel('log(# of vertex)', 'fontsize', 12);
 print('-f2','./label-vertex_log', '-dpng');    
 
 end
-%%
+
 % degree
 file=fopen('./degree.txt', 'r');
 if (file>0)
