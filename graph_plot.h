@@ -1,6 +1,6 @@
 //
 // MATLAB Compiler: 6.6 (R2018a)
-// Date: Sun Nov 18 15:08:35 2018
+// Date: Sun Nov 18 16:50:10 2018
 // Arguments: "-B""macro_default""-W""cpplib:graph_plot""graph_plot.m"
 //
 
@@ -80,7 +80,7 @@ bool MW_CALL_CONV mlxGraph_plot(int nlhs, mxArray *plhs[], int nrhs, mxArray *pr
 
 #endif
 
-extern LIB_graph_plot_CPP_API void MW_CALL_CONV graph_plot();
+extern LIB_graph_plot_CPP_API void MW_CALL_CONV graph_plot(const mwArray& gn);
 
 /* C++ INTERFACE -- WRAPPERS FOR USER-DEFINED MATLAB FUNCTIONS -- END */
 #endif

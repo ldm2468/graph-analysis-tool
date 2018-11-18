@@ -8,11 +8,11 @@ int main(int argc, char *argv[]) {
 	struct snu::DSResult result;
 
 	snu::make_plot(graph); // make plot
-	
+
 	snu::init_stat(&result);
 	snu::basic_stat(graph, &result);
 	snu::count_stat(graph, &result);
-	
+
 	snu::make_html("stat.html", &result); // make html
 
 	return 0;

@@ -1,6 +1,8 @@
-function []=graph_plot()
+function []=graph_plot(gn)
+
+mkdir(['./matlab_plot/', gn]);
 % label
-file=fopen('./label-vertex.txt', 'r');
+file=fopen('./matlab_plot/label-vertex.txt', 'r');
 if ( file > 0)
 data = textscan(file,'%s %f');
 figure(1);
@@ -12,7 +14,8 @@ h.DisplayOrder = 'descend';
 title('label-vertex', 'fontsize', 14);
 xlabel('label', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-print('-f1','./label-vertex', '-dpng');    
+path=['./matlab_plot/', gn,'/', gn,'_label-vertex'];
+print('-f1',path, '-dpng');    
  
 figure(2);
 vertex_log = log10(abs(vertex));
@@ -21,12 +24,13 @@ h.DisplayOrder = 'descend';
 title('label-log(vertex)', 'fontsize', 14);
 xlabel('label', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-print('-f2','./label-vertex_log', '-dpng');    
+path=['./matlab_plot/', gn,'/', gn '_label-vertex_log'];
+print('-f2',path, '-dpng');    
 
 end
 
 % degree
-file=fopen('./degree.txt', 'r');
+file=fopen('./matlab_plot/degree.txt', 'r');
 if (file>0)
 d = fscanf(file, "%f");
 figure(3);
@@ -34,19 +38,21 @@ h=histogram(d);
 title('degree-vertex', 'fontsize', 14);
 xlabel('degree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-print('-f3','./degree', '-dpng');
+path=['./matlab_plot/', gn,'/', gn, '_degree'];
+print('-f3', path, '-dpng');
 
 figure(4);
 h=histogram(log10(abs(d)));
 title('degree-log(vertex)', 'fontsize', 14);
 xlabel('degree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-print('-f4','./degree_log', '-dpng');
+path=['./matlab_plot/', gn,'/', gn, '_degree_log'];
+print('-f4', path, '-dpng');
 
 end
 
 % indegree
-file=fopen('./indegree.txt', 'r');
+file=fopen('./matlab_plot/indegree.txt', 'r');
 if(file>0)
 d = fscanf(file, "%f");
 figure(5);
@@ -54,18 +60,20 @@ histogram(d);
 title('indegree-vertex', 'fontsize', 14);
 xlabel('indegree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-print('-f5','./indegree', '-dpng');
+path=['./matlab_plot/', gn, '/', gn, '_indegree'];
+print('-f5', path, '-dpng');
 figure(6);
 histogram(log10(d));
 title('indegree-log(vertex)', 'fontsize', 14);
 xlabel('indegree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-print('-f6','./indegree_log', '-dpng');
+path=['./matlab_plot/', gn, '/', gn, '_indegree_log'];
+print('-f6', path, '-dpng');
 
 end
 
 % outdegree
-file=fopen('./outdegree.txt', 'r');
+file=fopen('./matlab_plot/outdegree.txt', 'r');
 if(file>0)
 d = fscanf(file, "%f");
 figure(7);
@@ -73,13 +81,16 @@ histogram(d);
 title('outdegree-vertex', 'fontsize', 14);
 xlabel('outdegree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-print('-f7','./outdegree', '-dpng');
+path=['./matlab_plot/', gn, '/', gn, '_outdegree'];
+print('-f7', path, '-dpng');
+
 figure(8);
 histogram(log10(abs(d)));
 title('outdegree-log(vertex)', 'fontsize', 14);
 xlabel('outdegree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-print('-f8','./outdegree_log', '-dpng');
+path=['./matlab_plot/', gn, '/', gn, '_outdegree_log'];
+print('-f8', path, '-dpng');
 end
 
 clc; close all;
