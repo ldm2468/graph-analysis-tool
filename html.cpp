@@ -3,7 +3,7 @@
 
 namespace snu {
 
-	void make_html(char *name, DSResult *result) {
+	void make_html(char *name, DSResult *result, Plot *plot) {
 		FILE *fp = fopen(name, "w");
 
 
@@ -51,26 +51,26 @@ namespace snu {
 				</h2>\
 				<h3>\
 				<p> label-vertex image </p>\
-				<img src=\"./matlab_plot/label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-				<img src=\"./matlab_plot/label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
+				<img src=\"%s/label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+				<img src=\"%s/label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
 				</h3>\
 				<p> indegree image </p>\
-				<img src=\"./matlab_plot/indegree.png\" width=\"400\" alt=\"indegree image\">\
-				<img src=\"./matlab_plot/indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
+				<img src=\"%s/indegree.png\" width=\"400\" alt=\"indegree image\">\
+				<img src=\"%s/indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
 				</h3>\
 				<h3>\
 				<p> outdegree image </p>\
-				<img src=\"./matlab_plot/outdegree.png\" width=\"400\" alt=\"outdegree image\">\
-				<img src=\"./matlab_plot/outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">
+				<img src=\"%s/outdegree.png\" width=\"400\" alt=\"outdegree image\">\
+				<img src=\"%s/outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">
 				</h3>\
 			</body>\
 		</html>\
-		")
+		", plot, plot, plot, plot, plot, plot);
 
 		fclose(fp);
 	}
 
-	void make_html(char *name, USResult *result) {
+	void make_html(char *name, USResult *result, Plot *plot) {
 		FILE *fp = fopen(name, "w");
 		fprintf(fp, "\
 		<!DOCTYPE html>\
@@ -116,17 +116,17 @@ namespace snu {
 				</h2>\
 				<h3>\
 				<p> label-vertex image </p>\
-				<img src=\"./matlab_plot/label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-				<img src=\"./matlab_plot/label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
+				<img src=\"%s/label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+				<img src=\"%s/label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
 				</h3>\
 				<h3>\
 				<p> degree image </p>\
-				<img src=\"./matlab_plot/degree.png\" width=\"400\" alt=\"degree image\">\
-				<img src=\"./matlab_plot/degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
+				<img src=\"%s/degree.png\" width=\"400\" alt=\"degree image\">\
+				<img src=\"%s/degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
 				</h3>\
 			</body>\
 		</html>\
-		")
+		", plot, plot, plot, plot);
 		fclose(fp);
 	}
 }
