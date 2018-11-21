@@ -1,0 +1,8 @@
+LIBRARY graph_plot
+EXPORTS
+graph_plotInitialize
+graph_plotInitializeWithHandlers
+graph_plotTerminate
+graph_plotPrintStackTrace
+mlxGraph_plot
+
