@@ -11,8 +11,6 @@ namespace snu {
 		negative_edge_num = 0;
 	}
 
-	/* do not have to define constructor of child classes */
-
 	/* destructor */
 	Graph::~Graph() {
 		// delete vertex, edge, vertex_label, edge_label;

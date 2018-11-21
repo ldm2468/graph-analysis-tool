@@ -2,7 +2,7 @@
 #include "html.h"
 
 namespace snu {
-
+  
 	void make_html(char *name, DSResult *result, Plot *plot) {
 		FILE *fp = fopen(name, "w");
 

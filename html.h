@@ -1,7 +1,7 @@
 #ifndef HTML_H
 #define HTML_H
 
-#include "basicstat.h"
+#include "stat.h"
 #include "plot.h"
 
 namespace snu {

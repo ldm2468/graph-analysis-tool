@@ -1,8 +1,8 @@
 #include "plot.h"
 
 namespace snu {
-
-	std::string *make_plot(DSGraph *graph, std::string plot_name) {
+  
+	Plot *make_plot(DSGraph *graph, std::string plot_name) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
 		// descending order
@@ -25,14 +25,10 @@ namespace snu {
 
 		fclose(fp);
 
-
-
-
-
-
+		return NULL;
 	}
 
-	std::string *make_plot(USGraph *graph, std::string plot_name) {
+	Plot *make_plot(USGraph *graph, std::string plot_name) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
 		// descending order
@@ -47,6 +43,8 @@ namespace snu {
 			fprintf(fp, "%d ", (*it->second).indegree);
 
 		fclose(fp);
+		
+		return NULL;
 	}
 
 
