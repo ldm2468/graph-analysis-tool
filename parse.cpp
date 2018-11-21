@@ -5,6 +5,7 @@
 
 namespace snu {
 
+	// parse .snu file
 	DSGraph *parse_snu_DSGraph(std::string file_path) {
 		std::ifstream infile(file_path);
 		std::string line;
@@ -50,6 +51,7 @@ namespace snu {
 		return graph;
 	}
 
+	// parse .net file
 	DSGraph *parse_net_DSGraph(std::string file_path) {
 		DSGraph *graph = new DSGraph();
 		std::ifstream infile(file_path);
@@ -105,6 +107,7 @@ namespace snu {
 		return graph;
 	}
 
+	// parse .snap file
 	DSGraph *parse_snap_DSGraph(std::string file_path) {
 		std::ifstream infile(file_path);
 		std::string line;

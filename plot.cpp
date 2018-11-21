@@ -3,7 +3,7 @@
 
 namespace snu {
 
-	void make_plot(DSGraph *graph) {
+	Plot *make_plot(DSGraph *graph, std::string plot_name) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
 		// descending order
@@ -25,9 +25,11 @@ namespace snu {
 			fprintf(fp, "%d ", (*it->second).edges.size());
 	
 		fclose(fp);
+
+		return NULL;
 	}
 
-	void make_plot(USGraph *graph) {
+	Plot *make_plot(USGraph *graph, std::string plot_name) {
 		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
 
 		// descending order
@@ -42,5 +44,7 @@ namespace snu {
 			fprintf(fp, "%d ", (*it->second).indegree);
 		
 		fclose(fp);
+		
+		return NULL;
 	}
 }

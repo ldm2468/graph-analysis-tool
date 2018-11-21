@@ -7,6 +7,7 @@
 #include "graph.h"
 
 // graph analysis algorithms
+#include "stat.h"
 #include "basicstat.h"
 #include "countstat.h"
 

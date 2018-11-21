@@ -1,43 +1,8 @@
 #include "basicstat.h"
-#include "graph.h"
 #include <unordered_set>
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 namespace snu {
-
-	void init_stat(DSResult *result) {
-		*result = {
-			.size = -1,
-			.volume = -1,
-			.avg_degree = -1,
-			.fill = -1,
-			.max_indegree = -1,
-			.max_outdegree = -1,
-			.reciprocity = -1,
-			.negativity = -1,
-			.lcc = -1,
-			.diameter = -1,
-			.four_tour_count = -1,
-		};
-	}
-
-	void init_stat(USResult *result) {
-		*result = {
-			.size = -1,
-			.volume = -1,
-			.avg_degree = -1,
-			.fill = -1,
-			.max_degree = -1,
-			.negativity = -1,
-			.lcc = -1,
-			.diameter = -1,
-			.wedge_count = -1,
-			.claw_count = -1,
-			.triangle_count = -1,
-			.square_count = -1,
-			.four_tour_count = -1,
-		};
-	}
 
 	void basic_stat(DSGraph *graph, DSResult *result) {
 		unsigned long long n = graph->id_to_vertex.size();
@@ -62,6 +27,8 @@ namespace snu {
 
 		result->lcc = 0; // TODO
 		result->diameter = 0; // TODO
+
+		result->basicstat = true;
 	}
 
 	void basic_stat(USGraph *graph, USResult *result) {
@@ -82,5 +49,7 @@ namespace snu {
 
 		result->lcc = 0; // TODO
 		result->diameter = 0; // TODO
+
+		result->basicstat = true;
 	}
 }

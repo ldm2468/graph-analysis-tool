@@ -1,7 +1,8 @@
 #ifndef COUNTSTAT_H
 #define COINTSTAT_H
 
-#include "basicstat.h"
+#include "graph.h"
+#include "stat.h"
 
 namespace snu {
 
