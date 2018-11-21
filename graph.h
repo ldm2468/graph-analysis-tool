@@ -5,6 +5,8 @@
 // TODO: Vector can be much more efficient type than list. Consider about it.
 #include <vector>
 #include <unordered_map>
+#include "stat.h"
+#include "plot.h"
 
 namespace snu {
 
@@ -13,6 +15,10 @@ namespace snu {
 	class USGraph; // undirected simple graph
 	//class DMGraph; //   directed multigraph, not implemented
 	//class UMGraph; // undirected multigraph, not implemented
+
+	typedef class Graph Graph;
+	typedef class DSGraph DSGraph;
+	typedef class USGraph USGraph;
 
 	class Graph {
 	protected:
@@ -87,12 +93,13 @@ namespace snu {
 		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
 
 		// friend function
-		friend void basic_stat(DSGraph *graph, struct DSResult *result);
-		friend void count_stat(DSGraph *graph, struct DSResult *result);
+		friend void basic_stat(DSGraph *graph, DSResult *result);
+		friend void count_stat(DSGraph *graph, DSResult *result);
+		friend Plot *make_plot(DSGraph *graph, std::string plot_name);
+		
 		friend DSGraph *parse_snu_DSGraph(std::string file_path);
 		friend DSGraph *parse_net_DSGraph(std::string file_path);
 		friend DSGraph *parse_snap_DSGraph(std::string file_path);
-		friend void make_plot(DSGraph *graph);
 	};
 
 	class USGraph: public Graph { // undirected simple graph
@@ -101,11 +108,10 @@ namespace snu {
 		int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt); // vector version
 
 		// friend function
-		friend void basic_stat(USGraph *graph, struct USResult *result);
-		friend void count_stat(USGraph *graph, struct USResult *result);
-		friend void make_plot(USGraph *graph);
+		friend void basic_stat(USGraph *graph, USResult *result);
+		friend void count_stat(USGraph *graph, USResult *result);
+		friend Plot *make_plot(USGraph *graph, std::string plot_name);
 	};
-
 
 	// class DMGraph: public Graph {};
 	// class UMGraph: public Graph {};
