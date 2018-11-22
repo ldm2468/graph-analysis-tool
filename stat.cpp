@@ -3,10 +3,12 @@
 namespace snu {
 	
 	void init_stat(DSResult *result) {
-		result->basicstat = result->countstat = false;
+		result->basicstat = false;
+		result->countstat = false;
 	}
 
 	void init_stat(USResult *result) {
-		result->basicstat = result->countstat = false;
+		result->basicstat = false;
+		result->countstat = false;
 	}
 }

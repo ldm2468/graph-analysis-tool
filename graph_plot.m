@@ -1,6 +1,5 @@
 function []=graph_plot(gn)
 
-mkdir(['./matlab_plot/', gn]);
 % label
 file=fopen('./matlab_plot/label-vertex.txt', 'r');
 if ( file > 0)
@@ -14,7 +13,7 @@ h.DisplayOrder = 'descend';
 title('label-vertex', 'fontsize', 14);
 xlabel('label', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-path=['./matlab_plot/', gn,'/', gn,'_label-vertex'];
+path=['./matlab_plot/', gn,'_label-vertex'];
 print('-f1',path, '-dpng');    
  
 figure(2);
@@ -24,7 +23,7 @@ h.DisplayOrder = 'descend';
 title('label-log(vertex)', 'fontsize', 14);
 xlabel('label', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-path=['./matlab_plot/', gn,'/', gn '_label-vertex_log'];
+path=['./matlab_plot/', gn '_label-vertex_log'];
 print('-f2',path, '-dpng');    
 
 end
@@ -38,7 +37,7 @@ h=histogram(d);
 title('degree-vertex', 'fontsize', 14);
 xlabel('degree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-path=['./matlab_plot/', gn,'/', gn, '_degree'];
+path=['./matlab_plot/', gn, '_degree'];
 print('-f3', path, '-dpng');
 
 figure(4);
@@ -46,7 +45,7 @@ h=histogram(log10(abs(d)));
 title('degree-log(vertex)', 'fontsize', 14);
 xlabel('degree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-path=['./matlab_plot/', gn,'/', gn, '_degree_log'];
+path=['./matlab_plot/', gn, '_degree_log'];
 print('-f4', path, '-dpng');
 
 end
@@ -60,14 +59,14 @@ histogram(d);
 title('indegree-vertex', 'fontsize', 14);
 xlabel('indegree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-path=['./matlab_plot/', gn, '/', gn, '_indegree'];
+path=['./matlab_plot/', gn, '_indegree'];
 print('-f5', path, '-dpng');
 figure(6);
 histogram(log10(d));
 title('indegree-log(vertex)', 'fontsize', 14);
 xlabel('indegree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-path=['./matlab_plot/', gn, '/', gn, '_indegree_log'];
+path=['./matlab_plot/', gn, '_indegree_log'];
 print('-f6', path, '-dpng');
 
 end
@@ -81,7 +80,7 @@ histogram(d);
 title('outdegree-vertex', 'fontsize', 14);
 xlabel('outdegree', 'fontsize', 12);
 ylabel('# of vertex', 'fontsize', 12);
-path=['./matlab_plot/', gn, '/', gn, '_outdegree'];
+path=['./matlab_plot/', gn, '_outdegree'];
 print('-f7', path, '-dpng');
 
 figure(8);
@@ -89,7 +88,7 @@ histogram(log10(abs(d)));
 title('outdegree-log(vertex)', 'fontsize', 14);
 xlabel('outdegree', 'fontsize', 12);
 ylabel('log(# of vertex)', 'fontsize', 12);
-path=['./matlab_plot/', gn, '/', gn, '_outdegree_log'];
+path=['./matlab_plot/', gn, '_outdegree_log'];
 print('-f8', path, '-dpng');
 end
 

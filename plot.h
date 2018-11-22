@@ -1,13 +1,11 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include "graph.h"
-#include <string>
-
 namespace snu {
 
-	std::string *make_plot(DSGraph *graph, std::string plot_name);
-	std::string *make_plot(USGraph *graph, std::string plot_name);
+	typedef unsigned int Plot;
+
+	void init_plot(Plot *plot);
 }
 
 #endif // PLOT_H

@@ -1,7 +1,8 @@
 //
-// MATLAB Compiler: 6.6 (R2018a)
-// Date: Sun Nov 18 16:50:10 2018
-// Arguments: "-B""macro_default""-W""cpplib:graph_plot""graph_plot.m"
+// MATLAB Compiler: 7.0 (R2018b)
+// Date: Thu Nov 22 09:41:37 2018
+// Arguments:
+// "-B""macro_default""-W""cpplib:graph_plot""-T""link:lib""graph_plot.m"
 //
 
 #include <stdio.h>

@@ -47,6 +47,9 @@ namespace snu {
 		bool countstat;
 	};
 
+	typedef struct DSResult DSresult;
+	typedef struct USResult USresult;
+
 	void init_stat(DSResult *result);
 	void init_stat(USResult *result);
 }
