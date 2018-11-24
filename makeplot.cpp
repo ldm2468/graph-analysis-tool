@@ -1,63 +1,77 @@
 #include "makeplot.h"
-#include "graph_plot.h"
+#include <fstream>
+#include <vector>
+#include <algorithm>
 
 namespace snu {
 
 	void make_plot(DSGraph *graph, Plot *plot) {
-		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
+		std::ofstream out;
 
-		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++)
-			fprintf(fp, "%s %llu\n", (*it->second).label.c_str(), (*it->second).vertices.size());
+		/* label-vertex */
+		out.open("./pyplot/label-vertex.txt");
 
-		fclose(fp);
+		unsigned int n = graph->id_to_vertex.size();
+		typedef std::pair <unsigned int, std::string *> vectype;
+		std::vector <vectype> vec;
+		vec.reserve(n);
+		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++) {
+			auto vlabel = *(it->second);
+			vec.push_back(make_pair(vlabel.vertices.size(), &vlabel.label));
+		}
 
-		fp = fopen("./matlab_plot/indegree.txt", "w");
+		std::sort(vec.begin(), vec.end(), [](vectype a, vectype b) { return a.first > b.first; });
+
+		for(auto it = vec.begin(); it != vec.end(); it++)
+			out << *(it->second) << " " << it->first << std::endl;
+
+		out.close();
+
+		/* indegree */
+		out.open("./pyplot/indegree.txt");
 
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++)
-			fprintf(fp, "%llu ", (*it->second).indegree);
+			out << (*it->second).indegree << " ";
 
-		fclose(fp);
+		out.close();
 
-		fp = fopen("./matlab_plot/outdegree.txt", "w");
+		/* outdegree */
+		out.open("./pyplot/outdegree.txt");
 
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++)
-			fprintf(fp, "%llu ", (*it->second).edges.size());
+			out << (*it->second).edges.size() << " ";
 
-		fclose(fp);
-
-		if(!graph_plotInitialize()) return; // error
-
-		char name[10];
-		sprintf(name, "%d", *plot);
-		mwArray mw_name(name);
-		graph_plot(mw_name);
-
-		graph_plotTerminate();
+		out.close();
 	}
 
 	void make_plot(USGraph *graph, Plot *plot) {
-		FILE *fp = fopen("./matlab_plot/label-vertex.txt", "w");
+		std::ofstream out;
 
-		// descending order
-		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++)
-			fprintf(fp, "%s %llu\n", (*it->second).label.c_str(), (*it->second).vertices.size());
+		/* label-vertex */
+		out.open("./pyplot/label-vertex.txt");
 
-		fclose(fp);
+		unsigned int n = graph->id_to_vertex.size();
+		typedef std::pair <unsigned int, std::string *> vectype;
+		std::vector <vectype> vec;
+		vec.reserve(n);
+		for(auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); it++) {
+			auto vlabel = *(it->second);
+			vec.push_back(make_pair(vlabel.vertices.size(), &vlabel.label));
+		}
 
-		fp = fopen("./matlab_plot/degree.txt", "w");
+		std::sort(vec.begin(), vec.end(), [](vectype a, vectype b) { return a.first > b.first; });
+
+		for(auto it = vec.begin(); it != vec.end(); it++)
+			out << *(it->second) << " " << it->first << std::endl;
+
+		out.close();
+
+		/* degree */
+		out.open("./pyplot/degree.txt");
 
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++)
-			fprintf(fp, "%llu ", (*it->second).indegree);
+			out << (*it->second).indegree << " ";
 
-		fclose(fp);
-		
-		if(!graph_plotInitialize()) return; // error
-
-		char name[10];
-		sprintf(name, "%d", *plot);
-		mwArray mw_name(name);
-		graph_plot(mw_name);
-
-		graph_plotTerminate();
+		out.close();
 	}
 }

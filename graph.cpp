@@ -2,15 +2,6 @@
 
 namespace snu {
 
-	/* constructor */
-	Graph::Graph() {
-		id_to_vertex.clear();
-		id_to_edge.clear();
-		vlabel_to_class.clear();
-		elabel_to_class.clear();
-		negative_edge_num = 0;
-	}
-
 	/* destructor */
 	Graph::~Graph() {
 		// delete vertex, edge, vertex_label, edge_label;
@@ -85,6 +76,8 @@ namespace snu {
 		e->wgt = wgt; // set weight
 		e->from->edges.push_back(e); // insert edge in from vertex
 		
+		is_connected.insert(std::make_pair(from, to)); // insert vertex pair
+
 		if(wgt < 0) negative_edge_num++;
 
 		return 0;
@@ -109,6 +102,7 @@ namespace snu {
 		Edge *e = id_to_edge[id];
 		e->to->edges.push_back(e); // insert edge in to vertex
 		e->from->indegree++; // increase indegree of from
+		is_connected.insert(std::make_pair(to, from)); // insert reverse
 		// be careful of switching from and to in this case
 
 		return 0;

@@ -24,49 +24,39 @@ namespace snu {
 				</style>\
 			</head>\
 			<body>\
-				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>\
-				<h2>\
-					(1) Graph information");
-
-			// Graph information
-			// fprintf(fp, "...");
-
+				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>");
+			
+		if(result->basicstat)
 			fprintf(fp, "\
-				</h2>\
 				<h2>\
-					(2) Basic statistics");
+					(1) Basic statistics\
+				</h2>"); // TODO: print basic statistics
 
-			// Basic statistics
-			//fprintf(fp, "...");
-
-
+		if(result->countstat)
 			fprintf(fp, "\
-				</h2>\
 				<h2>\
-					(3) Count statistics");
+					(2) Count statistics\
+				</h2>"); // TODO: print count statistics
 
-			// Count Statistics
-			//fprintf(fp,"...");
-
-			fprintf(fp, "\
+		fprintf(fp, "\
 				</h2>\
 				<h2>\
 					(4) Statistics Image\
 				</h2>\
 				<h3>\
 				<p> label-vertex image </p>\
-				<img src=\"matlab_plot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-				<img src=\"matlab_plot/%d_label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
+				<img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+				<img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
 				</h3>\
 				<h3>\
 				<p> indegree image </p>\
-				<img src=\"matlab_plot/%d_indegree.png\" width=\"400\" alt=\"indegree image\">\
-				<img src=\"matlab_plot/%d_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
+				<img src=\"pyplot/%d_indegree.png\" width=\"400\" alt=\"indegree image\">\
+				<img src=\"pyplot/%d_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
 				</h3>\
 				<h3>\
 				<p> outdegree image </p>\
-				<img src=\"matlab_plot/%d_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
-				<img src=\"matlab_plot/%d_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
+				<img src=\"pyplot/%d_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
+				<img src=\"pyplot/%d_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
 				</h3>\
 			</body>\
 		</html>\
@@ -94,44 +84,34 @@ namespace snu {
 				</style>\
 			</head>\
 			<body>\
-				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>\
-				<h2>\
-					(1) Graph information");
+				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>");
 
-			// Graph information
-			// fprintf(fp, "...");
-
+		if(result->basicstat)
 			fprintf(fp, "\
-				</h2>\
 				<h2>\
-					(2) Basic statistics");
+					(1) Basic statistics\
+				</h2>"); // TODO: print basic statistics
 
-			// Basic statistics
-			//fprintf(fp, "...");
-
-
+		if(result->countstat)
 			fprintf(fp, "\
-				</h2>\
 				<h2>\
-					(3) Count statistics");
+					(2) Count statistics\
+				</h2>"); // TODO: print count statistics
 
-			// Count Statistics
-			//fprintf(fp,"...");
-
-			fprintf(fp, "\
+		fprintf(fp, "\
 				</h2>\
 				<h2>\
 					(4) Statistics Image\
 				</h2>\
 				<h3>\
 				<p> label-vertex image </p>\
-				<img src=\"matlab_plot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-				<img src=\"matlab_plot/%d_label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
+				<img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+				<img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\log scale label-vertex image\">\
 				</h3>\
 				<h3>\
 				<p> degree image </p>\
-				<img src=\"matlab_plot/%d_degree.png\" width=\"400\" alt=\"degree image\">\
-				<img src=\"matlab_plot/%d_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
+				<img src=\"pyplot/%d_degree.png\" width=\"400\" alt=\"degree image\">\
+				<img src=\"pyplot/%d_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
 				</h3>\
 			</body>\
 		</html>\
