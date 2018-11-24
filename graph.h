@@ -5,6 +5,7 @@
 // TODO: Vector can be much more efficient type than list. Consider about it.
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include "stat.h"
 #include "plot.h"
 
@@ -38,7 +39,8 @@ namespace snu {
 			Vid id;
 			std::list <Label_of_Vertices *> labels;
 			std::list <Edge *> edges;
-			unsigned long long indegree;
+			unsigned int indegree;
+			char visit;
 		};
 
 		class Edge {
@@ -69,7 +71,10 @@ namespace snu {
 		std::unordered_map <Vlabel, Label_of_Vertices *> vlabel_to_class;
 		std::unordered_map <Elabel, Label_of_Edges *>    elabel_to_class;
 
-		unsigned long long negative_edge_num;
+		std::unordered_set <std::pair <Vid, Vid> > is_connected;
+
+		unsigned int negative_edge_num = 0;
+		char visit = 0;
 
 		//std::unordered_map <std::pair <VId, VId>, Edge *> id_pair_to_edge;
 
@@ -85,6 +90,9 @@ namespace snu {
 		int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt); // array version
 		// if edge is created normally, then return 0
 		// if error occurs, then return 1
+
+		// friend function
+		friend unsigned long long BFS(Graph::Vertex *start);
 	};
 
 	class DSGraph: public Graph { // directed simple graph
