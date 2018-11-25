@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <Python.h>
 
 namespace snu {
 
@@ -42,6 +43,22 @@ namespace snu {
 			out << (*it->second).edges.size() << " ";
 
 		out.close();
+
+
+		FILE *fp = fopen("ploy.py", "r");
+		if(fp==NULL){
+			return;
+		}
+		char buf[200];
+		Py_Initialize();
+		if(Py_IsInitialized()){
+			while(fgets(buf, 200, fp)){
+				PyRun_SimpleString(buf);
+			}
+			Py_Finalize();
+		}
+		fclose(fp);
+
 	}
 
 	void make_plot(USGraph *graph, Plot *plot) {
@@ -73,5 +90,20 @@ namespace snu {
 			out << (*it->second).indegree << " ";
 
 		out.close();
+
+		FILE *fp = fopen("ploy.py", "r");
+		if(fp==NULL){
+			return;
+		}
+		char buf[200];
+		Py_Initialize();
+		if(Py_IsInitialized()){
+			while(fgets(buf, 200, fp)){
+				PyRun_SimpleString(buf);
+			}
+			Py_Finalize();
+		}
+		fclose(fp);
+
 	}
 }
