@@ -14,7 +14,7 @@ namespace snu {
 		double reciprocity; // only defined in directed graph
 		double negativity;
 		unsigned int lcc; // largest connected component
-		unsigned int diameter; // diameter of graph
+		//unsigned int diameter; // diameter of graph
 
 		/* count_stat */
 		// unsigned long long four_tour_count;
@@ -33,14 +33,14 @@ namespace snu {
 		unsigned int max_degree; // maximum degree
 		double negativity;
 		unsigned int lcc;
-		unsigned int diameter;
+		//unsigned int diameter;
 
 		/* count_stat */
 		unsigned long long wedge_count;
 		unsigned long long claw_count;
-		unsigned long long triangle_count;
-		// unsigned long long square_count;
-		// unsigned long long four_tour_count;
+		//unsigned long long triangle_count;
+		//unsigned long long square_count;
+		//unsigned long long four_tour_count;
 
 		/* stat check */
 		bool basicstat;

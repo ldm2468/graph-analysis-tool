@@ -4,6 +4,7 @@ namespace snu {
   
 	void init_plot(Plot *plot) {
 		static unsigned int cnt = 0;
-		*plot = cnt++;
+		plot->id = cnt++;
+		plot->makeplot = false;
 	}
 }

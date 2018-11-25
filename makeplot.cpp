@@ -58,22 +58,25 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot */
-		FILE *fp = fopen("plot.py", "r");
-		if(fp == NULL) return; // error
-
-		char buf[MAX_BUF];
-
+		/* pyplot 
 		Py_Initialize();
-		if(Py_IsInitialized()) {
-			while(fgets(buf, MAX_BUF, fp)) {
-				sprintf(buf, buf, *plot);
-				PyRun_SimpleString(buf);
-			}
-			Py_Finalize();
-		}
-
+		printf("aaa\n");
+		PyObject *main_module = PyImport_AddModule("__main__");
+		printf("bbb\n");
+		PyObject *main_dict = PyModule_GetDict(main_module);
+		printf("ccc\n");
+		char filename[] = "plot.py";
+		printf("ddd\n");
+		FILE *fp = fopen(filename, "r");
+		printf("eee\n");
+		PyRun_File(fp, filename, 1, main_dict, main_dict);
+		printf("fff\n");
 		fclose(fp);
+		printf("ggg\n");
+		Py_Finalize();
+		printf("hhh\n");
+*/
+		plot->makeplot = true;
 	}
 
 	void make_plot(USGraph *graph, Plot *plot) {
@@ -112,21 +115,13 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot */
-		FILE *fp = fopen("plot.py", "r");
-		if(fp == NULL) return; // error
-
-		char buf[MAX_BUF];
-
+		/* pyplot *//*
+		char filename[] = "plot.py";
 		Py_Initialize();
-		if(Py_IsInitialized()) {
-			while(fgets(buf, MAX_BUF, fp)) {
-				sprintf(buf, buf, *plot);
-				PyRun_SimpleString(buf);
-			}
-			Py_Finalize();
-		}
-
-		fclose(fp);
+		FILE *fp = _Py_fopen(filename, "r");
+		PyRun_SimpleFile(fp, filename);
+		Py_Finalize();
+*/
+		plot->makeplot = true;
 	}
 }

@@ -12,7 +12,7 @@ namespace snu {
 		// TODO: square_count, four_tour_count
 		result->wedge_count = 0;
 		result->claw_count = 0;
-		result->triangle_count = 0;
+		// result->triangle_count = 0;
 		// result->square_count = 0;
 		// result->four_tour_count = 0;
 

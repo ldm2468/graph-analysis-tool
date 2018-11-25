@@ -66,7 +66,7 @@ namespace snu {
 			}
 		}
 
-		result->diameter = 0; // TODO
+		// result->diameter = 0; // TODO
 
 		result->basicstat = true;
 	}
@@ -96,7 +96,7 @@ namespace snu {
 			}
 		}
 
-		result->diameter = 0; // TODO
+		// result->diameter = 0; // TODO
 
 		result->basicstat = true;
 	}
