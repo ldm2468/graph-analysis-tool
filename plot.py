@@ -2,9 +2,9 @@ from matplotlib import pyplot as plt
 import math
 
 # label-vertex
-l=[]
-n=[]
 with open('./pyplot/label-vertex.txt', mode='rt') as f:
+    l=[]
+    n=[]
     while True:
         text=f.readline()
         if not text:
@@ -13,7 +13,7 @@ with open('./pyplot/label-vertex.txt', mode='rt') as f:
         l=l+[text[0]]
         n=n+[int(text[1])]
 
-    if len(l)!=0:         
+    if len(l)!=0:
         plt.figure(1)
         plt.bar(l,n)
         plt.xlabel('label')
@@ -33,42 +33,7 @@ with open('./pyplot/label-vertex.txt', mode='rt') as f:
         fig = plt.gcf()
         fig.savefig("./pyplot/%d_label-vertex_log.png", dpi=300)
 
-# degree
-with open('./pyplot/degree.txt', mode='rt') as f:
-    text=f.readline()
-    a=text.split()
-    for i in range(len(a)):
-        a[i]=int(a[i])
-    b=[]
-    for i in range(max(a)+1):
-        b.append(0)
-    
-    degree = list(range(0, max(a)+1))
- 
-    for i in range(len(degree)):
-        for j in range(len(a)):
-            if a[j]==degree[i]:
-                b[i]=b[i]+1
-    plt.figure(3)
-    plt.bar(degree, b)
-    plt.xlabel('degree')
-    plt.ylabel('# of vertex')
-    plt.title('degree')
-    fig = plt.gcf()
-    fig.savefig("./pyplot/%d_degree.png", dpi=300)
 
-    for i in range(len(degree)):
-        if degree[i]!=0:
-            degree[i]=math.log(degree[i])
-        if b[i]!=0:
-            b[i]=math.log(b[i])
-    plt.figure(4)
-    plt.bar(degree, b, width=0.1)
-    plt.xlabel('log(degree)')
-    plt.ylabel('log(# of vertex)')
-    plt.title('degree_log')
-    fig = plt.gcf()
-    fig.savefig("./pyplot/%d_degree_log.png", dpi=300)
 
 # indegree
 with open('./pyplot/indegree.txt', mode='rt') as f:
@@ -79,9 +44,9 @@ with open('./pyplot/indegree.txt', mode='rt') as f:
     b=[]
     for i in range(max(a)+1):
         b.append(0)
-    
+
     degree = list(range(0, max(a)+1))
- 
+
     for i in range(len(degree)):
         for j in range(len(a)):
             if a[j]==degree[i]:
@@ -116,9 +81,9 @@ with open('./pyplot/outdegree.txt', mode='rt') as f:
     b=[]
     for i in range(max(a)+1):
         b.append(0)
-    
+
     degree = list(range(0, max(a)+1))
- 
+
     for i in range(len(degree)):
         for j in range(len(a)):
             if a[j]==degree[i]:
@@ -143,5 +108,39 @@ with open('./pyplot/outdegree.txt', mode='rt') as f:
     plt.title('degree_log')
     fig = plt.gcf()
     fig.savefig("./pyplot/%d_outdegree_log.png", dpi=300)
+    
+# degree
+with open('./pyplot/degree.txt', mode='rt') as f:
+    text=f.readline()
+    a=text.split()
+    for i in range(len(a)):
+        a[i]=int(a[i])
+    b=[]
+    for i in range(max(a)+1):
+        b.append(0)
 
+    degree = list(range(0, max(a)+1))
 
+    for i in range(len(degree)):
+        for j in range(len(a)):
+            if a[j]==degree[i]:
+                b[i]=b[i]+1
+    plt.figure(3)
+    plt.bar(degree, b)
+    plt.xlabel('degree')
+    plt.ylabel('# of vertex')
+    plt.title('degree')
+    fig = plt.gcf()
+    fig.savefig("./pyplot/%d_degree.png", dpi=300)
+
+    for i in range(len(degree)):
+        if degree[i]!=0:
+            degree[i]=math.log(degree[i])
+        if b[i]!=0:
+            b[i]=math.log(b[i])
+    plt.figure(4)
+    plt.bar(degree, b, width=0.1)
+    plt.xlabel('log(degree)')
+    plt.ylabel('log(# of vertex)')
+    plt.title('degree_log')
+    fig = plt.gcf()
