@@ -58,24 +58,16 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot 
+		/* pyplot */
+		PyObject *pName, *pModule, *pFunc;
 		Py_Initialize();
-		printf("aaa\n");
-		PyObject *main_module = PyImport_AddModule("__main__");
-		printf("bbb\n");
-		PyObject *main_dict = PyModule_GetDict(main_module);
-		printf("ccc\n");
-		char filename[] = "plot.py";
-		printf("ddd\n");
-		FILE *fp = fopen(filename, "r");
-		printf("eee\n");
-		PyRun_File(fp, filename, 1, main_dict, main_dict);
-		printf("fff\n");
-		fclose(fp);
-		printf("ggg\n");
+		pName = PyUnicode_FromString("plot");
+		pModule = PyImport_Import(pName);
+		pFunc = PyObject_GetAttrString(pModule, "plot");
+		if(pFunc && PyCallable_Check(pFunc)) PyObject_CallObject(pFunc, NULL);
+		else PyErr_Print();
 		Py_Finalize();
-		printf("hhh\n");
-*/
+
 		plot->makeplot = true;
 	}
 
@@ -121,7 +113,7 @@ namespace snu {
 		FILE *fp = _Py_fopen(filename, "r");
 		PyRun_SimpleFile(fp, filename);
 		Py_Finalize();
-*/
-		plot->makeplot = true;
+
+		plot->makeplot = true;*/
 	}
 }
