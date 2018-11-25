@@ -59,7 +59,7 @@ namespace snu {
 		out.close();
 
 		/* pyplot */
-		FILE *fp = fopen("ploy.py", "r");
+		FILE *fp = fopen("plot.py", "r");
 		if(fp == NULL) return; // error
 
 		char buf[MAX_BUF];
@@ -113,7 +113,7 @@ namespace snu {
 		out.close();
 
 		/* pyplot */
-		FILE *fp = fopen("ploy.py", "r");
+		FILE *fp = fopen("plot.py", "r");
 		if(fp == NULL) return; // error
 
 		char buf[MAX_BUF];
