@@ -2,9 +2,8 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include <math.h>
-#include <Python.h>
-#define MAX_BUF 100
+#include <stdlib.h>
+#define CMD_MAX_LENGTH 30
 
 namespace snu {
 
@@ -30,6 +29,10 @@ namespace snu {
 
 		out.close();
 
+		char cmd[CMD_MAX_LENGTH];
+		sprintf(cmd, "python label-vertex.py %d", plot->id);
+		system(cmd);
+
 		/* indegree */
 		out.open("./pyplot/indegree.txt");
 
@@ -43,6 +46,9 @@ namespace snu {
 			out << *it << " ";
 
 		out.close();
+
+		sprintf(cmd, "python indegree.py %d", plot->id);
+		system(cmd);
 
 		/* outdegree */
 		out.open("./pyplot/outdegree.txt");
@@ -58,16 +64,9 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot *//*
-		PyObject *pName, *pModule, *pFunc;
-		Py_Initialize();
-		pName = PyUnicode_FromString("plot");
-		pModule = PyImport_Import(pName);
-		pFunc = PyObject_GetAttrString(pModule, "plot");
-		if(pFunc && PyCallable_Check(pFunc)) PyObject_CallObject(pFunc, NULL);
-		else PyErr_Print();
-		Py_Finalize();
-*/
+		sprintf(cmd, "python outdegree.py %d", plot->id);
+		system(cmd);
+
 		plot->makeplot = true;
 	}
 
@@ -92,6 +91,10 @@ namespace snu {
 			out << *(it->first) << " " << it->second << std::endl;
 
 		out.close();
+		
+		char cmd[CMD_MAX_LENGTH];
+		sprintf(cmd, "python label-vertex.py %d", plot->id);
+		system(cmd);
 
 		/* degree */
 		out.open("./pyplot/degree.txt");
@@ -107,13 +110,10 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot *//*
-		char filename[] = "plot.py";
-		Py_Initialize();
-		FILE *fp = _Py_fopen(filename, "r");
-		PyRun_SimpleFile(fp, filename);
-		Py_Finalize();
+		sprintf(cmd, "python degree.py %d", plot->id);
+		system(cmd);
 
-		plot->makeplot = true;*/
+		/* pyplot */
+		plot->makeplot = true;
 	}
 }

@@ -18,16 +18,19 @@ namespace snu {
 				<meta charset = \"utf-8\">\
 				<title>SNU Graph Analysis Tool</title>\
 				<style type=\"text/css\">\
+					h1{\
+						text-indent: 1em;\
+					}\
 					h2{\
 						text-indent: 2em;\
 					}\
-					p{\
+					h3{\
 						text-indent: 4em;\
 					}\
 				</style>\
 			</head>\
 			<body>\
-				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>");
+				<h1><p>SNU Graph Analysis Tool</p></h1>");
 
 		if(result) {
 			if(result->basicstat)
@@ -39,7 +42,7 @@ namespace snu {
 					<p> size = %u </p>\
 					<p> volume = %u </p>\
 					<p> avg_degree = %lf </p>\
-					<p> fill = %lf </p>\
+					<p> density(fill) = %lf </p>\
 					<p> max_indegree = %u </p>\
 					<p> max_outdegree = %u </p>\
 					<p> reciprocity = %lf </p>\
@@ -99,10 +102,13 @@ namespace snu {
 				<meta charset = \"utf-8\">\
 				<title>SNU Graph Analysis Tool</title>\
 				<style type=\"text/css\">\
+					h1{\
+						text-indent: 1em;\
+					}\
 					h2{\
 						text-indent: 2em;\
 					}\
-					p{\
+					h3{\
 						text-indent: 4em;\
 					}\
 				</style>\
@@ -120,7 +126,7 @@ namespace snu {
 					<p> size = %u </p>\
 					<p> volume = %u </p>\
 					<p> avg_degree = %lf </p>\
-					<p> fill = %lf </p>\
+					<p> density(fill) = %lf </p>\
 					<p> max_degree = %u </p>\
 					<p> negativity = %lf </p>\
 					<p> largest connected component = %u </p>\
