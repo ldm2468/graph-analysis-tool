@@ -58,7 +58,7 @@ namespace snu {
 
 		out.close();
 
-		/* pyplot */
+		/* pyplot *//*
 		PyObject *pName, *pModule, *pFunc;
 		Py_Initialize();
 		pName = PyUnicode_FromString("plot");
@@ -67,7 +67,7 @@ namespace snu {
 		if(pFunc && PyCallable_Check(pFunc)) PyObject_CallObject(pFunc, NULL);
 		else PyErr_Print();
 		Py_Finalize();
-
+*/
 		plot->makeplot = true;
 	}
 

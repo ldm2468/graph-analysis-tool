@@ -15,7 +15,7 @@ def plot():
             n=n+[int(text[1])]
         if len(l)!=0:
             print("figure start")
-            #plt.figure(1)
+            plt.figure(1)
             print("figure end")
             plt.bar(l,n)
             plt.xlabel('label')
@@ -90,7 +90,7 @@ def plot():
                 b[a[i]]=b[a[i]]+1
    
             plt.figure(5)
-            plt.bar(degree, b)
+            plt.scatter(degree, b)
             plt.xlabel('indegree')
             plt.ylabel('# of vertex')
             plt.title('indegree')
@@ -102,7 +102,7 @@ def plot():
                 if b[i]!=0:
                     b[i]=math.log(b[i])
             plt.figure(6)
-            plt.bar(degree, b, width=0.1)
+            plt.scatter(degree, b)
             plt.xlabel('log(indegree)')
             plt.ylabel('log(# of vertex)')
             plt.title('indegree_log')
@@ -147,3 +147,4 @@ def plot():
             fig.savefig("./pyplot/%d_outdegree_log.png", dpi=300)
 
     return
+plot()
