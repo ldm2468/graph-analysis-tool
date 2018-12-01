@@ -39,6 +39,6 @@ with open('./pyplot/outdegree.txt', mode='rt') as f:
         plt.ylabel('log(# of vertex)')
         plt.title('degree_log')
         fig = plt.gcf()
-        fpath = "./pyplot/"+str(graph_name)+"outdegree_log.png"
+        fpath = "./pyplot/"+str(graph_name)+"_outdegree_log.png"
         fig.savefig(fpath, dpi=300)
 
