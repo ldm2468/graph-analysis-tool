@@ -8,8 +8,8 @@
 
 // graph analysis algorithms
 #include "stat.h"
-
 #include "basicstat.h"
+#include "connectstat.h"
 #include "countstat.h"
 
 // graph parsing
@@ -17,7 +17,6 @@
 
 // graph plots
 #include "plot.h"
-
 #include "makeplot.h"
 
 // make html file to show statistics
