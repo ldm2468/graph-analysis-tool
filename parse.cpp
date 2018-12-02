@@ -121,12 +121,12 @@ namespace snu {
 
 			// vertex
 			if(line.find("#") != std::string::npos){
-				if(line.find("Node") != std::string::npos){
+				if(line.find("Nodes") != std::string::npos){
 					iss>>number_vertex;
 					iss>>number_edge;
 					for(vid = 0; vid < number_vertex; vid++){
 						// add vertex
-						graph->add_vertex(vid, NULL);
+						graph->add_vertex(vid, 0, NULL);
 					}
 				}
 				continue;
@@ -138,7 +138,7 @@ namespace snu {
 			iss >> from;
 			iss >> to;
 			// add edge
-			graph->add_edge(eid, NULL, from, to, 1);
+			graph->add_edge(eid, 0, NULL, from, to, 1);
 			eid++;
 		}
 		if(eid == number_edge)
@@ -162,6 +162,48 @@ namespace snu {
 		return NULL; // failed
 	}
 	// parsing USGraph version follows
+	USGraph *parse_snap_USGraph(std::string file_path) {
+		std::ifstream infile(file_path);
+		std::string line;
+		DSGraph *graph = new DSGraph();
+		Graph::Eid eid = 0;
+		Graph::Vid vid = 0;
+		int number_vertex = 0;
+		int number_edge = 0;
+		while(getline(infile, line)) {
+			std::istringstream iss(line);
+
+			// vertex
+			if(line.find("#") != std::string::npos){
+				if(line.find("Nodes") != std::string::npos){
+					iss>>number_vertex;
+					iss>>number_edge;
+					for(vid = 0; vid < number_vertex; vid++){
+						// add vertex
+						graph->add_vertex(vid, 0, NULL);
+					}
+				}
+				continue;
+			}
+
+			// edge
+			Graph::Vid from;
+			Graph::Vid to;
+			iss >> from;
+			iss >> to;
+			// add edge
+			graph->add_edge(eid, 0, NULL, from, to, 1);
+			eid++;
+		}
+		if(eid == number_edge)
+			return graph;
+		else{
+			// error
+			delete graph;
+			return NULL;
+		}
+	}
+
 	USGraph *parse_USGraph(std::string file_path) {
 		if(file_path.rfind(".snu") == file_path.length() - 4) {
 			return NULL; // error
