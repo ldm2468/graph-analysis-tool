@@ -4,6 +4,7 @@ namespace snu {
 	
 	void count_stat(USGraph *graph, USResult *result) {
 		unsigned long long s = 0, z = 0, t = 0;
+		
 		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++) {
 			unsigned long long degree = it->second->indegree;
 			s += degree * (degree - 1) / 2;

@@ -6,8 +6,8 @@ namespace snu {
 		unsigned int n = graph->id_to_vertex.size();
 		unsigned int m = graph->id_to_edge.size();
 
-		result->size = n; // n
-		result->volume = m; // m
+		result->size = n;
+		result->volume = m;
 		result->num_vlabel = graph->vlabel_to_class.size();
 		result->num_elabel = graph->elabel_to_class.size();
 		result->density = (double) m / (n * n); // assume there is loop

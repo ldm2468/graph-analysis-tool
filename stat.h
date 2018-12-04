@@ -5,7 +5,7 @@
 
 namespace snu {
 
-	struct DSResult {
+	typedef struct DSResult {
 		/* basic satistics */
 		unsigned int size; // number of vertices
 		unsigned int volume; // number of edges
@@ -29,9 +29,9 @@ namespace snu {
 		/* statistic check */
 		bool basicstat;
 		bool connectstat;
-	};
+	} DSResult;
 
-	struct USResult {
+	typedef struct USResult {
 		/* basic statistics */
 		unsigned int size; // number of vertices
 		unsigned int volume; // number of edges
@@ -59,10 +59,7 @@ namespace snu {
 		bool basicstat;
 		bool connectstat;
 		bool countstat;
-	};
-
-	typedef struct DSResult DSresult;
-	typedef struct USResult USresult;
+	} USresult;
 
 	void init_stat(DSResult *result);
 	void init_stat(USResult *result);

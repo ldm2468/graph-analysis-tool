@@ -3,13 +3,11 @@
 
 namespace snu {
 
-	struct Plot {
+	typedef struct Plot {
 		unsigned int id;
 		bool makeplot;
-	};
-
-	typedef struct Plot Plot;
-
+	} Plot;
+	
 	void init_plot(Plot *plot);
 }
 

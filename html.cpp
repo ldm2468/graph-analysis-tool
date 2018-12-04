@@ -68,7 +68,7 @@ namespace snu {
 						<p> number of weakly connected components = %u </p>\
 						<p> size of largest weakly connected component = %u </p>\
 					</h3>\
-				", result->num_scc, result->num_wcc, result->size_lscc, result->size_lwcc);
+				", result->num_scc, result->size_lscc, result->num_wcc, result->size_lwcc);
 		}
 
 		if(plot && plot->makeplot)
@@ -136,7 +136,7 @@ namespace snu {
 						<p> number of vertex labels = %u </p>\
 						<p> number of edge labels = %u </p>\
 						<p> density = %lf </p>\
-						<p> average degree = %u </p>\
+						<p> average degree = %lf </p>\
 						<p> maximum degree = %u </p>\
 						<p> maximum size of vertex label = %u </p>\
 						<p> maximum size of edge label = %u </p>\
@@ -154,7 +154,7 @@ namespace snu {
 					<h3>\
 						<p> number of connected components = %u </p>\
 						<p> size of largest connected component = %u </p>\
-						<p> diameter (largest distance of all shortest path) = %u </p>\
+						<p> approximate diameter (largest distance of all shortest path) = %u </p>\
 					</h3>\
 				", result->num_cc, result->size_lcc, result->diameter);
 	

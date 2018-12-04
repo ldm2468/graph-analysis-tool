@@ -39,7 +39,7 @@ namespace snu {
 			std::list <Label_of_Vertices *> labels;
 			std::list <Edge *> edges;
 			unsigned int indegree;
-			char visit;
+			void *temp;
 		};
 
 		class Edge {
