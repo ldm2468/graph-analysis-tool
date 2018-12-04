@@ -2,7 +2,6 @@
 #define GRAPH_H
 
 #include <list>
-// TODO: Vector can be much more efficient type than list. Consider about it.
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -40,7 +39,7 @@ namespace snu {
 			std::list <Label_of_Vertices *> labels;
 			std::list <Edge *> edges;
 			unsigned int indegree;
-			char visit;
+			void *temp;
 		};
 
 		class Edge {
@@ -106,7 +105,7 @@ namespace snu {
 
 		// friend function
 		friend void basic_stat(DSGraph *graph, DSResult *result);
-		friend void count_stat(DSGraph *graph, DSResult *result);
+		friend void connect_stat(DSGraph *graph, DSResult *result);
 		friend void make_plot(DSGraph *graph, Plot *plot);
 		
 		friend DSGraph *parse_snu_DSGraph(std::string file_path);
@@ -121,12 +120,10 @@ namespace snu {
 
 		// friend function
 		friend void basic_stat(USGraph *graph, USResult *result);
+		friend void connect_stat(USGraph *graph, USResult *result);
 		friend void count_stat(USGraph *graph, USResult *result);
 		friend void make_plot(USGraph *graph, Plot *plot);
 	};
-
-	// class DMGraph: public Graph {};
-	// class UMGraph: public Graph {};
 }
 
 #endif // GRAPH_H

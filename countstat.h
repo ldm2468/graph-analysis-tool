@@ -6,7 +6,6 @@
 
 namespace snu {
 
-	void count_stat(DSGraph *graph, DSResult *result);
 	void count_stat(USGraph *graph, USResult *result);
 }
 
