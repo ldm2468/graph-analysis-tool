@@ -7,6 +7,7 @@
 
 namespace snu {
 
+	// thread-unsafe, TODO: file path has to be like 0_label-vertex.txt depending on plot.id
 	void make_plot(DSGraph *graph, Plot *plot) {
 		std::ofstream out;
 

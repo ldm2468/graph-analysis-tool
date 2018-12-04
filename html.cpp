@@ -32,6 +32,16 @@ namespace snu {
 			<body>\
 				<h1><p>SNU Graph Analysis Tool</p></h1>");
 
+		fprintf(fp, "\
+			<h2>\
+				Graph Information\
+			</h2>\
+			<h3>\
+				<p> graph name: %s </p>\
+				<p> graph type: directed simple graph </p>\
+			</h3>\
+		", name);
+
 		if(result) {
 			if(result->basicstat)
 				fprintf(fp, "\
@@ -123,6 +133,16 @@ namespace snu {
 			</head>\
 			<body>\
 				<h1><p>SNU Graph Analysis Tool</p></h1>");
+		
+		fprintf(fp, "\
+			<h2>\
+				Graph Information\
+			</h2>\
+			<h3>\
+				<p> graph name: %s </p>\
+				<p> graph type: undirected simple graph </p>\
+			</h3>\
+		", name);
 
 		if(result) {
 			if(result->basicstat)

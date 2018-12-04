@@ -200,20 +200,19 @@ namespace snu {
 		public:
 			static First_info first(Graph::Vertex *start) {
 				unsigned int cnt = 0;
-				Graph::Vertex *farthest = NULL;
+				Graph::Vertex *now = start;
 				Vertex_info *now_info, *next_info;
 				std::queue <Graph::Vertex *> q;
 
-				now_info = (Vertex_info *)start->temp;
+				now_info = (Vertex_info *)now->temp;
 				now_info->visit = true;
 				now_info->dist = 0;
 				q.push(start);
 
 				while(!q.empty()) {
-					Graph::Vertex *now = q.front();
+					now = q.front();
 					q.pop();
 					cnt++;
-					farthest = now;
 					now_info = (Vertex_info *)now->temp;
 
 					for(auto it = now->edges.begin(); it != now->edges.end(); it++) {
@@ -228,11 +227,10 @@ namespace snu {
 					}
 				}
 
-				return First_info {farthest, cnt};
+				return First_info {now, cnt};
 			}
 
 			static unsigned int second(Graph::Vertex *start) {
-				unsigned int largest_dist = 0;
 				Vertex_info *now_info, *next_info;
 				std::queue <Graph::Vertex *> q;
 
@@ -245,7 +243,6 @@ namespace snu {
 					Graph::Vertex *now = q.front();
 					q.pop();
 					now_info = (Vertex_info *)now->temp;
-					largest_dist = now_info->dist;
 
 					for(auto it = now->edges.begin(); it != now->edges.end(); it++) {
 						Graph::Vertex *next = now == (*it)->to ? (*it)->from : (*it)->to;
@@ -259,7 +256,7 @@ namespace snu {
 					}
 				}
 
-				return largest_dist;
+				return now_info->dist;
 			}
 
 		} BFS;

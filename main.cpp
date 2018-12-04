@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 	snu::init_stat(&usr1);
 	snu::basic_stat(usg1, &usr1);
 	snu::connect_stat(usg1, &usr1);
+	snu::count_stat(usg1, &usr1);
 	snu::init_plot(&plot2);
 	snu::make_plot(usg1, &plot2);
 	snu::make_html("com-dblp_label", &usr1, &plot2);
@@ -66,7 +67,7 @@ int main(int argc, char *argv[]) {
 	snu::init_stat(&usr3);
 	snu::basic_stat(usg3, &usr3);
 	snu::connect_stat(usg3, &usr3);
-	snu::count_stat(usg3, &usr3);
+	//snu::count_stat(usg3, &usr3);
 	snu::init_plot(&usplot);
 	snu::make_plot(usg3, &usplot);
 	snu::make_html("ca-AstroPh", &usr3, &usplot);
