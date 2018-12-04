@@ -122,7 +122,7 @@ namespace snu {
 				</style>\
 			</head>\
 			<body>\
-				<center><h1><p>SNU Graph Analysis Tool</p></h1></center>");
+				<h1><p>SNU Graph Analysis Tool</p></h1>");
 
 		if(result) {
 			if(result->basicstat)

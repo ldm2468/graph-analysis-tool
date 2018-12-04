@@ -112,108 +112,130 @@ namespace snu {
 		std::ifstream infile(file_path);
 		std::string line;
 		DSGraph *graph = new DSGraph();
+		std::unordered_set <int> set;
 		Graph::Eid eid = 0;
-		Graph::Vid vid = 0;
-		int number_vertex = 0;
-		int number_edge = 0;
+
 		while(getline(infile, line)) {
 			std::istringstream iss(line);
 
-			// vertex
-			if(line.find("#") != std::string::npos){
-				if(line.find("Nodes") != std::string::npos){
-					iss>>number_vertex;
-					iss>>number_edge;
-					for(vid = 0; vid < number_vertex; vid++){
-						// add vertex
-						graph->add_vertex(vid, 0, NULL);
-					}
-				}
+			if(line.find("#") != std::string::npos)
 				continue;
+
+			Graph::Vid from, to;
+			iss >> from >> to;
+
+			if(!set.count(from)) {
+				set.insert(from);
+				graph->add_vertex(from, 0, NULL);
+			}
+			if(!set.count(to)) {
+				set.insert(to);
+				graph->add_vertex(to, 0, NULL);
 			}
 
-			// edge
-			Graph::Vid from;
-			Graph::Vid to;
-			iss >> from;
-			iss >> to;
 			// add edge
-			graph->add_edge(eid, 0, NULL, from, to, 1);
-			eid++;
+			graph->add_edge(eid++, 0, NULL, from, to, 1);
 		}
-		if(eid == number_edge)
-			return graph;
-		else{
-			// error
-			delete graph;
-			return NULL;
-		}
+
+		return graph;
 	}
 
 	// parsing DSGraph version follows
 	DSGraph *parse_DSGraph(std::string file_path) {
 		if(file_path.rfind(".snu") == file_path.length() - 4)
 			return parse_snu_DSGraph(file_path);
-		if(file_path.rfind(".snap") == file_path.length() - 5)
-			return parse_snu_DSGraph(file_path);
+		else if(file_path.rfind(".snap") == file_path.length() - 5)
+			return parse_snap_DSGraph(file_path);
 		else if(file_path.rfind(".net") == file_path.length() - 4)
 			return parse_net_DSGraph(file_path);
 		// else if
 		return NULL; // failed
 	}
-	// parsing USGraph version follows
-	USGraph *parse_snap_USGraph(std::string file_path) {
+
+	USGraph *parse_snu_USGraph(std::string file_path) {
 		std::ifstream infile(file_path);
 		std::string line;
-		DSGraph *graph = new DSGraph();
+		USGraph *graph = new USGraph();
 		Graph::Eid eid = 0;
-		Graph::Vid vid = 0;
-		int number_vertex = 0;
-		int number_edge = 0;
+
 		while(getline(infile, line)) {
 			std::istringstream iss(line);
 
-			// vertex
-			if(line.find("#") != std::string::npos){
-				if(line.find("Nodes") != std::string::npos){
-					iss>>number_vertex;
-					iss>>number_edge;
-					for(vid = 0; vid < number_vertex; vid++){
-						// add vertex
-						graph->add_vertex(vid, 0, NULL);
-					}
+			std::string sign;
+			iss >> sign;
+			if(sign == "t") {}
+			else if(sign == "v") {
+				Graph::Vid id;
+				Graph::Vlabel label;
+				std::vector <Graph::Vlabel> label_vector;
+
+				iss >> id;
+				while(iss >> label) label_vector.push_back(label);
+				if(graph->add_vertex(id, &label_vector)) { // error
+					delete graph;
+					return NULL;
 				}
+			}
+			else if(sign == "e") {
+				Graph::Vid from, to;
+				Graph::Elabel label;
+				std::vector<Graph::Elabel> label_vector;
+
+				iss >> from >> to;
+				while(iss >> label) label_vector.push_back(label);
+				if(graph->add_edge(eid++, &label_vector, from, to, 1)) { // error
+					delete graph;
+					return NULL;
+				}
+			}
+			else { // error
+				delete graph;
+				return NULL;
+			}
+		}
+
+		return graph;
+	}
+
+	USGraph *parse_snap_USGraph(std::string file_path) {
+		std::ifstream infile(file_path);
+		std::string line;
+		USGraph *graph = new USGraph();
+		std::unordered_set <int> set;
+		Graph::Eid eid = 0;
+
+		while(getline(infile, line)) {
+			std::istringstream iss(line);
+
+			if(line.find("#") != std::string::npos)
 				continue;
+
+			Graph::Vid from, to;
+			iss >> from >> to;
+
+			if(!set.count(from)) {
+				set.insert(from);
+				graph->add_vertex(from, 0, NULL);
+			}
+			if(!set.count(to)) {
+				set.insert(to);
+				graph->add_vertex(to, 0, NULL);
 			}
 
-			// edge
-			Graph::Vid from;
-			Graph::Vid to;
-			iss >> from;
-			iss >> to;
 			// add edge
-			graph->add_edge(eid, 0, NULL, from, to, 1);
-			eid++;
+			graph->add_edge(eid++, 0, NULL, from, to, 1);
 		}
-		if(eid == number_edge)
-			return graph;
-		else{
-			// error
-			delete graph;
-			return NULL;
-		}
+
+		return graph;
 	}
 
 	USGraph *parse_USGraph(std::string file_path) {
-		if(file_path.rfind(".snu") == file_path.length() - 4) {
+		if(file_path.rfind(".snu") == file_path.length() - 4)
+			return parse_snu_USGraph(file_path); // error
+		else if(file_path.rfind(".snap") == file_path.length() - 5)
+			return parse_snap_USGraph(file_path); // error
+		else if(file_path.rfind(".net") == file_path.length() - 4)
 			return NULL; // error
-		}
-		if(file_path.rfind(".snap") == file_path.length() - 5) {
-			return NULL; // error
-		}
-		else if(file_path.rfind(".net") == file_path.length() - 4) {
-			return NULL; // error
-		}
 		// else if
 		return NULL; // failed
 	}

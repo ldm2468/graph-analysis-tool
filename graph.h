@@ -123,6 +123,9 @@ namespace snu {
 		friend void connect_stat(USGraph *graph, USResult *result);
 		friend void count_stat(USGraph *graph, USResult *result);
 		friend void make_plot(USGraph *graph, Plot *plot);
+
+		friend USGraph *parse_snu_USGraph(std::string file_path);
+		friend USGraph *parse_snap_USGraph(std::string file_path);
 	};
 }
 

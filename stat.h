@@ -59,7 +59,7 @@ namespace snu {
 		bool basicstat;
 		bool connectstat;
 		bool countstat;
-	} USresult;
+	} USResult;
 
 	void init_stat(DSResult *result);
 	void init_stat(USResult *result);

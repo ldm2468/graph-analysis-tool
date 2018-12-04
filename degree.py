@@ -35,7 +35,7 @@ with open('./pyplot/degree.txt', mode='rt') as f:
             if b[i]!=0:
                 b[i]=math.log(b[i])
         plt.figure(4)
-        plt.scatter(degree)
+        plt.scatter(degree, b)
         plt.xlabel('log(degree)')
         plt.ylabel('log(# of vertex)')
         plt.title('degree_log')
