@@ -5,6 +5,8 @@ C++11 이상을 지원하는 C++ Compiler와 3.6 버전 이상의 Python, Python
 ## 실행 방법
 사용자 환경에 맞게 Makefile을 수정한 후 `make`한다. 설정한 executable file이 나오면 그것을 실행하면 된다.
 ## API
+`#include "snugal.h"`
+
 `DSGraph *parse_DSGraph(std::string file_path)`
 
 `USGraph *parse_USGraph(std::string file_path)`
