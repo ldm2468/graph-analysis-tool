@@ -74,7 +74,7 @@ namespace snu {
             Label_of_Edges *el;
 
             // no edge label class
-            if(it == elabel_to_class.end()) {
+            if (it == elabel_to_class.end()) {
                 el = new Label_of_Edges();
                 elabel_to_class[lbl[i]] = el;
                 el->label = lbl[i];
