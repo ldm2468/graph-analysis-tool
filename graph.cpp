@@ -1,117 +1,136 @@
 #include "graph.h"
 
+
 namespace snu {
 
-	Graph::Graph() {}
+    Graph::Graph() {}
 
-	/* destructor */
-	Graph::~Graph() {
-		// delete vertex, edge, vertex_label, edge_label;
-		for(auto it = id_to_vertex.begin(); it != id_to_vertex.end(); it++) delete it->second;
-		for(auto it = id_to_edge.begin(); it != id_to_edge.end(); it++) delete it->second;
-		for(auto it = vlabel_to_class.begin(); it != vlabel_to_class.end(); it++) delete it->second;
-		for(auto it = elabel_to_class.begin(); it != elabel_to_class.end(); it++) delete it->second;
-	}
+    /* destructor */
+    Graph::~Graph()
+    {
+        // delete vertex, edge, vertex_label, edge_label;
+        for (auto it = id_to_vertex.begin(); it != id_to_vertex.end(); ++it) delete it->second;
+        for (auto it = id_to_edge.begin(); it != id_to_edge.end(); ++it) delete it->second;
+        for (auto it = vlabel_to_class.begin(); it != vlabel_to_class.end(); ++it) delete it->second;
+        for (auto it = elabel_to_class.begin(); it != elabel_to_class.end(); ++it) delete it->second;
+    }
 
-	/* do not have to define destructor of child classes */
+    /* do not have to define destructor of child classes */
 
-	/* array version */
-	int Graph::add_vertex(Vid id, unsigned int num, Vlabel lbl[]) {
-		if(id_to_vertex.count(id)) return 1; // error: graph already has a vertex having same id
+    /* array version */
+    int Graph::add_vertex(Vid id, unsigned int num, Vlabel lbl[])
+    {
+        // error: graph already has a vertex having same id
+        if (id_to_vertex.count(id)) return 1;
 
-		Vertex *v = new Vertex(); // create vertex class
-		id_to_vertex[id] = v;
-		v->id = id; // set id
-		// set labels
-		// if no vertex label class then create it
-		for(unsigned int i = 0; i < num; i++) {
-			auto it = vlabel_to_class.find(lbl[i]);
-			Label_of_Vertices *vl;
+        Vertex *v = new Vertex();
+        id_to_vertex[id] = v;
+        v->id = id;
 
-			if(it == vlabel_to_class.end()) { // no vertex label class
-				vl = new Label_of_Vertices();
-				vlabel_to_class[lbl[i]] = vl;
-				vl->label = lbl[i];
-			}
-			else vl = it->second;
-			
-			vl->vertices.push_back(v);
-			v->labels.push_back(vl);
-		}
+        // set labels
+        // if no vertex label class then create it
+        for (unsigned int i = 0; i < num; ++i) {
+            auto it = vlabel_to_class.find(lbl[i]);
+            Label_of_Vertices *vl;
 
-		return 0;
-	}
+            // no vertex label class
+            if (it == vlabel_to_class.end()) {
+                vl = new Label_of_Vertices();
+                vlabel_to_class[lbl[i]] = vl;
+                vl->label = lbl[i];
+            }
+            else {
+                vl = it->second;
+            }
+            
+            vl->vertices.push_back(v);
+            v->labels.push_back(vl);
+        }
 
-	/* vector version */
-	int Graph::add_vertex(Vid id, std::vector <Vlabel> *lbl) {
-		return add_vertex(id, lbl->size(), lbl->data());
-	}
+        return 0;
+    }
 
-	/* base add_edge function, DSGraph version */
-	int Graph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
-		if(id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
-			return 1;
-		// error: already have edge having same id or no from or to vertex
+    /* vector version */
+    int Graph::add_vertex(Vid id, std::vector <Vlabel> *lbl)
+    {
+        return add_vertex(id, lbl->size(), lbl->data());
+    }
 
-		Edge *e = new Edge(); // create edge class
-		id_to_edge[id] = e;
-		e->id = id; // set id
-		// set edge labels
-		// if no edge label class then create it
-		for(unsigned int i = 0; i < num; i++) {
-			auto it = elabel_to_class.find(lbl[i]);
-			Label_of_Edges *el;
+    /* base add_edge function, DSGraph version */
+    int Graph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) 
+    {
+        // error: already have edge having same id or no from or to vertex
+        if (id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
+            return 1;
 
-			if(it == elabel_to_class.end()) { // no edge label class
-				el = new Label_of_Edges();
-				elabel_to_class[lbl[i]] = el;
-				el->label = lbl[i];
-			}
-			else el = it->second;
+        Edge *e = new Edge();
+        id_to_edge[id] = e;
+        e->id = id;
+        
+        // set edge labels
+        // if no edge label class then create it
+        for (unsigned int i = 0; i < num; ++i) {
+            auto it = elabel_to_class.find(lbl[i]);
+            Label_of_Edges *el;
 
-			el->edges.push_back(e);
-			e->labels.push_back(el);
-		}
-		e->from = id_to_vertex[from]; // set from
-		e->to = id_to_vertex[to]; // set to
-		e->to->indegree++; // increase indegree
-		e->wgt = wgt; // set weight
-		e->from->edges.push_back(e); // insert edge in from vertex
-		
-		is_connected.insert(std::make_pair(from, to)); // insert vertex pair
+            // no edge label class
+            if (it == elabel_to_class.end()) {
+                el = new Label_of_Edges();
+                elabel_to_class[lbl[i]] = el;
+                el->label = lbl[i];
+            }
+            else {
+                el = it->second;
+            }
 
-		if(wgt < 0) negative_edge_num++;
+            el->edges.push_back(e);
+            e->labels.push_back(el);
+        }
 
-		return 0;
-	}
+        e->from = id_to_vertex[from];
+        e->to = id_to_vertex[to];
+        e->to->indegree++;
+        e->wgt = wgt;
+        e->from->edges.push_back(e);
+        
+        is_connected.insert(std::make_pair(from, to));
 
-	/* array version */
-	int DSGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
-		if(Graph::add_edge(id, num, lbl, from, to, wgt)) return 1; // there is error
+        if (wgt < 0) negative_edge_num++;
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/* vector version */
-	int DSGraph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt) {
-		return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
-	}
+    /* array version */
+    int DSGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt)
+    {
+        return Graph::add_edge(id, num, lbl, from, to, wgt);
+    }
 
-	/* array version */
-	int USGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt) {
-		if(Graph::add_edge(id, num, lbl, from, to, wgt)) return 1; // there is error
+    /* vector version */
+    int DSGraph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt)
+    {
+        return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
+    }
 
-		Edge *e = id_to_edge[id];
-		e->to->edges.push_back(e); // insert edge in to vertex
-		e->from->indegree++; // increase indegree of from
-		is_connected.insert(std::make_pair(to, from)); // insert reverse
-		// be careful of switching from and to in this case
+    /* array version */
+    int USGraph::add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt)
+    {
+        // there is an error
+        if (Graph::add_edge(id, num, lbl, from, to, wgt)) return 1;
 
-		return 0;
-	}
+        Edge *e = id_to_edge[id];
+        e->to->edges.push_back(e);
+        e->from->indegree++;
+        is_connected.insert(std::make_pair(to, from));  // insert reverse
+                                                        // be careful of switching from and to in this case
 
-	/* vector version */
-	int USGraph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt) {
-		return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
-	}
+        return 0;
+    }
+
+    /* vector version */
+    int USGraph::add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt)
+    {
+        return add_edge(id, lbl->size(), lbl->data(), from, to, wgt);
+    }
 }
+
