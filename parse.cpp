@@ -7,7 +7,7 @@
 namespace snu {
 
     // parse .snu file
-    int parse_snu_DSGraph(std::string file_path, DSGraph& graph)
+    int parseDSGraphSNU(std::string file_path, DSGraph& graph)
     {
         std::ifstream infile(file_path);
         if (infile.fail()) {
@@ -48,9 +48,10 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_edge(eid++, &label_vector, from, to, 1)) {
+                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
                     return PARSE_FAILURE_ADD_EDGE;
                 }
+                ++eid;
             }
             else {
                 return PARSE_FAILURE_INVALID_INPUT;
@@ -61,7 +62,7 @@ namespace snu {
     }
 
     // parse .net file
-    int parse_net_DSGraph(std::string file_path, DSGraph& graph) 
+    int parseDSGraphNET(std::string file_path, DSGraph& graph) 
     {
         std::ifstream infile(file_path);
         if (infile.fail()) {
@@ -69,24 +70,24 @@ namespace snu {
         }
 
         std::string line;
-        int check_vertex = 0;
-        int check_edge = 0;
+        bool check_vertex = false;
+        bool check_edge = false;
 
         while (getline(infile, line)) {
             std::istringstream iss(line);
 
             if (line.find("*Vertices") != std::string::npos || line.find("*vertices") != std::string::npos) {
-                check_vertex = 1;
-                check_edge = 0;
+                check_vertex = true;
+                check_edge = false;
                 continue;
             }
             else if (line.find("*arcs") != std::string::npos || line.find("*Arcs") != std::string::npos) {
-                check_edge = 1;
-                check_vertex = 0;
+                check_edge = true;
+                check_vertex = false;
                 continue;
             }
 
-            if (check_vertex==1) {
+            if (check_vertex) {
                 Graph::Vid id;
                 std::vector <Graph::Vlabel> label_vector;
                 Graph::Vlabel label;
@@ -102,16 +103,14 @@ namespace snu {
                 }
             }
 
-            if (check_edge==1) {
+            if (check_edge) {
                 Graph::Eid id;
                 Graph::Vid from;
                 Graph::Vid to;
                 std::vector <Graph::Elabel> label_vector;
                 Graph::Elabel label;
 
-                iss >> id;
-                iss >> from;
-                iss >> to;
+                iss >> id >> from >> to;
                 while (iss >> label) {
                     if (label == "l") continue;
                     label.erase(std::remove(label.begin(), label.end(), '\"'), label.end());
@@ -128,7 +127,7 @@ namespace snu {
     }
 
     // parse .snap file
-    int parse_snap_DSGraph(std::string file_path, DSGraph& graph)
+    int parseDSGraphSNAP(std::string file_path, DSGraph& graph)
     {
         std::ifstream infile(file_path);
         if (infile.fail()) {
@@ -162,28 +161,29 @@ namespace snu {
                 }
             }
 
-            if (graph.add_edge(eid++, 0, NULL, from, to, 1)) {
+            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
                 return PARSE_FAILURE_ADD_EDGE;
             }
+            ++eid;
         }
 
         return PARSE_SUCCESS;
     }
 
     // parsing DSGraph version follows
-    int parse_DSGraph(std::string file_path, DSGraph& graph)
+    int parseDSGraph(std::string file_path, DSGraph& graph)
     {
         if (file_path.rfind(".snu") == file_path.length() - 4)
-            return parse_snu_DSGraph(file_path, graph);
+            return parseDSGraphSNU(file_path, graph);
         else if (file_path.rfind(".snap") == file_path.length() - 5)
-            return parse_snap_DSGraph(file_path, graph);
+            return parseDSGraphSNAP(file_path, graph);
         else if (file_path.rfind(".net") == file_path.length() - 4)
-            return parse_net_DSGraph(file_path, graph);
+            return parseDSGraphNET(file_path, graph);
 
         return PARSE_FAILURE_INVALID_FILETYPE;
     }
 
-    int parse_snu_USGraph(std::string file_path, USGraph& graph)
+    int parseUSGraphSNU(std::string file_path, USGraph& graph)
     {
         std::ifstream infile(file_path);
         if (infile.fail()) {
@@ -223,9 +223,10 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_edge(eid++, &label_vector, from, to, 1)) {
+                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
                     return PARSE_FAILURE_ADD_EDGE;
                 }
+                ++eid;
             }
             else {
                 return PARSE_FAILURE_INVALID_INPUT;
@@ -235,7 +236,7 @@ namespace snu {
         return PARSE_SUCCESS;
     }
 
-    int parse_snap_USGraph(std::string file_path, USGraph& graph)
+    int parseUSGraphSNAP(std::string file_path, USGraph& graph)
     {
         std::ifstream infile(file_path);
         if (infile.fail()) {
@@ -249,8 +250,9 @@ namespace snu {
         while (getline(infile, line)) {
             std::istringstream iss(line);
 
-            if (line.find("#") != std::string::npos)
+            if (line.find("#") != std::string::npos) {
                 continue;
+            }
 
             Graph::Vid from, to;
             iss >> from >> to;
@@ -269,20 +271,21 @@ namespace snu {
                 }
             }
 
-            if (graph.add_edge(eid++, 0, NULL, from, to, 1)) {
+            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
                 return PARSE_FAILURE_ADD_EDGE;
             }
+            ++eid;
         }
 
         return PARSE_SUCCESS;
     }
 
-    int parse_USGraph(std::string file_path, USGraph& graph)
+    int parseUSGraph(std::string file_path, USGraph& graph)
     {
         if (file_path.rfind(".snu") == file_path.length() - 4)
-            return parse_snu_USGraph(file_path, graph);
+            return parseUSGraphSNU(file_path, graph);
         else if (file_path.rfind(".snap") == file_path.length() - 5)
-            return parse_snap_USGraph(file_path, graph);
+            return parseUSGraphSNAP(file_path, graph);
         else if (file_path.rfind(".net") == file_path.length() - 4)
             return PARSE_FAILURE_INVALID_FILETYPE;
 

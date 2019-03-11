@@ -14,8 +14,8 @@ namespace snu {
     const int PARSE_FAILURE_ADD_VERTEX = 4;
     const int PARSE_FAILURE_ADD_EDGE = 5;
 
-    int parse_DSGraph(std::string file_path, DSGraph& graph);
-    int parse_USGraph(std::string file_path, USGraph& graph);
+    int parseDSGraph(std::string file_path, DSGraph& graph);
+    int parseUSGraph(std::string file_path, USGraph& graph);
 }
 
 #endif // PARSE_H
