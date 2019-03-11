@@ -1,77 +1,159 @@
 #include <stdio.h>
+#include <string.h>
+#include <getopt.h>
 #include "snugal.h"
 
-int main(int argc, char *argv[]) {
 
-	// test library
+void usage(void);
 
-	snu::DSGraph *dsg1 = snu::parse_DSGraph("data/example.snu");
-	snu::DSResult dsr1;
-	snu::Plot plot1;
-	snu::init_stat(&dsr1);
-	snu::basic_stat(dsg1, &dsr1);
-	snu::connect_stat(dsg1, &dsr1);
-	snu::init_plot(&plot1);
-	snu::make_plot(dsg1, &plot1);
-	snu::make_html("example", &dsr1, &plot1);
-	delete dsg1;
 
-	snu::USGraph *usg1 = snu::parse_USGraph("data/com-dblp_label.snu");
-	snu::USResult usr1;
-	snu::Plot plot2;
-	snu::init_stat(&usr1);
-	snu::basic_stat(usg1, &usr1);
-	snu::connect_stat(usg1, &usr1);
-	snu::count_stat(usg1, &usr1);
-	snu::init_plot(&plot2);
-	snu::make_plot(usg1, &plot2);
-	snu::make_html("com-dblp_label", &usr1, &plot2);
-	delete usg1;
+int main(int argc, char* argv[]) 
+{
+    if (argc < 2) {
+        usage();
+        return 1;
+    }
 
-	snu::DSGraph *dsg2 = snu::parse_DSGraph("data/web-Google_label.snu");
-	snu::DSResult dsr2;
-	snu::Plot plot3;
-	snu::init_stat(&dsr2);
-	snu::basic_stat(dsg2, &dsr2);
-	snu::connect_stat(dsg2, &dsr2);
-	snu::init_plot(&plot3);
-	snu::make_plot(dsg2, &plot3);
-	snu::make_html("web-Google_label", &dsr2, &plot3);
-	delete dsg2;
+    bool directed = false;  // suppose given graph is undirected.
 
-	snu::USGraph *usg2 = snu::parse_USGraph("data/as-skitter_label.snu");
-	snu::USResult usr2;
-	snu::Plot plot4;
-	snu::init_stat(&usr2);
-	snu::basic_stat(usg2, &usr2);
-	snu::connect_stat(usg2, &usr2);
-	snu::init_plot(&plot4);
-	snu::make_plot(usg2, &plot4);
-	snu::make_html("as-skitter_label", &usr2, &plot4);
-	delete usg2;
+    while (true) {
+        static struct option long_options[] = {
+            {"directed", 0, NULL, 'd'}, 
+            {"undirected", 0, NULL, 'u'}, 
+            {"help", 0, NULL, 'h'}, 
+            {0, 0, 0, 0}
+        };
 
-	snu::DSGraph *dsg3 = snu::parse_DSGraph("data/web-BerkStan.snap");
-	snu::DSResult dsr3;
-	snu::Plot dsplot;
-	snu::init_stat(&dsr3);
-	snu::basic_stat(dsg3, &dsr3);
-	snu::connect_stat(dsg3, &dsr3);
-	snu::init_plot(&dsplot);
-	snu::make_plot(dsg3, &dsplot);
-	snu::make_html("web-BerkStan", &dsr3, &dsplot);
-	delete dsg3;
+        int option = getopt_long(argc, argv, "duh", long_options, NULL);
 
-	snu::USGraph *usg3 = snu::parse_USGraph("data/ca-AstroPh.snap");
-	snu::USResult usr3;
-	snu::Plot usplot;
-	snu::init_stat(&usr3);
-	snu::basic_stat(usg3, &usr3);
-	snu::connect_stat(usg3, &usr3);
-	//snu::count_stat(usg3, &usr3);
-	snu::init_plot(&usplot);
-	snu::make_plot(usg3, &usplot);
-	snu::make_html("ca-AstroPh", &usr3, &usplot);
-	delete usg3;
+        if (option < 0) {
+            break;
+        }
 
+        switch (option) {
+          case 'd':
+            directed = true;
+            break;
+
+          case 'u':
+            directed = false;
+            break;
+
+          case 'h':
+            usage();
+            return 0;
+
+          default:
+            usage();
+            return 1;
+        }
+    }
+
+    // There exists no non-option argument.
+    // That is, input file path is not given.
+    if (argc <= optind) {
+        fprintf(stderr, "input file is not given.\n");
+        return 1;
+    }
+
+    // Suppose input file path is the first non-option argument.
+    std::string input_path(argv[optind]);
+
+    if (directed) {
+        snu::DSGraph graph;
+        int parse_status = snu::parseDSGraph(input_path, graph);
+        switch (parse_status) {
+          case snu::PARSE_SUCCESS:
+            break;
+
+          case snu::PARSE_FAILURE_NO_INPUT:
+            fprintf(stderr, "input file is not locatable.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_INVALID_INPUT:
+            fprintf(stderr, "input data is invalid.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_INVALID_FILETYPE:
+            fprintf(stderr, "this filetype is not supported.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_ADD_VERTEX:
+          case snu::PARSE_FAILURE_ADD_EDGE:
+            fprintf(stderr, "internal error\n");
+            return 1;
+
+          default:
+            return 1;
+        }
+
+        snu::DSResult result;
+        snu::init_stat(&result);
+        snu::basic_stat(&graph, &result);
+        snu::connect_stat(&graph, &result);
+
+        snu::Plot plot;
+        snu::init_plot(&plot);
+        snu::make_plot(&graph, &plot);
+
+        snu::make_html("output", &result, &plot);
+    }
+    else {
+        snu::USGraph graph;
+        int parse_status = snu::parseUSGraph(input_path, graph);
+        switch (parse_status) {
+          case snu::PARSE_SUCCESS:
+            break;
+
+          case snu::PARSE_FAILURE_NO_INPUT:
+            fprintf(stderr, "input file is not locatable.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_INVALID_INPUT:
+            fprintf(stderr, "input data is invalid.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_INVALID_FILETYPE:
+            fprintf(stderr, "this filetype is not supported.\n");
+            return 1;
+
+          case snu::PARSE_FAILURE_ADD_VERTEX:
+          case snu::PARSE_FAILURE_ADD_EDGE:
+            fprintf(stderr, "internal error\n");
+            return 1;
+
+          default:
+            return 1;
+        }
+
+        snu::USResult result;
+        snu::init_stat(&result);
+        snu::basic_stat(&graph, &result);
+        snu::connect_stat(&graph, &result);
+        snu::count_stat(&graph, &result);
+
+        snu::Plot plot;
+        snu::init_plot(&plot);
+        snu::make_plot(&graph, &plot);
+
+        snu::make_html("output", &result, &plot);
+    }
+	
 	return 0;
 }
+
+
+void usage(void)
+{
+    printf(" usage: main <input file> [options]\n");
+    printf("\n");
+    printf("  options:\n");
+    printf("   -d | --directed       set graph directed\n");
+    printf("   -u | --undirected     set graph undirected (default)\n");
+    printf("   -h | --help           print this list of help\n");
+    printf("\n");
+    printf("   e.g. ./main some_path/some_graph.snap --directed\n");
+
+    return;
+}
+
