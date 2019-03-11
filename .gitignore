@@ -1,6 +1,7 @@
 *.o
 main
 data
+pyplot
 *.txt
 *.html
 *.png
