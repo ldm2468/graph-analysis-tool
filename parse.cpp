@@ -7,11 +7,14 @@
 namespace snu {
 
     // parse .snu file
-    DSGraph *parse_snu_DSGraph(std::string file_path)
+    int parseDSGraphSNU(std::string file_path, DSGraph& graph)
     {
         std::ifstream infile(file_path);
+        if (infile.fail()) {
+            return PARSE_FAILURE_NO_INPUT;
+        }
+
         std::string line;
-        DSGraph *graph = new DSGraph();
         Graph::Eid eid = 0;
 
         while (getline(infile, line)) {
@@ -19,6 +22,7 @@ namespace snu {
 
             std::string sign;
             iss >> sign;
+            
             if (sign == "t") {}
             else if (sign == "v") {
                 Graph::Vid id;
@@ -26,12 +30,12 @@ namespace snu {
                 std::vector <Graph::Vlabel> label_vector;
 
                 iss >> id;
-                while (iss >> label) label_vector.push_back(label);
+                while (iss >> label) {
+                    label_vector.push_back(label);
+                }
 
-                // error
-                if (graph->add_vertex(id, &label_vector)) {
-                    delete graph;
-                    return NULL;
+                if (graph.add_vertex(id, &label_vector)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
             else if (sign == "e") {
@@ -40,47 +44,50 @@ namespace snu {
                 std::vector<Graph::Elabel> label_vector;
 
                 iss >> from >> to;
-                while (iss >> label) label_vector.push_back(label);
-
-                // error
-                if (graph->add_edge(eid++, &label_vector, from, to, 1)) {
-                    delete graph;
-                    return nullptr;
+                while (iss >> label) {
+                    label_vector.push_back(label);
                 }
+
+                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
+                    return PARSE_FAILURE_ADD_EDGE;
+                }
+                ++eid;
             }
             else {
-                delete graph;
-                return nullptr;
+                return PARSE_FAILURE_INVALID_INPUT;
             }
         }
 
-        return graph;
+        return PARSE_SUCCESS;
     }
 
     // parse .net file
-    DSGraph *parse_net_DSGraph(std::string file_path) 
+    int parseDSGraphNET(std::string file_path, DSGraph& graph) 
     {
-        DSGraph *graph = new DSGraph();
         std::ifstream infile(file_path);
+        if (infile.fail()) {
+            return PARSE_FAILURE_NO_INPUT;
+        }
+
         std::string line;
-        int check_vertex = 0;
-        int check_edge = 0;
+        bool check_vertex = false;
+        bool check_edge = false;
 
         while (getline(infile, line)) {
             std::istringstream iss(line);
 
             if (line.find("*Vertices") != std::string::npos || line.find("*vertices") != std::string::npos) {
-                check_vertex = 1;
-                check_edge = 0;
+                check_vertex = true;
+                check_edge = false;
                 continue;
             }
             else if (line.find("*arcs") != std::string::npos || line.find("*Arcs") != std::string::npos) {
-                check_edge = 1;
-                check_vertex = 0;
+                check_edge = true;
+                check_vertex = false;
                 continue;
             }
 
-            if (check_vertex==1) {
+            if (check_vertex) {
                 Graph::Vid id;
                 std::vector <Graph::Vlabel> label_vector;
                 Graph::Vlabel label;
@@ -90,37 +97,44 @@ namespace snu {
                     label.erase(std::remove(label.begin(), label.end(), '\"'), label.end());
                     label_vector.push_back(label);
                 }
-                graph->add_vertex(id, &label_vector);
+
+                if (graph.add_vertex(id, &label_vector)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
+                }
             }
 
-            if (check_edge==1) {
+            if (check_edge) {
                 Graph::Eid id;
                 Graph::Vid from;
                 Graph::Vid to;
                 std::vector <Graph::Elabel> label_vector;
                 Graph::Elabel label;
 
-                iss >> id;
-                iss >> from;
-                iss >> to;
+                iss >> id >> from >> to;
                 while (iss >> label) {
                     if (label == "l") continue;
                     label.erase(std::remove(label.begin(), label.end(), '\"'), label.end());
                     label_vector.push_back(label);
                 }
-                graph->add_edge(id, &label_vector, from, to, 1);
+
+                if (graph.add_edge(id, &label_vector, from, to, 1)) {
+                    return PARSE_FAILURE_ADD_EDGE;
+                }
             }
         }
 
-        return graph;
+        return PARSE_SUCCESS;
     }
 
     // parse .snap file
-    DSGraph *parse_snap_DSGraph(std::string file_path) 
+    int parseDSGraphSNAP(std::string file_path, DSGraph& graph)
     {
         std::ifstream infile(file_path);
+        if (infile.fail()) {
+            return PARSE_FAILURE_NO_INPUT;
+        }
+
         std::string line;
-        DSGraph *graph = new DSGraph();
         std::unordered_set <int> set;
         Graph::Eid eid = 0;
 
@@ -135,39 +149,48 @@ namespace snu {
 
             if (!set.count(from)) {
                 set.insert(from);
-                graph->add_vertex(from, 0, NULL);
+                if (graph.add_vertex(from, 0, NULL)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
+                }
             }
 
             if (!set.count(to)) {
                 set.insert(to);
-                graph->add_vertex(to, 0, NULL);
+                if (graph.add_vertex(to, 0, NULL)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
+                }
             }
 
-            graph->add_edge(eid++, 0, NULL, from, to, 1);
+            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
+                return PARSE_FAILURE_ADD_EDGE;
+            }
+            ++eid;
         }
 
-        return graph;
+        return PARSE_SUCCESS;
     }
 
     // parsing DSGraph version follows
-    DSGraph *parse_DSGraph(std::string file_path)
+    int parseDSGraph(std::string file_path, DSGraph& graph)
     {
         if (file_path.rfind(".snu") == file_path.length() - 4)
-            return parse_snu_DSGraph(file_path);
+            return parseDSGraphSNU(file_path, graph);
         else if (file_path.rfind(".snap") == file_path.length() - 5)
-            return parse_snap_DSGraph(file_path);
+            return parseDSGraphSNAP(file_path, graph);
         else if (file_path.rfind(".net") == file_path.length() - 4)
-            return parse_net_DSGraph(file_path);
+            return parseDSGraphNET(file_path, graph);
 
-        // failed
-        return nullptr;
+        return PARSE_FAILURE_INVALID_FILETYPE;
     }
 
-    USGraph *parse_snu_USGraph(std::string file_path)
+    int parseUSGraphSNU(std::string file_path, USGraph& graph)
     {
         std::ifstream infile(file_path);
+        if (infile.fail()) {
+            return PARSE_FAILURE_NO_INPUT;
+        }
+
         std::string line;
-        USGraph *graph = new USGraph();
         Graph::Eid eid = 0;
 
         while (getline(infile, line)) {
@@ -182,12 +205,12 @@ namespace snu {
                 std::vector<Graph::Vlabel> label_vector;
 
                 iss >> id;
-                while (iss >> label) label_vector.push_back(label);
+                while (iss >> label) {
+                    label_vector.push_back(label);
+                }
 
-                // error
-                if (graph->add_vertex(id, &label_vector)) {
-                    delete graph;
-                    return nullptr;
+                if (graph.add_vertex(id, &label_vector)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
             else if (sign == "e") {
@@ -196,66 +219,77 @@ namespace snu {
                 std::vector<Graph::Elabel> label_vector;
 
                 iss >> from >> to;
-                while (iss >> label) label_vector.push_back(label);
-
-                // error
-                if (graph->add_edge(eid++, &label_vector, from, to, 1)) {
-                    delete graph;
-                    return nullptr;
+                while (iss >> label) {
+                    label_vector.push_back(label);
                 }
+
+                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
+                    return PARSE_FAILURE_ADD_EDGE;
+                }
+                ++eid;
             }
             else {
-                delete graph;
-                return nullptr;
+                return PARSE_FAILURE_INVALID_INPUT;
             }
         }
 
-        return graph;
+        return PARSE_SUCCESS;
     }
 
-    USGraph *parse_snap_USGraph(std::string file_path) 
+    int parseUSGraphSNAP(std::string file_path, USGraph& graph)
     {
         std::ifstream infile(file_path);
+        if (infile.fail()) {
+            return PARSE_FAILURE_NO_INPUT;
+        }
+
         std::string line;
-        USGraph *graph = new USGraph();
         std::unordered_set<int> set;
         Graph::Eid eid = 0;
 
         while (getline(infile, line)) {
             std::istringstream iss(line);
 
-            if (line.find("#") != std::string::npos)
+            if (line.find("#") != std::string::npos) {
                 continue;
+            }
 
             Graph::Vid from, to;
             iss >> from >> to;
 
             if (!set.count(from)) {
                 set.insert(from);
-                graph->add_vertex(from, 0, NULL);
+                if (graph.add_vertex(from, 0, NULL)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
+                }
             }
 
             if (!set.count(to)) {
                 set.insert(to);
-                graph->add_vertex(to, 0, NULL);
+                if (graph.add_vertex(to, 0, NULL)) {
+                    return PARSE_FAILURE_ADD_VERTEX;
+                }
             }
 
-            graph->add_edge(eid++, 0, NULL, from, to, 1);
+            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
+                return PARSE_FAILURE_ADD_EDGE;
+            }
+            ++eid;
         }
 
-        return graph;
+        return PARSE_SUCCESS;
     }
 
-    USGraph *parse_USGraph(std::string file_path) 
+    int parseUSGraph(std::string file_path, USGraph& graph)
     {
         if (file_path.rfind(".snu") == file_path.length() - 4)
-            return parse_snu_USGraph(file_path);
+            return parseUSGraphSNU(file_path, graph);
         else if (file_path.rfind(".snap") == file_path.length() - 5)
-            return parse_snap_USGraph(file_path);
+            return parseUSGraphSNAP(file_path, graph);
         else if (file_path.rfind(".net") == file_path.length() - 4)
-            return nullptr;
+            return PARSE_FAILURE_INVALID_FILETYPE;
 
-        return nullptr;
+        return PARSE_FAILURE_INVALID_FILETYPE;
     }
 }
 
