@@ -2,6 +2,8 @@ from matplotlib import pyplot as plt
 import math
 import sys
 
+plt.switch_backend('agg')
+
 graph_name = sys.argv[1]
 # indegree
 with open('./pyplot/indegree.txt', mode='rt') as f:
