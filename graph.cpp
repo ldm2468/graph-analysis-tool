@@ -9,10 +9,14 @@ namespace snu {
     Graph::~Graph()
     {
         // delete vertex, edge, vertex_label, edge_label;
-        for (auto it = id_to_vertex.begin(); it != id_to_vertex.end(); ++it) delete it->second;
-        for (auto it = id_to_edge.begin(); it != id_to_edge.end(); ++it) delete it->second;
-        for (auto it = vlabel_to_class.begin(); it != vlabel_to_class.end(); ++it) delete it->second;
-        for (auto it = elabel_to_class.begin(); it != elabel_to_class.end(); ++it) delete it->second;
+        for (auto it = id_to_vertex.begin(); it != id_to_vertex.end(); ++it) 
+			delete it->second;
+        for (auto it = id_to_edge.begin(); it != id_to_edge.end(); ++it) 
+			delete it->second;
+        for (auto it = vlabel_to_class.begin(); it != vlabel_to_class.end(); ++it) 
+			delete it->second;
+        for (auto it = elabel_to_class.begin(); it != elabel_to_class.end(); ++it) 
+			delete it->second;
     }
 
     // do not have to define destructor of child classes
