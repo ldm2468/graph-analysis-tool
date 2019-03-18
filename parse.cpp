@@ -34,7 +34,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_vertex(id, &label_vector)) {
+                if (graph.addVertex(id, &label_vector)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
@@ -48,7 +48,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
+                if (graph.addEdge(eid, &label_vector, from, to, 1)) {
                     return PARSE_FAILURE_ADD_EDGE;
                 }
                 ++eid;
@@ -98,7 +98,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_vertex(id, &label_vector)) {
+                if (graph.addVertex(id, &label_vector)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
@@ -117,7 +117,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_edge(id, &label_vector, from, to, 1)) {
+                if (graph.addEdge(id, &label_vector, from, to, 1)) {
                     return PARSE_FAILURE_ADD_EDGE;
                 }
             }
@@ -149,19 +149,19 @@ namespace snu {
 
             if (!set.count(from)) {
                 set.insert(from);
-                if (graph.add_vertex(from, 0, NULL)) {
+                if (graph.addVertex(from, 0, NULL)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
 
             if (!set.count(to)) {
                 set.insert(to);
-                if (graph.add_vertex(to, 0, NULL)) {
+                if (graph.addVertex(to, 0, NULL)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
 
-            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
+            if (graph.addEdge(eid, 0, NULL, from, to, 1)) {
                 return PARSE_FAILURE_ADD_EDGE;
             }
             ++eid;
@@ -209,7 +209,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_vertex(id, &label_vector)) {
+                if (graph.addVertex(id, &label_vector)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
@@ -223,7 +223,7 @@ namespace snu {
                     label_vector.push_back(label);
                 }
 
-                if (graph.add_edge(eid, &label_vector, from, to, 1)) {
+                if (graph.addEdge(eid, &label_vector, from, to, 1)) {
                     return PARSE_FAILURE_ADD_EDGE;
                 }
                 ++eid;
@@ -259,19 +259,19 @@ namespace snu {
 
             if (!set.count(from)) {
                 set.insert(from);
-                if (graph.add_vertex(from, 0, NULL)) {
+                if (graph.addVertex(from, 0, NULL)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
 
             if (!set.count(to)) {
                 set.insert(to);
-                if (graph.add_vertex(to, 0, NULL)) {
+                if (graph.addVertex(to, 0, NULL)) {
                     return PARSE_FAILURE_ADD_VERTEX;
                 }
             }
 
-            if (graph.add_edge(eid, 0, NULL, from, to, 1)) {
+            if (graph.addEdge(eid, 0, NULL, from, to, 1)) {
                 return PARSE_FAILURE_ADD_EDGE;
             }
             ++eid;

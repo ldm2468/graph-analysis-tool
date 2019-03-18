@@ -15,27 +15,23 @@ namespace snu {
     class DSGraph;  // directed simple graph
     class USGraph;  // undirected simple graph
 
-    typedef class Graph Graph;
-    typedef class DSGraph DSGraph;
-    typedef class USGraph USGraph;
-
     class Graph {
     public:
-        typedef int Vid;             // vertex id
-        typedef int Eid;             // edge id
+        typedef long long Vid;             // vertex id
+        typedef long long Eid;             // edge id
         typedef std::string Vlabel;  // vertex label
         typedef std::string Elabel;  // edge label
         typedef int Weight;          // integer type weight, other types of weight can be added
 
         class Vertex;
         class Edge;
-        class Label_of_Vertices;
-        class Label_of_Edges;
+        class LabelOfVertices;
+        class LabelOfEdges;
 
         class Vertex {
         public:
             Vid id;
-            std::list<Label_of_Vertices*> labels;
+            std::list<LabelOfVertices*> labels;
             std::list<Edge*> edges;
             unsigned int indegree;
             void *temp;
@@ -44,19 +40,19 @@ namespace snu {
         class Edge {
         public:
             Eid id;
-            std::list<Label_of_Edges*> labels;
+            std::list<LabelOfEdges*> labels;
             Vertex *from;  // In case of undirected graphs, there is no difference between from and to.
             Vertex *to;
-            Weight wgt;
+            Weight weight;
         };
 
-        class Label_of_Vertices {
+        class LabelOfVertices {
         public:
             Vlabel label;
             std::list<Vertex*> vertices;
         };
 
-        class Label_of_Edges {
+        class LabelOfEdges {
         public:
             Elabel label;
             std::list<Edge*> edges;
@@ -65,8 +61,8 @@ namespace snu {
         std::unordered_map<Vid, Vertex*> id_to_vertex;
         std::unordered_map<Eid, Edge*> id_to_edge;
 
-        std::unordered_map<Vlabel, Label_of_Vertices*> vlabel_to_class;
-        std::unordered_map<Elabel, Label_of_Edges*> elabel_to_class;
+        std::unordered_map<Vlabel, LabelOfVertices*> vlabel_to_class;
+        std::unordered_map<Elabel, LabelOfEdges*> elabel_to_class;
 
         struct pair_hash {
             inline unsigned long long operator()(const std::pair<Vid, Vid> &v) const {
@@ -85,45 +81,27 @@ namespace snu {
         // add vertex
         // if vertex is created normally, then return 0
         // if error occurs, then return 1
-        int add_vertex(Vid id, unsigned int num, Vlabel lbl[]);  // array version
-        int add_vertex(Vid id, std::vector <Vlabel> *lbl);       // vector version
+        int addVertex(Vid id, unsigned int num, Vlabel label[]);  // array version
+        int addVertex(Vid id, std::vector <Vlabel> *label);       // vector version
 
-        // directed form of add_edge
+        // directed form of addEdge
         // if edge is created normally, then return 0
         // if error occurs, then return 1
-        int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt);  // array version
-
-        friend unsigned long long BFS(Graph::Vertex *start);
+        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
     };
 
     // directed simple graph
     class DSGraph: public Graph {
     public:
-        int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt);  // array version
-        int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt);       // vector version
-
-        friend void basic_stat(DSGraph *graph, DSResult *result);
-        friend void connect_stat(DSGraph *graph, DSResult *result);
-        friend void make_plot(DSGraph *graph, Plot *plot);
-        
-        friend DSGraph *parse_snu_DSGraph(std::string file_path);
-        friend DSGraph *parse_net_DSGraph(std::string file_path);
-        friend DSGraph *parse_snap_DSGraph(std::string file_path);
+        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 
     // undirected simple graph
     class USGraph: public Graph {
     public:
-        int add_edge(Eid id, unsigned int num, Elabel lbl[], Vid from, Vid to, Weight wgt);  // array version
-        int add_edge(Eid id, std::vector <Elabel> *lbl, Vid from, Vid to, Weight wgt);       // vector version
-
-        friend void basic_stat(USGraph *graph, USResult *result);
-        friend void connect_stat(USGraph *graph, USResult *result);
-        friend void count_stat(USGraph *graph, USResult *result);
-        friend void make_plot(USGraph *graph, Plot *plot);
-
-        friend USGraph *parse_snu_USGraph(std::string file_path);
-        friend USGraph *parse_snap_USGraph(std::string file_path);
+        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 }
 

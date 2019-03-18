@@ -2,6 +2,8 @@ from matplotlib import pyplot as plt
 import math
 import sys
 
+plt.switch_backend('agg')
+
 graph_name = sys.argv[1]
 # label-vertex
 with open('./pyplot/label-vertex.txt', mode='rt') as f:
