@@ -53,7 +53,7 @@ namespace snu {
         sprintf(cmd, "python indegree.py %d", plot->id);
         system(cmd);
 
-        /* outdegree */
+        // outdegree
         out.open("./pyplot/outdegree.txt");
 
         degree.clear();
@@ -77,7 +77,7 @@ namespace snu {
     {
         std::ofstream out;
 
-        /* label-vertex */
+        // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
         unsigned int n = graph->id_to_vertex.size();
@@ -100,7 +100,7 @@ namespace snu {
         sprintf(cmd, "python label-vertex.py %d", plot->id);
         system(cmd);
 
-        /* degree */
+        // degree
         out.open("./pyplot/degree.txt");
 
         std::vector <unsigned int> degree;
@@ -117,7 +117,7 @@ namespace snu {
         sprintf(cmd, "python degree.py %d", plot->id);
         system(cmd);
 
-        /* pyplot */
+        // pyplot
         plot->makeplot = true;
     }
 }
