@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
 
         snu::Plot plot;
         snu::initPlot(&plot);
-        snu::make_plot(&graph, &plot);
+        snu::makePlot(&graph, &plot);
 
         snu::makeHtml(graph_name.c_str(), &result, &plot);
     }
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 
         snu::Plot plot;
         snu::initPlot(&plot);
-        snu::make_plot(&graph, &plot);
+        snu::makePlot(&graph, &plot);
 
         snu::makeHtml(graph_name.c_str(), &result, &plot);
     }
