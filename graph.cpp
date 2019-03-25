@@ -22,7 +22,7 @@ namespace snu {
     // do not have to define destructor of child classes
 
     // array version
-    int Graph::addVertex(Vid id, unsigned int num, Vlabel label[])
+    int Graph::addVertex(Vid id, long long num, Vlabel label[])
     {
         // error: graph already has a vertex having same id
         if (id_to_vertex.count(id)) return 1;
@@ -33,7 +33,7 @@ namespace snu {
 
         // set labels
         // if no vertex label class then create it
-        for (unsigned int i = 0; i < num; ++i) {
+        for (long long i = 0; i < num; ++i) {
             auto it = vlabel_to_class.find(label[i]);
             LabelOfVertices *vl;
 
@@ -61,7 +61,7 @@ namespace snu {
     }
 
     // base addEdge function, DSGraph version
-    int Graph::addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight) 
+    int Graph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) 
     {
         // error: already have edge having same id or no from or to vertex
         if (id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
@@ -73,7 +73,7 @@ namespace snu {
         
         // set edge labels
         // if no edge label class then create it
-        for (unsigned int i = 0; i < num; ++i) {
+        for (long long i = 0; i < num; ++i) {
             auto it = elabel_to_class.find(label[i]);
             LabelOfEdges *el;
 
@@ -105,7 +105,7 @@ namespace snu {
     }
 
     // array version
-    int DSGraph::addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight)
+    int DSGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight)
     {
         return Graph::addEdge(id, num, label, from, to, weight);
     }
@@ -117,7 +117,7 @@ namespace snu {
     }
 
     // array version
-    int USGraph::addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight)
+    int USGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight)
     {
         // there is an error
         if (Graph::addEdge(id, num, label, from, to, weight)) return 1;
