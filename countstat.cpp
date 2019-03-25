@@ -3,28 +3,40 @@
 
 namespace snu {
 	
-	void count_stat(USGraph *graph, USResult *result) {
-		unsigned long long s = 0, z = 0, t = 0;
+	void countStat(USGraph& graph, StatResult& result) {
+		unsigned long long s = 0;
+		unsigned long long z = 0;
 		
-		std::vector <std::pair <unsigned int, Graph::Vertex *> > vec;
+		std::vector <std::pair <long long, Graph::Vertex *> > vec;
 
-		for(auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); it++) {
-			unsigned int degree = it->second->indegree;
+		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++) {
+			long long degree = it->second->indegree;
 			s += (unsigned long long) degree * (degree - 1) / 2;
 			z += (unsigned long long) degree * (degree - 1) * (degree - 2) / 6;
 			vec.push_back(std::make_pair(degree, it->second));
 		}
 
-		result->wedge_count = s;
-		result->claw_count = z;
-		
+		result.wedge_count = s;
+		result.claw_count = z;
+		result.triangle_count = TriangleCount(vec);
+		result.countstat = true;
+	}
+
+	//O(m^(3/2)) time implementation, where m is the number of edges
+	//http://theory.stanford.edu/~tim/s14/l/l1.pdf
+	long long TriangleCount(std::vector<std::pair<long long, Graph::Vertex *> >& vec)
+	{
+		unsigned long long t = 0;
+
 		std::sort(vec.begin(), vec.end());
 
 		int size = vec.size();
 		for(int i = 0; i < size; i++)
 			vec[i].second->temp = new int(i); // rank
 
-		char *check = new char[size]();
+		bool *check = new bool[size];
+		for(int i = 0; i < size; ++i)
+			check[i] = false;
 
 		for(int i = 0; i < size; i++) {
 			Graph::Vertex *v = vec[i].second;
@@ -57,10 +69,8 @@ namespace snu {
 		for(int i = 0; i < size; i++)
 			delete (int *) vec[i].second->temp;
 		
-		delete check;
+		delete[] check;
 
-		result->triangle_count = t / 3;
-
-		result->countstat = true;
+		return t / 3;
 	}
 }

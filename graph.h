@@ -33,7 +33,7 @@ namespace snu {
             Vid id;
             std::list<LabelOfVertices*> labels;
             std::list<Edge*> edges;
-            unsigned int indegree;
+            long long indegree;
             void *temp;
         };
 
@@ -72,7 +72,7 @@ namespace snu {
 
         std::unordered_set<std::pair<Vid, Vid>, pair_hash> is_connected;
 
-        unsigned int negative_edge_num = 0;
+        long long negative_edge_num = 0;
         char visit = 0;
 
         Graph();   // prevent from creating Graph class and allow creating graph in subclass
@@ -81,26 +81,26 @@ namespace snu {
         // add vertex
         // if vertex is created normally, then return 0
         // if error occurs, then return 1
-        int addVertex(Vid id, unsigned int num, Vlabel label[]);  // array version
+        int addVertex(Vid id, long long num, Vlabel label[]);  // array version
         int addVertex(Vid id, std::vector <Vlabel> *label);       // vector version
 
         // directed form of addEdge
         // if edge is created normally, then return 0
         // if error occurs, then return 1
-        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
     };
 
     // directed simple graph
     class DSGraph: public Graph {
     public:
-        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
         int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 
     // undirected simple graph
     class USGraph: public Graph {
     public:
-        int addEdge(Eid id, unsigned int num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
         int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 }

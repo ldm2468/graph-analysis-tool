@@ -7,8 +7,8 @@
 
 namespace snu {
 
-    void makeHtml(const char *name, DSResult *result, Plot *plot);
-    void makeHtml(const char *name, USResult *result, Plot *plot);
+    void makeDSHtml(const char *name, StatResult& result, Plot *plot);
+    void makeUSHtml(const char *name, StatResult& result, Plot *plot);
 }
 
 #endif // HTML_H

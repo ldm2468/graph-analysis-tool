@@ -6,7 +6,7 @@
 
 namespace snu {
 
-    void makeHtml(const char *name, DSResult *result, Plot *plot)
+    void makeDSHtml(const char *name, StatResult& result, Plot *plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -44,44 +44,44 @@ namespace snu {
             </h3>\
         ", name);
 
-        if (result) {
-            if (result->basicstat)
+        //if (result) {
+            if (result.basicstat)
                 fprintf(fp, "\
                     <h2>\
                         Basic Statistics\
                     </h2>\
                     <h3>\
-                        <p> size = %u </p>\
-                        <p> volume = %u </p>\
-                        <p> number of vertex labels = %u </p>\
-                        <p> number of edge labels = %u </p>\
+                        <p> size = %lld </p>\
+                        <p> volume = %lld </p>\
+                        <p> number of vertex labels = %lld </p>\
+                        <p> number of edge labels = %lld </p>\
                         <p> density = %lf </p>\
-                        <p> maximum indegree = %u </p>\
-                        <p> maximum outdegree = %u </p>\
-                        <p> maximum size of vertex label = %u </p>\
-                        <p> maximum size of edge label = %u </p>\
+                        <p> maximum indegree = %lld </p>\
+                        <p> maximum outdegree = %lld </p>\
+                        <p> maximum size of vertex label = %lld </p>\
+                        <p> maximum size of edge label = %lld </p>\
                         <p> reciprocity = %lf </p>\
                         <p> negativity = %lf </p>\
                     </h3>\
-                ", result->size, result->volume, result->num_vlabel, result->num_elabel
-                , result->density, result->max_indegree, result->max_outdegree
-                , result->max_vlabel_size, result->max_elabel_size, result->reciprocity
-                , result->negativity);
+                ", result.size, result.volume, result.num_vlabel, result.num_elabel
+                , result.density, result.max_indegree, result.max_outdegree
+                , result.max_vlabel_size, result.max_elabel_size, result.reciprocity
+                , result.negativity);
 
 
-            if (result->connectstat)
+            if (result.connectstat)
                 fprintf(fp, "\
                     <h2>\
                         Connectivity Statistics\
                     </h2>\
                     <h3>\
-                        <p> number of strongly connected components = %u </p>\
-                        <p> size of largest strongly connected component = %u </p>\
-                        <p> number of weakly connected components = %u </p>\
-                        <p> size of largest weakly connected component = %u </p>\
+                        <p> number of strongly connected components = %lld </p>\
+                        <p> size of largest strongly connected component = %lld </p>\
+                        <p> number of weakly connected components = %lld </p>\
+                        <p> size of largest weakly connected component = %lld </p>\
                     </h3>\
-                ", result->num_scc, result->size_lscc, result->num_wcc, result->size_lwcc);
-        }
+                ", result.num_scc, result.size_lscc, result.num_wcc, result.size_lwcc);
+        //}
 
         if (plot && plot->makeplot)
             fprintf(fp, "\
@@ -109,7 +109,7 @@ namespace snu {
         fclose(fp);
     }
 
-    void makeHtml(const char *name, USResult *result, Plot *plot)
+    void makeUSHtml(const char *name, StatResult& result, Plot *plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -147,41 +147,41 @@ namespace snu {
             </h3>\
         ", name);
 
-        if (result) {
-            if(result->basicstat)
+        //if (result) {
+            if(result.basicstat)
                 fprintf(fp, "\
                     <h2>\
                         Basic Statistics\
                     </h2>\
                     <h3>\
-                        <p> size = %u </p>\
-                        <p> volume = %u </p>\
-                        <p> number of vertex labels = %u </p>\
-                        <p> number of edge labels = %u </p>\
+                        <p> size = %lld </p>\
+                        <p> volume = %lld </p>\
+                        <p> number of vertex labels = %lld </p>\
+                        <p> number of edge labels = %lld </p>\
                         <p> density = %lf </p>\
                         <p> average degree = %lf </p>\
-                        <p> maximum degree = %u </p>\
-                        <p> maximum size of vertex label = %u </p>\
-                        <p> maximum size of edge label = %u </p>\
+                        <p> maximum degree = %lld </p>\
+                        <p> maximum size of vertex label = %lld </p>\
+                        <p> maximum size of edge label = %lld </p>\
                         <p> negativity = %lf </p>\
                     </h3>\
-                ", result->size, result->volume, result->num_vlabel, result->num_elabel
-                , result->density, result->avg_degree, result->max_degree
-                , result->max_vlabel_size, result->max_elabel_size, result->negativity);
+                ", result.size, result.volume, result.num_vlabel, result.num_elabel
+                , result.density, result.avg_degree, result.max_degree
+                , result.max_vlabel_size, result.max_elabel_size, result.negativity);
 
-            if (result->connectstat)
+            if (result.connectstat)
                 fprintf(fp, "\
                     <h2>\
                         Connectivity Statistics\
                     </h2>\
                     <h3>\
-                        <p> number of connected components = %u </p>\
-                        <p> size of largest connected component = %u </p>\
-                        <p> approximate diameter (largest distance of all shortest path) = %u </p>\
+                        <p> number of connected components = %lld </p>\
+                        <p> size of largest connected component = %lld </p>\
+                        <p> approximate diameter (largest distance of all shortest path) = %lld </p>\
                     </h3>\
-                ", result->num_cc, result->size_lcc, result->diameter);
+                ", result.num_cc, result.size_lcc, result.diameter);
     
-            if (result->countstat)
+            if (result.countstat)
                 fprintf(fp, "\
                     <h2>\
                         Count statistics\
@@ -191,8 +191,8 @@ namespace snu {
                         <p> number of claws = %llu </p>\
                         <p> number of triangles = %llu </p>\
                     </h3>\
-                ", result->wedge_count, result->claw_count, result->triangle_count);
-        }
+                ", result.wedge_count, result.claw_count, result.triangle_count);
+        //}
 
         if (plot && plot->makeplot)
             fprintf(fp, "\

@@ -99,16 +99,16 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        snu::DSResult result;
-        snu::init_stat(&result);
-        snu::basic_stat(&graph, &result);
-        snu::connect_stat(&graph, &result);
+        snu::StatResult result;
+        snu::initStat(result);
+        snu::basicStat(graph, result);
+        snu::connectStat(graph, result);
 
         snu::Plot plot;
         snu::initPlot(&plot);
         snu::makePlot(&graph, &plot);
 
-        snu::makeHtml(graph_name.c_str(), &result, &plot);
+        snu::makeDSHtml(graph_name.c_str(), result, &plot);
     }
     else {
         snu::USGraph graph;
@@ -137,18 +137,17 @@ int main(int argc, char* argv[])
           default:
             return 1;
         }
-
-        snu::USResult result;
-        snu::init_stat(&result);
-        snu::basic_stat(&graph, &result);
-        snu::connect_stat(&graph, &result);
-        snu::count_stat(&graph, &result);
+        snu::StatResult result;
+        snu::initStat(result);
+        snu::basicStat(graph, result);
+        snu::connectStat(graph, result);
+        snu::countStat(graph, result);
 
         snu::Plot plot;
         snu::initPlot(&plot);
         snu::makePlot(&graph, &plot);
 
-        snu::makeHtml(graph_name.c_str(), &result, &plot);
+        snu::makeUSHtml(graph_name.c_str(), result, &plot);
     }
 	
 	return 0;

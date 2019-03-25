@@ -2,14 +2,20 @@
 
 namespace snu {
 	
-	void init_stat(DSResult *result) {
-		result->basicstat = false;
-		result->connectstat = false;
+	void initStat(DSResult& result) {
+		result.basicstat = false;
+		result.connectstat = false;
 	}
 
-	void init_stat(USResult *result) {
-		result->basicstat = false;
-		result->connectstat = false;
-		result->countstat = false;
+	void initStat(USResult& result) {
+		result.basicstat = false;
+		result.connectstat = false;
+		result.countstat = false;
+	}
+
+	void initStat(StatResult& result) {
+		result.basicstat = false;
+		result.connectstat = false;
+		result.countstat = false;
 	}
 }

@@ -6,7 +6,8 @@
 
 namespace snu {
 
-	void count_stat(USGraph *graph, USResult *result);
+	void countStat(USGraph& graph, StatResult& result);
+	long long TriangleCount(std::vector<std::pair<long long, Graph::Vertex *> >& vec);
 }
 
 #endif // COUNTSTAT_H
