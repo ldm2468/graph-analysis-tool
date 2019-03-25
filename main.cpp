@@ -58,6 +58,19 @@ int main(int argc, char* argv[])
     // Suppose input file path is the first non-option argument.
     std::string input_path(argv[optind]);
 
+    // Extract name of given graph from input path.
+    std::size_t slash = input_path.rfind("/");
+    if (slash == std::string::npos) {
+        slash = -1;
+    }
+
+    std::size_t dot = input_path.rfind(".");
+    if (dot == std::string::npos) {
+        dot = input_path.length();
+    }
+
+    std::string graph_name = input_path.substr(slash+1, dot-(slash+1));
+
     if (directed) {
         snu::DSGraph graph;
         int parse_status = snu::parseDSGraph(input_path, graph);
@@ -92,10 +105,10 @@ int main(int argc, char* argv[])
         snu::connect_stat(&graph, &result);
 
         snu::Plot plot;
-        snu::init_plot(&plot);
-        snu::make_plot(&graph, &plot);
+        snu::initPlot(&plot);
+        snu::makePlot(&graph, &plot);
 
-        snu::make_html("output", &result, &plot);
+        snu::makeHtml(graph_name.c_str(), &result, &plot);
     }
     else {
         snu::USGraph graph;
@@ -132,10 +145,10 @@ int main(int argc, char* argv[])
         snu::count_stat(&graph, &result);
 
         snu::Plot plot;
-        snu::init_plot(&plot);
-        snu::make_plot(&graph, &plot);
+        snu::initPlot(&plot);
+        snu::makePlot(&graph, &plot);
 
-        snu::make_html("output", &result, &plot);
+        snu::makeHtml(graph_name.c_str(), &result, &plot);
     }
 	
 	return 0;
