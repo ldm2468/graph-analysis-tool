@@ -90,20 +90,20 @@ namespace snu {
                 </h2>\
                 <h3>\
                     <p> label-vertex image </p>\
-                    <img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-                    <img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
                 </h3>\
                 <h3>\
                     <p> indegree image </p>\
-                    <img src=\"pyplot/%d_indegree.png\" width=\"400\" alt=\"indegree image\">\
-                    <img src=\"pyplot/%d_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
+                    <img src=\"pyplot/%s_indegree.png\" width=\"400\" alt=\"indegree image\">\
+                    <img src=\"pyplot/%s_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
                 </h3>\
                 <h3>\
                     <p> outdegree image </p>\
-                    <img src=\"pyplot/%d_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
-                    <img src=\"pyplot/%d_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
+                    <img src=\"pyplot/%s_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
+                    <img src=\"pyplot/%s_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
                 </h3>\
-            ", plot->id, plot->id, plot->id, plot->id, plot->id, plot->id);
+            ", plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);
@@ -201,15 +201,15 @@ namespace snu {
                 </h2>\
                 <h3>\
                     <p> label-vertex image </p>\
-                    <img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-                    <img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
                 </h3>\
                 <h3>\
                     <p> degree image </p>\
-                    <img src=\"pyplot/%d_degree.png\" width=\"400\" alt=\"degree image\">\
-                    <img src=\"pyplot/%d_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
+                    <img src=\"pyplot/%s_degree.png\" width=\"400\" alt=\"degree image\">\
+                    <img src=\"pyplot/%s_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
                 </h3>\
-            ", plot->id, plot->id, plot->id, plot->id);
+            ", plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);

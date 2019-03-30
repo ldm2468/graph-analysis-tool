@@ -104,8 +104,7 @@ int main(int argc, char* argv[])
         snu::basicStat(graph, result);
         snu::connectStat(graph, result);
 
-        snu::Plot plot;
-        snu::initPlot(&plot);
+        snu::Plot plot(graph_name);
         snu::makePlot(&graph, &plot);
 
         snu::makeDSHtml(graph_name.c_str(), result, &plot);
@@ -143,8 +142,7 @@ int main(int argc, char* argv[])
         snu::connectStat(graph, result);
         snu::countStat(graph, result);
 
-        snu::Plot plot;
-        snu::initPlot(&plot);
+        snu::Plot plot(graph_name);
         snu::makePlot(&graph, &plot);
 
         snu::makeUSHtml(graph_name.c_str(), result, &plot);

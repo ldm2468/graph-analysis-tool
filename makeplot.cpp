@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include <stdlib.h>
-#define CMD_MAX_LENGTH 30
 
 
 namespace snu {
@@ -32,9 +31,8 @@ namespace snu {
 
         out.close();
 
-        char cmd[CMD_MAX_LENGTH];
-        sprintf(cmd, "python label-vertex.py %d", plot->id);
-        system(cmd);
+        std::string cmd = "python label-vertex.py " + plot->name;
+        system(cmd.c_str());
 
         // indegree
         out.open("./pyplot/indegree.txt");
@@ -50,8 +48,8 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python indegree.py %d", plot->id);
-        system(cmd);
+        cmd = "python indegree.py " + plot->name;
+        system(cmd.c_str());
 
         // outdegree
         out.open("./pyplot/outdegree.txt");
@@ -67,8 +65,8 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python outdegree.py %d", plot->id);
-        system(cmd);
+        cmd = "python outdegree.py " + plot->name;
+        system(cmd.c_str());
 
         plot->makeplot = true;
     }
@@ -96,9 +94,8 @@ namespace snu {
 
         out.close();
         
-        char cmd[CMD_MAX_LENGTH];
-        sprintf(cmd, "python label-vertex.py %d", plot->id);
-        system(cmd);
+        std::string cmd = "python label-vertex.py " + plot->name;
+        system(cmd.c_str());
 
         // degree
         out.open("./pyplot/degree.txt");
@@ -114,8 +111,8 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python degree.py %d", plot->id);
-        system(cmd);
+        cmd = "python degree.py " + plot->name;
+        system(cmd.c_str());
 
         // pyplot
         plot->makeplot = true;
