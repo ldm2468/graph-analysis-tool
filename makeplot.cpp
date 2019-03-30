@@ -7,19 +7,18 @@
 
 namespace snu {
 
-    // thread-unsafe, TODO: file path has to be like 0_label-vertex.txt depending on plot.id
-    void makePlot(DSGraph *graph, Plot *plot)
+    void makePlot(DSGraph& graph, Plot& plot)
     {
         std::ofstream out;
 
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph->id_to_vertex.size();
+        unsigned int n = graph.id_to_vertex.size();
         typedef std::pair<std::string*, unsigned int> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
-        for (auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); ++it) {
+        for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
             auto vlabel = it->second;
             lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
         }
@@ -31,7 +30,7 @@ namespace snu {
 
         out.close();
 
-        std::string cmd = "python label-vertex.py " + plot->name;
+        std::string cmd = "python label-vertex.py " + plot.name;
         system(cmd.c_str());
 
         // indegree
@@ -39,7 +38,7 @@ namespace snu {
 
         std::vector<unsigned int> degree;
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
         
         std::sort(degree.begin(), degree.end());
@@ -48,7 +47,7 @@ namespace snu {
 
         out.close();
 
-        cmd = "python indegree.py " + plot->name;
+        cmd = "python indegree.py " + plot.name;
         system(cmd.c_str());
 
         // outdegree
@@ -56,7 +55,7 @@ namespace snu {
 
         degree.clear();
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).edges.size());
         
         std::sort(degree.begin(), degree.end());
@@ -65,24 +64,24 @@ namespace snu {
 
         out.close();
 
-        cmd = "python outdegree.py " + plot->name;
+        cmd = "python outdegree.py " + plot.name;
         system(cmd.c_str());
 
-        plot->makeplot = true;
+        plot.makeplot = true;
     }
 
-    void makePlot(USGraph *graph, Plot *plot)
+    void makePlot(USGraph& graph, Plot& plot)
     {
         std::ofstream out;
 
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph->id_to_vertex.size();
+        unsigned int n = graph.id_to_vertex.size();
         typedef std::pair<std::string*, unsigned int> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
-        for (auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); ++it) {
+        for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
             auto vlabel = it->second;
             lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
         }
@@ -94,7 +93,7 @@ namespace snu {
 
         out.close();
         
-        std::string cmd = "python label-vertex.py " + plot->name;
+        std::string cmd = "python label-vertex.py " + plot.name;
         system(cmd.c_str());
 
         // degree
@@ -102,7 +101,7 @@ namespace snu {
 
         std::vector <unsigned int> degree;
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
         
         std::sort(degree.begin(), degree.end());
@@ -111,11 +110,11 @@ namespace snu {
 
         out.close();
 
-        cmd = "python degree.py " + plot->name;
+        cmd = "python degree.py " + plot.name;
         system(cmd.c_str());
 
         // pyplot
-        plot->makeplot = true;
+        plot.makeplot = true;
     }
 }
 
