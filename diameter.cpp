@@ -47,7 +47,7 @@ namespace snu {
         for (auto id_vertex: graph.id_to_vertex) {
             Graph::Vertex* vertex = id_vertex.second;
             unsigned long long dist = *static_cast<unsigned long long*>(vertex->temp);
-            if (farthest_dist < dist) {
+            if (dist != INF && farthest_dist < dist) {
                 farthest_dist = dist;
                 farthest_vertex = vertex;
             }            
