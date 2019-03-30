@@ -6,7 +6,7 @@
 
 namespace snu {
 
-    void makeDSHtml(const char *name, StatResult& result, Plot *plot)
+    void makeDSHtml(const char *name, StatResult& result, Plot& plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -83,7 +83,7 @@ namespace snu {
                 ", result.num_scc, result.size_lscc, result.num_wcc, result.size_lwcc);
         //}
 
-        if (plot && plot->makeplot)
+        if (plot.makeplot)
             fprintf(fp, "\
                 <h2>\
                     Statistics Image\
@@ -103,13 +103,13 @@ namespace snu {
                     <img src=\"pyplot/%s_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
                     <img src=\"pyplot/%s_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
                 </h3>\
-            ", plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str());
+            ", plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);
     }
 
-    void makeUSHtml(const char *name, StatResult& result, Plot *plot)
+    void makeUSHtml(const char *name, StatResult& result, Plot& plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -194,7 +194,7 @@ namespace snu {
                 ", result.wedge_count, result.claw_count, result.triangle_count);
         //}
 
-        if (plot && plot->makeplot)
+        if (plot.makeplot)
             fprintf(fp, "\
                 <h2>\
                     Statistics Image\
@@ -209,7 +209,7 @@ namespace snu {
                     <img src=\"pyplot/%s_degree.png\" width=\"400\" alt=\"degree image\">\
                     <img src=\"pyplot/%s_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
                 </h3>\
-            ", plot->name.c_str(), plot->name.c_str(), plot->name.c_str(), plot->name.c_str());
+            ", plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);

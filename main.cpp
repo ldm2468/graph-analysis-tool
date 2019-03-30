@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
         snu::Plot plot(graph_name);
         snu::makePlot(graph, plot);
 
-        snu::makeDSHtml(graph_name.c_str(), result, &plot);
+        snu::makeDSHtml(graph_name.c_str(), result, plot);
     }
     else {
         snu::USGraph graph;
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
         snu::Plot plot(graph_name);
         snu::makePlot(graph, plot);
 
-        snu::makeUSHtml(graph_name.c_str(), result, &plot);
+        snu::makeUSHtml(graph_name.c_str(), result, plot);
     }
 	
 	return 0;
