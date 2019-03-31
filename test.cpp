@@ -165,8 +165,8 @@ int main(int argc, char* argv[])
         unsigned long long approx;
         milliseconds::rep approx_time = measure(approx, snu::approximate_diameter, graph);
 
-        printf("exact diameter  : %llu (%ld ms)\n", exact, exact_time);
-        printf("approx. diameter: %llu (%ld ms)\n", approx, approx_time);
+        printf("exact diameter  : %10llu (%10ld ms)\n", exact, exact_time);
+        printf("approx. diameter: %10llu (%10ld ms)\n", approx, approx_time);
     }
 	
 	return 0;
