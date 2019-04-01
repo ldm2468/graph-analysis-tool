@@ -8,10 +8,8 @@ namespace snu {
 
     void makeDSHtml(const char *name, StatResult& result, Plot& plot)
     {
-        char *real_name = (char*)malloc(strlen(name) + 6);
-        sprintf(real_name, "%s.html", name);
-        FILE *fp = fopen(real_name, "w");
-        free(real_name);
+		std::string real_name = name + std::string(".html");
+        FILE *fp = fopen(real_name.c_str(), "w");
 
         fprintf(fp, "\
         <!DOCTYPE html>\
@@ -111,10 +109,8 @@ namespace snu {
 
     void makeUSHtml(const char *name, StatResult& result, Plot& plot)
     {
-        char *real_name = (char*)malloc(strlen(name) + 6);
-        sprintf(real_name, "%s.html", name);
-        FILE *fp = fopen(real_name, "w");
-        free(real_name);
+		std::string real_name = name + std::string(".html");
+        FILE *fp = fopen(real_name.c_str(), "w");
         
         fprintf(fp, "\
         <!DOCTYPE html>\

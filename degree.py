@@ -31,15 +31,18 @@ with open('./pyplot/degree.txt', mode='rt') as f:
         fig = plt.gcf()
         fpath="./pyplot/"+str(graph_name)+"_degree.png"
         fig.savefig(fpath, dpi=300)
-        for i in range(len(degree)):
-            if degree[i]!=0:
-                degree[i]=math.log(degree[i])
-            if b[i]!=0:
-                b[i]=math.log(b[i])
+
+        #log scale
         plt.figure(4)
+        plt.xscale('log')
+        plt.yscale('log')
+        xmax = max(degree) * 2
+        ymax = max(b) * 2
+        plt.xlim(0.8, xmax)
+        plt.ylim(0.8, ymax)
         plt.scatter(degree, b)
-        plt.xlabel('log(degree)')
-        plt.ylabel('log(# of vertex)')
+        plt.xlabel('degree')
+        plt.ylabel('# of vertex')
         plt.title('degree_log')
         fig = plt.gcf()
         fpath = "./pyplot/"+str(graph_name)+"_degree_log.png"

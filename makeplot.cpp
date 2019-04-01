@@ -14,8 +14,8 @@ namespace snu {
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph.id_to_vertex.size();
-        typedef std::pair<std::string*, unsigned int> label_vertex;
+        long long n = graph.id_to_vertex.size();
+        typedef std::pair<std::string*, long long> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
         for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
@@ -36,7 +36,7 @@ namespace snu {
         // indegree
         out.open("./pyplot/indegree.txt");
 
-        std::vector<unsigned int> degree;
+        std::vector<long long> degree;
         degree.reserve(n);
         for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
@@ -77,8 +77,8 @@ namespace snu {
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph.id_to_vertex.size();
-        typedef std::pair<std::string*, unsigned int> label_vertex;
+        long long n = graph.id_to_vertex.size();
+        typedef std::pair<std::string*, long long> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
         for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
@@ -99,7 +99,7 @@ namespace snu {
         // degree
         out.open("./pyplot/degree.txt");
 
-        std::vector <unsigned int> degree;
+        std::vector <long long> degree;
         degree.reserve(n);
         for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
