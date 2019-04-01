@@ -3,24 +3,22 @@
 #include <vector>
 #include <algorithm>
 #include <stdlib.h>
-#define CMD_MAX_LENGTH 30
 
 
 namespace snu {
 
-    // thread-unsafe, TODO: file path has to be like 0_label-vertex.txt depending on plot.id
-    void makePlot(DSGraph *graph, Plot *plot)
+    void makePlot(DSGraph& graph, Plot& plot)
     {
         std::ofstream out;
 
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph->id_to_vertex.size();
+        unsigned int n = graph.id_to_vertex.size();
         typedef std::pair<std::string*, unsigned int> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
-        for (auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); ++it) {
+        for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
             auto vlabel = it->second;
             lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
         }
@@ -32,16 +30,15 @@ namespace snu {
 
         out.close();
 
-        char cmd[CMD_MAX_LENGTH];
-        sprintf(cmd, "python label-vertex.py %d", plot->id);
-        system(cmd);
+        std::string cmd = "python label-vertex.py " + plot.name;
+        system(cmd.c_str());
 
         // indegree
         out.open("./pyplot/indegree.txt");
 
         std::vector<unsigned int> degree;
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
         
         std::sort(degree.begin(), degree.end());
@@ -50,15 +47,15 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python indegree.py %d", plot->id);
-        system(cmd);
+        cmd = "python indegree.py " + plot.name;
+        system(cmd.c_str());
 
         // outdegree
         out.open("./pyplot/outdegree.txt");
 
         degree.clear();
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).edges.size());
         
         std::sort(degree.begin(), degree.end());
@@ -67,24 +64,24 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python outdegree.py %d", plot->id);
-        system(cmd);
+        cmd = "python outdegree.py " + plot.name;
+        system(cmd.c_str());
 
-        plot->makeplot = true;
+        plot.makeplot = true;
     }
 
-    void makePlot(USGraph *graph, Plot *plot)
+    void makePlot(USGraph& graph, Plot& plot)
     {
         std::ofstream out;
 
         // label-vertex
         out.open("./pyplot/label-vertex.txt");
 
-        unsigned int n = graph->id_to_vertex.size();
+        unsigned int n = graph.id_to_vertex.size();
         typedef std::pair<std::string*, unsigned int> label_vertex;
         std::vector<label_vertex> lv;
         lv.reserve(n);
-        for (auto it = graph->vlabel_to_class.begin(); it != graph->vlabel_to_class.end(); ++it) {
+        for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
             auto vlabel = it->second;
             lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
         }
@@ -96,16 +93,15 @@ namespace snu {
 
         out.close();
         
-        char cmd[CMD_MAX_LENGTH];
-        sprintf(cmd, "python label-vertex.py %d", plot->id);
-        system(cmd);
+        std::string cmd = "python label-vertex.py " + plot.name;
+        system(cmd.c_str());
 
         // degree
         out.open("./pyplot/degree.txt");
 
         std::vector <unsigned int> degree;
         degree.reserve(n);
-        for (auto it = graph->id_to_vertex.begin(); it != graph->id_to_vertex.end(); ++it)
+        for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
             degree.push_back((*it->second).indegree);
         
         std::sort(degree.begin(), degree.end());
@@ -114,11 +110,11 @@ namespace snu {
 
         out.close();
 
-        sprintf(cmd, "python degree.py %d", plot->id);
-        system(cmd);
+        cmd = "python degree.py " + plot.name;
+        system(cmd.c_str());
 
         // pyplot
-        plot->makeplot = true;
+        plot.makeplot = true;
     }
 }
 

@@ -1,9 +1,41 @@
 #include <stdio.h>
 #include <getopt.h>
-#include "snugal.h"
+
+#include <iostream>
+#include <chrono>
+#include <utility>
+
+#include "graph.h"
+#include "parse.h"
+#include "diameter.h"
 
 
-void usage(void);
+typedef std::chrono::milliseconds milliseconds;
+
+
+void usage(void)
+{
+    printf(" usage: main <input file> [options]\n");
+    printf("\n");
+    printf("  options:\n");
+    printf("   -d | --directed       set graph directed\n");
+    printf("   -u | --undirected     set graph undirected (default)\n");
+    printf("   -h | --help           print this list of help\n");
+    printf("\n");
+    printf("   e.g. ./main some_path/some_graph.snap --directed\n");
+
+    return;
+}
+
+
+template<typename Ret, typename Func, typename ...Args>
+milliseconds::rep measure(Ret&& ret, Func&& func, Args&&... args) {
+    auto start = std::chrono::steady_clock::now();
+    ret = std::forward<Func>(func)(std::forward<Args>(args)...);
+    auto finish = std::chrono::steady_clock::now();
+
+    return std::chrono::duration_cast<milliseconds>(finish - start).count();
+}
 
 
 int main(int argc, char* argv[]) 
@@ -98,16 +130,6 @@ int main(int argc, char* argv[])
           default:
             return 1;
         }
-
-        snu::StatResult result;
-        snu::initStat(result);
-        snu::basicStat(graph, result);
-        snu::connectStat(graph, result);
-
-        snu::Plot plot(graph_name);
-        snu::makePlot(graph, plot);
-
-        snu::makeDSHtml(graph_name.c_str(), result, plot);
     }
     else {
         snu::USGraph graph;
@@ -136,33 +158,18 @@ int main(int argc, char* argv[])
           default:
             return 1;
         }
-        snu::StatResult result;
-        snu::initStat(result);
-        snu::basicStat(graph, result);
-        snu::connectStat(graph, result);
-        snu::countStat(graph, result);
 
-        snu::Plot plot(graph_name);
-        snu::makePlot(graph, plot);
+        unsigned long long exact;
+        milliseconds::rep exact_time = measure(exact, snu::diameter, graph);
+        
+        unsigned long long approx;
+        milliseconds::rep approx_time = measure(approx, snu::approximate_diameter, graph);
 
-        snu::makeUSHtml(graph_name.c_str(), result, plot);
+        printf("exact diameter  : %10llu (%10ld ms)\n", exact, exact_time);
+        printf("approx. diameter: %10llu (%10ld ms)\n", approx, approx_time);
     }
 	
 	return 0;
 }
 
-
-void usage(void)
-{
-    printf(" usage: main <input file> [options]\n");
-    printf("\n");
-    printf("  options:\n");
-    printf("   -d | --directed       set graph directed\n");
-    printf("   -u | --undirected     set graph undirected (default)\n");
-    printf("   -h | --help           print this list of help\n");
-    printf("\n");
-    printf("   e.g. ./main some_path/some_graph.snap --directed\n");
-
-    return;
-}
 

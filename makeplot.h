@@ -7,8 +7,8 @@
 
 namespace snu {
 
-    void makePlot(DSGraph *graph, Plot *plot);
-    void makePlot(USGraph *graph, Plot *plot);
+    void makePlot(DSGraph& graph, Plot& plot);
+    void makePlot(USGraph& graph, Plot& plot);
 }
 
 #endif // MAKEPLOT_H

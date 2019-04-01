@@ -6,7 +6,7 @@
 
 namespace snu {
 
-    void makeDSHtml(const char *name, StatResult& result, Plot *plot)
+    void makeDSHtml(const char *name, StatResult& result, Plot& plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -83,33 +83,33 @@ namespace snu {
                 ", result.num_scc, result.size_lscc, result.num_wcc, result.size_lwcc);
         //}
 
-        if (plot && plot->makeplot)
+        if (plot.makeplot)
             fprintf(fp, "\
                 <h2>\
                     Statistics Image\
                 </h2>\
                 <h3>\
                     <p> label-vertex image </p>\
-                    <img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-                    <img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
                 </h3>\
                 <h3>\
                     <p> indegree image </p>\
-                    <img src=\"pyplot/%d_indegree.png\" width=\"400\" alt=\"indegree image\">\
-                    <img src=\"pyplot/%d_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
+                    <img src=\"pyplot/%s_indegree.png\" width=\"400\" alt=\"indegree image\">\
+                    <img src=\"pyplot/%s_indegree_log.png\" width=\"400\" alt=\"log scale indegree image\">\
                 </h3>\
                 <h3>\
                     <p> outdegree image </p>\
-                    <img src=\"pyplot/%d_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
-                    <img src=\"pyplot/%d_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
+                    <img src=\"pyplot/%s_outdegree.png\" width=\"400\" alt=\"outdegree image\">\
+                    <img src=\"pyplot/%s_outdegree_log.png\" width=\"400\" alt=\"log scale outdegree image\">\
                 </h3>\
-            ", plot->id, plot->id, plot->id, plot->id, plot->id, plot->id);
+            ", plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);
     }
 
-    void makeUSHtml(const char *name, StatResult& result, Plot *plot)
+    void makeUSHtml(const char *name, StatResult& result, Plot& plot)
     {
         char *real_name = (char*)malloc(strlen(name) + 6);
         sprintf(real_name, "%s.html", name);
@@ -194,22 +194,22 @@ namespace snu {
                 ", result.wedge_count, result.claw_count, result.triangle_count);
         //}
 
-        if (plot && plot->makeplot)
+        if (plot.makeplot)
             fprintf(fp, "\
                 <h2>\
                     Statistics Image\
                 </h2>\
                 <h3>\
                     <p> label-vertex image </p>\
-                    <img src=\"pyplot/%d_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
-                    <img src=\"pyplot/%d_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex.png\" width=\"400\" alt=\"label-vertex image\">\
+                    <img src=\"pyplot/%s_label-vertex_log.png\" width=\"400\" alt=\"log scale label-vertex image\">\
                 </h3>\
                 <h3>\
                     <p> degree image </p>\
-                    <img src=\"pyplot/%d_degree.png\" width=\"400\" alt=\"degree image\">\
-                    <img src=\"pyplot/%d_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
+                    <img src=\"pyplot/%s_degree.png\" width=\"400\" alt=\"degree image\">\
+                    <img src=\"pyplot/%s_degree_log.png\" width=\"400\" alt=\"log scale degree image\">\
                 </h3>\
-            ", plot->id, plot->id, plot->id, plot->id);
+            ", plot.name.c_str(), plot.name.c_str(), plot.name.c_str(), plot.name.c_str());
         
         fprintf(fp, "</body></html>");
         fclose(fp);
