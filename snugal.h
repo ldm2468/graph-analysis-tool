@@ -11,6 +11,7 @@
 #include "basicstat.h"
 #include "connectstat.h"
 #include "countstat.h"
+#include "biconnected.h"
 
 // graph parsing
 #include "parse.h"
