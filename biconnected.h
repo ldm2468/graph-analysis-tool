@@ -1,0 +1,4 @@
+#ifndef BICONNECTED_H
+#define BICONNECTED_H
+
+#endif // BICONNECTED_H
