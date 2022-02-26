@@ -28,6 +28,10 @@ namespace snu {
 		long long size_lwcc; // largest size of weakly connected components
 		long long diameter; // longest shortest paths
 
+        // biconnected components and articulation points
+        long long num_articulation_points; // number of articulation points
+        long long num_biconnected_components; // number of biconnected components
+
 		// counting statistics 
 		unsigned long long wedge_count; // number of wedges
 		unsigned long long claw_count; // number of claws
@@ -36,6 +40,7 @@ namespace snu {
 		// statistic check
 		bool basicstat = false;
 		bool connectstat = false;
+        bool biconnectedstat = false;
 		bool countstat = false;
 	} StatResult;
 
