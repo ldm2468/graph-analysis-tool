@@ -87,8 +87,6 @@ namespace snu {
             }
         }
 
-        printf("%lld, %lld\n", result.num_biconnected_components, result.num_articulation_points);
-
         for (auto& pair: graph.id_to_vertex) {
             delete getMetadata(pair.second);
         }
