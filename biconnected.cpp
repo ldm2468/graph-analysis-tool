@@ -88,9 +88,14 @@ namespace snu {
 
         // count articulation points
         result.num_arp = 0;
+        result.max_conn_bcc = 0;
         for (auto& pair: graph.id_to_vertex) {
-            if (getMetadata(pair.second)->num_connected_bcc > 1) {
+            long long cbcc = getMetadata(pair.second)->num_connected_bcc;
+            if (cbcc > 1) {
                 result.num_arp++;
+                if (cbcc > result.max_conn_bcc) {
+                    result.max_conn_bcc = cbcc;
+                }
             }
         }
 
