@@ -6,7 +6,7 @@ namespace snu {
         bool visited = false;
         bool is_articulation_point = false;
         long long depth = -1; // the depth in the dfs
-        long long low_point = -1;
+        long long low_point = -1; // depth of topmost ancestor reachable
         long long child_count = 0; // number of children in dfs tree
         Graph::Vertex *parent = nullptr; // the parent in the dfs tree
     } VertexMetadata;
@@ -49,8 +49,8 @@ namespace snu {
                             dfs_stack.push(to);
                             escape = true;
                             break;
-                        } else if (to != meta->parent) { // this is a back edge!
-                            if (meta->low_point > to_meta->depth) {
+                        } else if (to != meta->parent) {
+                            if (meta->low_point > to_meta->depth) { // this is a back edge!
                                 meta->low_point = to_meta->depth;
                             }
                         }
@@ -59,7 +59,7 @@ namespace snu {
                         continue;
                     }
                     if (v == root) {
-                        if (meta->child_count != 1) {
+                        if (meta->child_count > 1) {
                             // if dfs tree root has multiple children, it must be an articulation point!
                             meta->is_articulation_point = true;
                         }
@@ -77,7 +77,6 @@ namespace snu {
                     }
                     dfs_stack.pop();
                 }
-                // result.num_biconnected_components = dfsArticulationPoints(pair.second, 0, result.num_biconnected_components);
             }
         }
 
