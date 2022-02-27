@@ -86,10 +86,12 @@ namespace snu {
                         Biconnected Component Statistics\
                     </h2>\
                     <h3>\
-                        <p> number of articulation points (cut vertices) = %lld </p>\
-                        <p> number of biconnected components = %lld </p>\
+                        <p> number of articulation points (ARP) = %lld </p>\
+                        <p> number of biconnected components (BCC) = %lld </p>\
+                        <p> size of largest biconnected component = %lld </p>\
+                        <p> maximum number of BCC's connected to a single ARP = %lld </p>\
                     </h3>\
-                ", result.num_arp, result.num_bcc);
+                ", result.num_arp, result.num_bcc, result.size_lbcc, result.max_conn_bcc);
         //}
 
         if (plot.makeplot)
@@ -196,9 +198,10 @@ namespace snu {
                     <h3>\
                         <p> number of articulation points (ARP) = %lld </p>\
                         <p> number of biconnected components (BCC) = %lld </p>\
+                        <p> size of largest biconnected component = %lld </p>\
                         <p> maximum number of BCC's connected to a single ARP = %lld </p>\
                     </h3>\
-                ", result.num_arp, result.num_bcc, result.max_conn_bcc);
+                ", result.num_arp, result.num_bcc, result.size_lbcc, result.max_conn_bcc);
     
             if (result.countstat)
                 fprintf(fp, "\
