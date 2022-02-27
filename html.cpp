@@ -79,6 +79,17 @@ namespace snu {
                         <p> size of largest weakly connected component = %lld </p>\
                     </h3>\
                 ", result.num_scc, result.size_lscc, result.num_wcc, result.size_lwcc);
+
+            if (result.biconnectedstat)
+                fprintf(fp, "\
+                    <h2>\
+                        Biconnected Component Statistics\
+                    </h2>\
+                    <h3>\
+                        <p> number of articulation points (cut vertices) = %lld </p>\
+                        <p> number of biconnected components = %lld </p>\
+                    </h3>\
+                ", result.num_articulation_points, result.num_biconnected_components);
         //}
 
         if (plot.makeplot)
@@ -176,6 +187,17 @@ namespace snu {
                         <p> approximate diameter (largest distance of all shortest path) = %lld </p>\
                     </h3>\
                 ", result.num_cc, result.size_lcc, result.diameter);
+
+            if (result.biconnectedstat)
+                fprintf(fp, "\
+                    <h2>\
+                        Biconnected Component Statistics\
+                    </h2>\
+                    <h3>\
+                        <p> number of articulation points (cut vertices) = %lld </p>\
+                        <p> number of biconnected components = %lld </p>\
+                    </h3>\
+                ", result.num_articulation_points, result.num_biconnected_components);
     
             if (result.countstat)
                 fprintf(fp, "\
