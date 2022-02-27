@@ -89,7 +89,7 @@ namespace snu {
                         <p> number of articulation points (cut vertices) = %lld </p>\
                         <p> number of biconnected components = %lld </p>\
                     </h3>\
-                ", result.num_articulation_points, result.num_biconnected_components);
+                ", result.num_arp, result.num_bcc);
         //}
 
         if (plot.makeplot)
@@ -197,7 +197,7 @@ namespace snu {
                         <p> number of articulation points (cut vertices) = %lld </p>\
                         <p> number of biconnected components = %lld </p>\
                     </h3>\
-                ", result.num_articulation_points, result.num_biconnected_components);
+                ", result.num_arp, result.num_bcc);
     
             if (result.countstat)
                 fprintf(fp, "\

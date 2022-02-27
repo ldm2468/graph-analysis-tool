@@ -17,7 +17,7 @@ namespace snu {
 
     // This is the algorithm presented by Hopcroft and Tarjan (1973).
     // It has been modified to avoid recursion (to prevent stack overflows)
-    static long long countBiconnectedComponents(Graph &graph) {
+    static long long countBcc(Graph &graph) {
         long long num_bcc = 0;
         std::stack<Graph::Vertex *> dfs_stack;
 
@@ -84,13 +84,13 @@ namespace snu {
             pair.second->temp = new VertexMetadata();
         }
 
-        result.num_biconnected_components = countBiconnectedComponents(graph);
+        result.num_bcc = countBcc(graph);
 
         // count articulation points
-        result.num_articulation_points = 0;
+        result.num_arp = 0;
         for (auto& pair: graph.id_to_vertex) {
             if (getMetadata(pair.second)->num_connected_bcc > 1) {
-                result.num_articulation_points++;
+                result.num_arp++;
             }
         }
 
