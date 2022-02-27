@@ -32,6 +32,7 @@ namespace snu {
         long long num_arp; // number of articulation points
         long long num_bcc; // number of biconnected components
         long long max_conn_bcc; // maximum number of bcc's connected to a single arp
+        long long size_lbcc; // largest size of biconnected components
 
 		// counting statistics 
 		unsigned long long wedge_count; // number of wedges

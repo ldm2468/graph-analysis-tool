@@ -5,6 +5,7 @@ namespace snu {
     typedef struct VertexMetadata {
         bool visited = false;
         long long num_connected_bcc = 1; // number of connected bcc's (1 for non-articulation points)
+        long long bcc_size = 1; // size of the bcc the vertex is located in
         long long depth = -1; // the depth in the dfs
         long long low_point = -1; // depth of topmost ancestor reachable
         long long child_count = 0; // number of children in dfs tree
@@ -17,8 +18,7 @@ namespace snu {
 
     // This is the algorithm presented by Hopcroft and Tarjan (1973).
     // It has been modified to avoid recursion (to prevent stack overflows)
-    static long long countBcc(Graph &graph) {
-        long long num_bcc = 0;
+    static void countBcc(Graph &graph, StatResult &result) {
         std::stack<Graph::Vertex *> dfs_stack;
 
         // Attempt dfs starting from every vertex:
@@ -28,9 +28,10 @@ namespace snu {
             VertexMetadata *root_meta = getMetadata(root);
             if (!root_meta->visited) { // begin dfs with this root!
                 root_meta->depth = 0;
+                root_meta->num_connected_bcc = 0;
                 dfs_stack.push(root);
                 while (!dfs_stack.empty()) {
-                    bool escape = false;
+                    bool escape = false; // used to escape nested loop
                     Graph::Vertex *v = dfs_stack.top();
                     VertexMetadata *meta = getMetadata(v);
                     if (!meta->visited) {
@@ -57,16 +58,20 @@ namespace snu {
                     if (escape) {
                         continue;
                     }
-                    if (v == root) {
-                        meta->num_connected_bcc = meta->child_count;
-                        num_bcc += meta->child_count;
+                    if (v == root) { // if i'm root
                         break; // finished processing root, stack should be empty
                     }
-                    if (meta->depth > 1) { // if parent isn't root...
-                        if (meta->low_point == getMetadata(meta->parent)->depth || meta->low_point == meta->depth) {
-                            getMetadata(meta->parent)->num_connected_bcc++;
-                            num_bcc++;
+                    bool parent_is_arp = meta->depth == 1
+                                      || meta->low_point == getMetadata(meta->parent)->depth
+                                      || meta->low_point == meta->depth;
+                    if (parent_is_arp) {
+                        getMetadata(meta->parent)->num_connected_bcc++;
+                        result.num_bcc++;
+                        if (meta->bcc_size + 1 > result.size_lbcc) {
+                            result.size_lbcc = meta->bcc_size + 1;
                         }
+                    } else { // propagate bcc size to parent
+                        getMetadata(meta->parent)->bcc_size += meta->bcc_size;
                     }
                     // update low point of parent before popping
                     if (getMetadata(meta->parent)->low_point > meta->low_point) {
@@ -76,7 +81,6 @@ namespace snu {
                 }
             }
         }
-        return num_bcc;
     }
 
     void biconnectedComponents(Graph& graph, StatResult& result) {
@@ -84,7 +88,9 @@ namespace snu {
             pair.second->temp = new VertexMetadata();
         }
 
-        result.num_bcc = countBcc(graph);
+        result.num_bcc = 0;
+        result.size_lbcc = 0;
+        countBcc(graph, result);
 
         // count articulation points
         result.num_arp = 0;
