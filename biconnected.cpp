@@ -4,7 +4,7 @@
 namespace snu {
     typedef struct VertexMetadata {
         bool visited = false;
-        bool is_articulation_point = false;
+        long long num_connected_bcc = 1; // number of connected bcc's (1 for non-articulation points)
         long long depth = -1; // the depth in the dfs
         long long low_point = -1; // depth of topmost ancestor reachable
         long long child_count = 0; // number of children in dfs tree
@@ -18,7 +18,7 @@ namespace snu {
     // This is the algorithm presented by Hopcroft and Tarjan (1973).
     // It has been modified to avoid recursion (to prevent stack overflows)
     static long long countBiconnectedComponents(Graph &graph) {
-        long long num_biconnected_components = 0;
+        long long num_bcc = 0;
         std::stack<Graph::Vertex *> dfs_stack;
 
         // Attempt dfs starting from every vertex:
@@ -58,17 +58,14 @@ namespace snu {
                         continue;
                     }
                     if (v == root) {
-                        if (meta->child_count > 1) {
-                            // if dfs tree root has multiple children, it must be an articulation point!
-                            meta->is_articulation_point = true;
-                        }
-                        num_biconnected_components += meta->child_count;
+                        meta->num_connected_bcc = meta->child_count;
+                        num_bcc += meta->child_count;
                         break; // finished processing root, stack should be empty
                     }
                     if (meta->depth > 1) { // if parent isn't root...
                         if (meta->low_point == getMetadata(meta->parent)->depth || meta->low_point == meta->depth) {
-                            getMetadata(meta->parent)->is_articulation_point = true;
-                            num_biconnected_components++;
+                            getMetadata(meta->parent)->num_connected_bcc++;
+                            num_bcc++;
                         }
                     }
                     // update low point of parent before popping
@@ -79,7 +76,7 @@ namespace snu {
                 }
             }
         }
-        return num_biconnected_components;
+        return num_bcc;
     }
 
     void biconnectedComponents(Graph& graph, StatResult& result) {
@@ -89,12 +86,14 @@ namespace snu {
 
         result.num_biconnected_components = countBiconnectedComponents(graph);
 
+        // count articulation points
         result.num_articulation_points = 0;
         for (auto& pair: graph.id_to_vertex) {
-            if (getMetadata(pair.second)->is_articulation_point) {
+            if (getMetadata(pair.second)->num_connected_bcc > 1) {
                 result.num_articulation_points++;
             }
         }
+
         result.biconnectedstat = true;
 
         for (auto& pair: graph.id_to_vertex) {
