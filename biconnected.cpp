@@ -86,6 +86,7 @@ namespace snu {
                 result.num_articulation_points++;
             }
         }
+        result.biconnectedstat = true;
 
         for (auto& pair: graph.id_to_vertex) {
             delete getMetadata(pair.second);
