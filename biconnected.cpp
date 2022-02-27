@@ -15,19 +15,18 @@ namespace snu {
         return (VertexMetadata *) v->temp;
     }
 
-    void biconnectedComponents(Graph& graph, StatResult& result) {
-        for (auto& pair: graph.id_to_vertex) {
-            pair.second->temp = new VertexMetadata();
-        }
-
-        result.num_biconnected_components = 0;
-
+    // This is the algorithm presented by Hopcroft and Tarjan (1973).
+    // It has been modified to avoid recursion (to prevent stack overflows)
+    static long long countBiconnectedComponents(Graph &graph) {
+        long long num_biconnected_components = 0;
         std::stack<Graph::Vertex *> dfs_stack;
 
+        // Attempt dfs starting from every vertex:
+        // this accounts for disconnected graphs.
         for (auto& pair: graph.id_to_vertex) {
             Graph::Vertex *root = pair.second;
             VertexMetadata *root_meta = getMetadata(root);
-            if (!root_meta->visited) {
+            if (!root_meta->visited) { // begin dfs with this root!
                 root_meta->depth = 0;
                 dfs_stack.push(root);
                 while (!dfs_stack.empty()) {
@@ -63,15 +62,16 @@ namespace snu {
                             // if dfs tree root has multiple children, it must be an articulation point!
                             meta->is_articulation_point = true;
                         }
-                        result.num_biconnected_components += meta->child_count;
+                        num_biconnected_components += meta->child_count;
                         break; // finished processing root, stack should be empty
                     }
                     if (meta->depth > 1) { // if parent isn't root...
                         if (meta->low_point == getMetadata(meta->parent)->depth || meta->low_point == meta->depth) {
                             getMetadata(meta->parent)->is_articulation_point = true;
-                            result.num_biconnected_components++;
+                            num_biconnected_components++;
                         }
                     }
+                    // update low point of parent before popping
                     if (getMetadata(meta->parent)->low_point > meta->low_point) {
                         getMetadata(meta->parent)->low_point = meta->low_point;
                     }
@@ -79,6 +79,15 @@ namespace snu {
                 }
             }
         }
+        return num_biconnected_components;
+    }
+
+    void biconnectedComponents(Graph& graph, StatResult& result) {
+        for (auto& pair: graph.id_to_vertex) {
+            pair.second->temp = new VertexMetadata();
+        }
+
+        result.num_biconnected_components = countBiconnectedComponents(graph);
 
         result.num_articulation_points = 0;
         for (auto& pair: graph.id_to_vertex) {
