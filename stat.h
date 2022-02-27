@@ -29,8 +29,8 @@ namespace snu {
 		long long diameter; // longest shortest paths
 
         // biconnected components and articulation points
-        long long num_articulation_points; // number of articulation points
-        long long num_biconnected_components; // number of biconnected components
+        long long num_arp; // number of articulation points
+        long long num_bcc; // number of biconnected components
 
 		// counting statistics 
 		unsigned long long wedge_count; // number of wedges
