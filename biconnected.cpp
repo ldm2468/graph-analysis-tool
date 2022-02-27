@@ -27,27 +27,29 @@ namespace snu {
             Graph::Vertex *root = pair.second;
             VertexMetadata *root_meta = getMetadata(root);
             if (!root_meta->visited) { // begin dfs with this root!
-                root_meta->depth = 0;
+                root_meta->depth = root_meta->low_point = 0;
                 root_meta->num_connected_bcc = 0;
                 dfs_stack.push(root);
+
                 while (!dfs_stack.empty()) {
                     bool escape = false; // used to escape nested loop
                     Graph::Vertex *v = dfs_stack.top();
                     VertexMetadata *meta = getMetadata(v);
-                    if (!meta->visited) {
-                        meta->low_point = meta->depth;
-                        meta->visited = true;
-                    }
+                    meta->visited = true;
+
                     for (auto& e: v->edges) {
                         Graph::Vertex *to = e->to == v ? e->from : e->to;
                         VertexMetadata *to_meta = getMetadata(to);
 
                         if (!to_meta->visited) { // this is a child!
                             meta->child_count++;
+
+                            // initialize child metadata
                             to_meta->parent = v;
-                            to_meta->depth = meta->depth + 1;
+                            to_meta->depth = to_meta->low_point = meta->depth + 1;
                             dfs_stack.push(to);
-                            escape = true;
+
+                            escape = true; // escape loop, begin processing child immediately
                             break;
                         } else if (to != meta->parent) {
                             if (meta->low_point > to_meta->depth) { // this is a back edge!
