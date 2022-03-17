@@ -4,11 +4,12 @@
 #include "graph.h"
 #include "stat.h"
 
-#define DAMPING_FACTOR 0.85
+#define PAGERANK_DAMPING_FACTOR 0.85
 #define CONVERGENCE_TEST 1E-6
+#define MAX_ITERATIONS 1000
 
 namespace snu {
-    void pageRank(Graph &graph, StatResult &result);
+    void eigenCentrality(Graph &graph, StatResult &result);
 }
 
 #endif //EIGENCENTRALITY_H

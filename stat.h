@@ -29,7 +29,10 @@ namespace snu {
 		long long diameter; // longest shortest paths
 
         // eigencentrality
+        bool pagerank_converged = false; // whether pagerank converged
         double max_pagerank; // maximum pagerank value
+        bool eigencentrality_converged = false; // whether eigencentrality converged
+        double max_eigencentrality; // maximum eigencentrality value
 
         // biconnected components and articulation points
         long long num_arp; // number of articulation points
