@@ -102,6 +102,7 @@ int main(int argc, char* argv[])
         snu::StatResult result;
         snu::initStat(result);
         snu::basicStat(graph, result);
+        snu::pageRank(graph, result);
         snu::connectStat(graph, result);
 
         snu::Plot plot(graph_name);
@@ -140,6 +141,7 @@ int main(int argc, char* argv[])
         snu::initStat(result);
         snu::basicStat(graph, result);
         snu::connectStat(graph, result);
+        snu::pageRank(graph, result);
         snu::biconnectedComponents(graph, result);
         snu::countStat(graph, result);
 

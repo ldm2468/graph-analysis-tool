@@ -28,6 +28,9 @@ namespace snu {
 		long long size_lwcc; // largest size of weakly connected components
 		long long diameter; // longest shortest paths
 
+        // eigencentrality
+        double max_pagerank; // maximum pagerank value
+
         // biconnected components and articulation points
         long long num_arp; // number of articulation points
         long long num_bcc; // number of biconnected components
@@ -42,6 +45,7 @@ namespace snu {
 		// statistic check
 		bool basicstat = false;
 		bool connectstat = false;
+        bool eigencentralitystat = false;
         bool biconnectedstat = false;
 		bool countstat = false;
 	} StatResult;
