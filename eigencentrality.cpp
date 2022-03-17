@@ -28,7 +28,7 @@ namespace snu {
             iterations++;
             not_finished = false;
             mat->mul(prob, mul);
-            for (int i = 0; i < prob.size(); i++) {
+            for (int i = 0; i < n; i++) {
                 double next = damper + DAMPING_FACTOR * mul[i];
                 if ((next > prob[i] ? next - prob[i] : prob[i] - next) > CONVERGENCE_TEST) {
                     not_finished = true;
@@ -45,5 +45,7 @@ namespace snu {
         }
 
         result.eigencentralitystat = true;
+
+        delete mat;
     }
 }
