@@ -80,6 +80,27 @@ namespace snu {
                     </h3>\
                 ", result.num_scc, result.size_lscc, result.num_wcc, result.size_lwcc);
 
+            if (result.eigencentralitystat) {
+                fprintf(fp, "\
+                    <h2>\
+                        Eigenvector Centrality Statistics\
+                    </h2>\
+                    <h3>");
+                if (result.eigencentrality_converged) {
+                    fprintf(fp, "<p> Max eigenvector centrality value = %lf </p>",
+                            result.max_eigencentrality);
+                } else {
+                    fprintf(fp, "<p> Eigenvector centrality failed to converge. </p>");
+                }
+                if (result.pagerank_converged) {
+                    fprintf(fp, "<p> Max PageRank value = %lf </p>",
+                            result.max_pagerank);
+                } else {
+                    fprintf(fp, "<p> PageRank failed to converge. </p>");
+                }
+                fprintf(fp, "</h3>");
+            }
+
             if (result.biconnectedstat)
                 fprintf(fp, "\
                     <h2>\
@@ -190,6 +211,26 @@ namespace snu {
                     </h3>\
                 ", result.num_cc, result.size_lcc, result.diameter);
 
+            if (result.eigencentralitystat) {
+                fprintf(fp, "\
+                        <h2>\
+                            Eigenvector Centrality Statistics\
+                        </h2>\
+                        <h3>");
+                if (result.eigencentrality_converged) {
+                    fprintf(fp, "<p> Max eigenvector centrality value = %lf </p>",
+                            result.max_eigencentrality);
+                } else {
+                    fprintf(fp, "<p> Eigenvector centrality failed to converge. </p>");
+                }
+                if (result.pagerank_converged) {
+                    fprintf(fp, "<p> Max PageRank value = %lf </p>",
+                            result.max_pagerank);
+                } else {
+                    fprintf(fp, "<p> PageRank failed to converge. </p>");
+                }
+                fprintf(fp, "</h3>");
+            }
             if (result.biconnectedstat)
                 fprintf(fp, "\
                     <h2>\
