@@ -10,9 +10,9 @@ double &snu::Matrix::at(int r, int c) {
 
 void snu::Matrix::mul(const std::vector<double> &v, std::vector<double> &res) {
     res.reserve(rows);
-    for (int r = 0; r < rows; r++) {
+    for (unsigned int r = 0; r < rows; r++) {
         double acc = 0;
-        for (int c = 0; c < cols; c++) {
+        for (unsigned int c = 0; c < cols; c++) {
             acc += dat[r * cols + c] * v[c];
         }
         res[r] = acc;
