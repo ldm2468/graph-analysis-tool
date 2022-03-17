@@ -87,14 +87,14 @@ namespace snu {
                     </h2>\
                     <h3>");
                 if (result.eigencentrality_converged) {
-                    fprintf(fp, "<p> Max eigenvector centrality value = %lf </p>",
-                            result.max_eigencentrality);
+                    fprintf(fp, "<p> Max eigenvector centrality value = %lf at ID = %lld </p>",
+                            result.max_eigencentrality, result.max_eigencentrality_id);
                 } else {
                     fprintf(fp, "<p> Eigenvector centrality failed to converge. </p>");
                 }
                 if (result.pagerank_converged) {
-                    fprintf(fp, "<p> Max PageRank value = %lf </p>",
-                            result.max_pagerank);
+                    fprintf(fp, "<p> Max PageRank value = %lf at ID = %lld </p>",
+                            result.max_pagerank, result.max_pagerank_id);
                 } else {
                     fprintf(fp, "<p> PageRank failed to converge. </p>");
                 }
@@ -218,14 +218,14 @@ namespace snu {
                         </h2>\
                         <h3>");
                 if (result.eigencentrality_converged) {
-                    fprintf(fp, "<p> Max eigenvector centrality value = %lf </p>",
-                            result.max_eigencentrality);
+                    fprintf(fp, "<p> Max eigenvector centrality value = %lf at ID = %lld </p>",
+                            result.max_eigencentrality, result.max_eigencentrality_id);
                 } else {
                     fprintf(fp, "<p> Eigenvector centrality failed to converge. </p>");
                 }
                 if (result.pagerank_converged) {
-                    fprintf(fp, "<p> Max PageRank value = %lf </p>",
-                            result.max_pagerank);
+                    fprintf(fp, "<p> Max PageRank value = %lf at ID = %lld </p>",
+                            result.max_pagerank, result.max_pagerank_id);
                 } else {
                     fprintf(fp, "<p> PageRank failed to converge. </p>");
                 }

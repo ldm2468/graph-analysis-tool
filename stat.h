@@ -31,8 +31,10 @@ namespace snu {
         // eigencentrality
         bool pagerank_converged = false; // whether pagerank converged
         double max_pagerank; // maximum pagerank value
+        long long max_pagerank_id; // id of max pagerank value vertex
         bool eigencentrality_converged = false; // whether eigencentrality converged
         double max_eigencentrality; // maximum eigencentrality value
+        long long max_eigencentrality_id; // id of max eigencentrality vertex
 
         // biconnected components and articulation points
         long long num_arp; // number of articulation points
