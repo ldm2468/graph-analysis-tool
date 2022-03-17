@@ -9,7 +9,6 @@
 #define MAX_ITERATIONS 100
 #define KATZ_ITERATIONS 100
 #define KATZ_ATTENUATION_FACTOR 0.5
-#define MATRIX_ALGORITHM_LIMIT 8192
 
 namespace snu {
     void eigenCentrality(Graph &graph, StatResult &result);
