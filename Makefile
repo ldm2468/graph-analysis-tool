@@ -1,6 +1,6 @@
 CXX = g++
 MAIN = main
-MAIN_OBJECTS = main.o graph.o parse.o stat.o basicstat.o connectstat.o biconnected.o eigencentrality.o countstat.o makeplot.o html.o
+MAIN_OBJECTS = main.o graph.o parse.o stat.o basicstat.o connectstat.o biconnected.o eigencentrality.o matrix.o countstat.o makeplot.o html.o
 TEST = test
 TEST_OBJECTS = test.o graph.o parse.o diameter.o
 PYPLOT_DIR = pyplot
