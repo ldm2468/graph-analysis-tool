@@ -103,7 +103,6 @@ int main(int argc, char* argv[])
         snu::initStat(result);
         snu::basicStat(graph, result);
         snu::connectStat(graph, result);
-        snu::biconnectedComponents(graph, result);
 
         snu::Plot plot(graph_name);
         snu::makePlot(graph, plot);
