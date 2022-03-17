@@ -88,10 +88,9 @@ namespace snu {
         std::vector<double> mul;
         prob.resize(n);
 
-        double recip_sqrt = 1. / std::sqrt((double) n);
         for (auto& pair: graph.id_to_vertex) {
             auto g = pair.second;
-            prob[g->id] = recip_sqrt;
+            prob[g->id] = 1;
 
             if (!g->edges.empty()) {
                 for (auto& edge: g->edges) {
@@ -146,9 +145,8 @@ namespace snu {
         prob.resize(n);
         mul.resize(n);
 
-        double recip_sqrt = 1. / std::sqrt((double) n);
         for (int i = 0; i < n; i++) {
-            prob[i] = recip_sqrt;
+            prob[i] = 1;
         }
 
         bool not_finished = true;
