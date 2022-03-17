@@ -4,6 +4,16 @@
 #include <cmath>
 
 namespace snu {
+    static void normalizeProb(int n, std::vector<double> &prob) {
+        double sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += prob[i];
+        }
+        for (int i = 0; i < n; i++) {
+            prob[i] *= n / sum;
+        }
+    }
+
     static bool matrixBasedPageRank(Graph &graph, std::vector<double> &prob) {
         int n = (int) graph.id_to_vertex.size();
         auto mat = new Matrix(n, n);
@@ -128,14 +138,6 @@ namespace snu {
             return false;
         }
 
-        double sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += prob[i];
-        }
-        for (int i = 0; i < n; i++) {
-            prob[i] *= n / sum;
-        }
-
         return true;
     }
 
@@ -185,35 +187,91 @@ namespace snu {
             return false;
         }
 
-        double sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += prob[i];
-        }
-        for (int i = 0; i < n; i++) {
-            prob[i] *= n / sum;
+        return true;
+    }
+
+    static void matrixBasedKatzCentrality(Graph &graph, std::vector<double> &prob) {
+        int n = (int) graph.id_to_vertex.size();
+        auto mat = new Matrix(n, n);
+        std::vector<double> pow, tmp;
+        prob.resize(n);
+        pow.resize(n);
+        tmp.resize(n);
+
+        for (auto& pair: graph.id_to_vertex) {
+            auto g = pair.second;
+            pow[g->id] = 1;
+
+            if (!g->edges.empty()) {
+                for (auto& edge: g->edges) {
+                    auto to = edge->to == g ? edge->from : edge->to;
+                    mat->at((int) to->id, (int) g->id) = KATZ_ATTENUATION_FACTOR;
+                }
+            }
         }
 
-        return true;
+        for (int it = 0; it < KATZ_ITERATIONS; it++) {
+            mat->mul(pow, tmp);
+            pow = tmp;
+
+            for (int i = 0; i < n; i++) {
+                prob[i] += pow[i];
+            }
+        }
+        delete mat;
+    }
+
+    static void sparseKatzCentrality(Graph &graph, std::vector<double> &prob) {
+        int n = (int) graph.id_to_vertex.size();
+        std::vector<double> pow, tmp;
+        prob.resize(n);
+        pow.resize(n);
+        tmp.resize(n);
+
+        for (auto& pair: graph.id_to_vertex) {
+            auto g = pair.second;
+            pow[g->id] = 1;
+        }
+
+        for (int it = 0; it < KATZ_ITERATIONS; it++) {
+            std::fill(tmp.begin(), tmp.end(), 0);
+            for (auto& pair: graph.id_to_vertex) {
+                auto g = pair.second;
+                if (!g->edges.empty()) {
+                    for (auto& edge: g->edges) {
+                        auto to = edge->to == g ? edge->from : edge->to;
+                        tmp[to->id] += pow[g->id] * KATZ_ATTENUATION_FACTOR;
+                    }
+                }
+            }
+            pow = tmp;
+
+            for (int i = 0; i < n; i++) {
+                prob[i] += pow[i];
+            }
+        }
     }
 
     struct eigen_centrality_functions {
         bool (*eigenCentrality)(Graph &graph, std::vector<double> &prob);
         bool (*pageRank)(Graph &graph, std::vector<double> &prob);
+        void (*katzCentrality)(Graph &graph, std::vector<double> &prob);
     };
 
     static const struct eigen_centrality_functions matrixBased = {
-        matrixBasedEigenCentrality, matrixBasedPageRank
+        matrixBasedEigenCentrality, matrixBasedPageRank, matrixBasedKatzCentrality
     };
 
     static const struct eigen_centrality_functions sparse = {
-        sparseEigenCentrality, sparsePageRank
+        sparseEigenCentrality, sparsePageRank, sparseKatzCentrality
     };
 
     void eigenCentrality(Graph &graph, StatResult &result) {
         int n = (int) graph.id_to_vertex.size();
         std::vector<double> prob;
-        const struct eigen_centrality_functions f = n > 4096 ? sparse : matrixBased;
+        const struct eigen_centrality_functions f = n > MATRIX_ALGORITHM_LIMIT ? sparse : matrixBased;
         if (f.eigenCentrality(graph, prob)) {
+            normalizeProb(n, prob);
             result.eigencentrality_converged = true;
             result.max_eigencentrality = 0;
             for (int i = 0; i < n; i++) {
@@ -225,6 +283,7 @@ namespace snu {
         }
 
         if (f.pageRank(graph, prob)) {
+            normalizeProb(n, prob);
             result.pagerank_converged = true;
             result.max_pagerank = 0;
             for (int i = 0; i < n; i++) {
@@ -232,6 +291,17 @@ namespace snu {
                     result.max_pagerank = prob[i];
                     result.max_pagerank_id = i;
                 }
+            }
+        }
+
+        f.katzCentrality(graph, prob);
+        normalizeProb(n, prob);
+        result.katz_centrality_computed = true;
+        result.max_katz_centrality = 0;
+        for (int i = 0; i < n; i++) {
+            if (prob[i] > result.max_katz_centrality) {
+                result.max_katz_centrality = prob[i];
+                result.max_katz_centrality_id = i;
             }
         }
 
