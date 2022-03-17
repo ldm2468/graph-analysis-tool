@@ -98,6 +98,10 @@ namespace snu {
                 } else {
                     fprintf(fp, "<p> PageRank failed to converge. </p>");
                 }
+                if (result.katz_centrality_computed) {
+                    fprintf(fp, "<p> Max Katz centrality value = %lf at ID = %lld </p>",
+                            result.max_katz_centrality, result.max_katz_centrality_id);
+                }
                 fprintf(fp, "</h3>");
             }
 
@@ -228,6 +232,10 @@ namespace snu {
                             result.max_pagerank, result.max_pagerank_id);
                 } else {
                     fprintf(fp, "<p> PageRank failed to converge. </p>");
+                }
+                if (result.katz_centrality_computed) {
+                    fprintf(fp, "<p> Max Katz centrality value = %lf at ID = %lld </p>",
+                            result.max_katz_centrality, result.max_katz_centrality_id);
                 }
                 fprintf(fp, "</h3>");
             }
