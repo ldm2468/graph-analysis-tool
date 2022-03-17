@@ -105,6 +105,7 @@ namespace snu {
             for (int i = 0; i < n; i++) {
                 if (prob[i] > result.max_eigencentrality) {
                     result.max_eigencentrality = prob[i];
+                    result.max_eigencentrality_id = i;
                 }
             }
         }
@@ -114,6 +115,7 @@ namespace snu {
             for (int i = 0; i < n; i++) {
                 if (prob[i] > result.max_pagerank) {
                     result.max_pagerank = prob[i];
+                    result.max_pagerank_id = i;
                 }
             }
         }
