@@ -64,7 +64,7 @@ namespace snu {
                         break; // finished processing root, stack should be empty
                     }
                     bool parent_is_arp = meta->depth == 1
-                                      || meta->low_point == getMetadata(meta->parent)->depth
+                                      || meta->low_point == meta->depth - 1
                                       || meta->low_point == meta->depth;
                     if (parent_is_arp) {
                         getMetadata(meta->parent)->num_connected_bcc++;
