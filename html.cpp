@@ -85,7 +85,8 @@ namespace snu {
                     <h2>\
                         Eigenvector Centrality Statistics\
                     </h2>\
-                    <h3>");
+                    <h3>\
+                    <p> max eigenvalue = %lf</p>", result.max_eigenvalue);
                 if (result.eigencentrality_converged) {
                     fprintf(fp, "<p> max eigenvector centrality value = %lf at ID = %lld </p>",
                             result.max_eigencentrality, result.max_eigencentrality_id);
@@ -220,7 +221,8 @@ namespace snu {
                         <h2>\
                             Eigenvector Centrality Statistics\
                         </h2>\
-                        <h3>");
+                        <h3>\
+                        <p> max eigenvalue = %lf</p>", result.max_eigenvalue);
                 if (result.eigencentrality_converged) {
                     fprintf(fp, "<p> max eigenvector centrality value = %lf at ID = %lld </p>",
                             result.max_eigencentrality, result.max_eigencentrality_id);
