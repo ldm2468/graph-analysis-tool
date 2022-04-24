@@ -45,6 +45,10 @@ namespace snu {
         long long max_conn_bcc; // maximum number of bcc's connected to a single arp
         long long size_lbcc; // largest size of biconnected components
 
+		// closeness centrality
+		double max_closeness_centrality; // maximum closeness centrality value
+		long long max_closeness_centrality_id; // id of max closeness centrality vertex
+
 		// counting statistics 
 		unsigned long long wedge_count; // number of wedges
 		unsigned long long claw_count; // number of claws
@@ -56,6 +60,7 @@ namespace snu {
         bool eigencentralitystat = false;
         bool biconnectedstat = false;
 		bool countstat = false;
+		bool closenessstat = false;
 	} StatResult;
 
 	void initStat(StatResult& result);
