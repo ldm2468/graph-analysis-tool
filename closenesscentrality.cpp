@@ -37,7 +37,7 @@ namespace snu {
     static bool calcClosenessCentrality(const Graph &graph, StatResult &result) {
         const auto& vertices = graph.id_to_vertex;
         int V = vertices.size();
-        int sample_sz = std::min(V, MAX_SAMPLE_SZ);
+        int sample_sz = std::min(V, MAX_CLOSENESS_SAMPLE_SZ);
 
         std::vector<std::pair<Graph::Vid, Graph::Vertex*>> samples;
         std::sample(vertices.begin(), vertices.end(), std::back_inserter(samples), 
@@ -82,8 +82,8 @@ namespace snu {
         bool ret = calcClosenessCentrality(graph, result);
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
+        //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+        //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
         return ret;
     }
 }

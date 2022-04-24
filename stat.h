@@ -49,6 +49,10 @@ namespace snu {
 		double max_closeness_centrality; // maximum closeness centrality value
 		long long max_closeness_centrality_id; // id of max closeness centrality vertex
 
+		// betweenness centrality
+		double max_betweenness_centrality; // maximum betweenness centrality value
+		long long max_betweenness_centrality_id; // id of max betweenness centrality vertex
+
 		// counting statistics 
 		unsigned long long wedge_count; // number of wedges
 		unsigned long long claw_count; // number of claws
@@ -61,6 +65,7 @@ namespace snu {
         bool biconnectedstat = false;
 		bool countstat = false;
 		bool closenessstat = false;
+		bool betweennessstat = false;
 	} StatResult;
 
 	void initStat(StatResult& result);

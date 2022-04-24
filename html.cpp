@@ -262,6 +262,16 @@ namespace snu {
                     </h3>",
                             result.max_closeness_centrality, result.max_closeness_centrality_id);
             }
+            if (result.betweennessstat) {
+                fprintf(fp, "\
+                    <h2>\
+                        Betweenness Centrality Statistics\
+                    </h2>\
+                    <h3>\
+                        <p> max betweenness centrality value = %lf at ID = %lld </p>\
+                    </h3>",
+                            result.max_betweenness_centrality, result.max_betweenness_centrality_id);
+            }
             if (result.countstat)
                 fprintf(fp, "\
                     <h2>\
