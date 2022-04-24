@@ -239,7 +239,7 @@ namespace snu {
                 }
                 fprintf(fp, "</h3>");
             }
-            if (result.biconnectedstat)
+            if (result.biconnectedstat) {
                 fprintf(fp, "\
                     <h2>\
                         Biconnected Component Statistics\
@@ -251,7 +251,17 @@ namespace snu {
                         <p> maximum number of BCC's connected to a single ARP = %lld </p>\
                     </h3>\
                 ", result.num_arp, result.num_bcc, result.size_lbcc, result.max_conn_bcc);
-    
+            }
+            if (result.closenessstat) {
+                fprintf(fp, "\
+                    <h2>\
+                        Closeness Centrality Statistics\
+                    </h2>\
+                    <h3>\
+                        <p> max closeness centrality value = %lf at ID = %lld </p>\
+                    </h3>",
+                            result.max_closeness_centrality, result.max_closeness_centrality_id);
+            }
             if (result.countstat)
                 fprintf(fp, "\
                     <h2>\

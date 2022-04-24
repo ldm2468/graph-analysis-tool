@@ -13,6 +13,7 @@
 #include "countstat.h"
 #include "eigencentrality.h"
 #include "biconnected.h"
+#include "closenesscentrality.h"
 
 // graph parsing
 #include "parse.h"
