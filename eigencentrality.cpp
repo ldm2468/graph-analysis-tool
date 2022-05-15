@@ -2,21 +2,18 @@
 #include <cmath>
 
 namespace snu {
-    static void normalizeProb(int n, std::vector<double> &prob) {
+    static void normalizeProb(int n, std::unordered_map<Graph::Vid, double> &prob) {
         double sum = 0;
-        for (int i = 0; i < n; i++) {
-            sum += prob[i];
+        for (auto& pair: prob) {
+            sum += pair.second;
         }
-        for (int i = 0; i < n; i++) {
-            prob[i] *= n / sum;
+        for (auto& pair: prob) {
+            pair.second *= n / sum;
         }
     }
 
-    static bool calcPageRank(Graph &graph, std::vector<double> &prob) {
-        int n = (int) graph.id_to_vertex.size();
-        std::vector<double> mul;
-        prob.resize(n);
-        mul.resize(n);
+    static bool calcPageRank(Graph &graph, std::unordered_map<Graph::Vid, double> &prob) {
+        std::unordered_map<Graph::Eid, double> mul; // matrix multiplication result
 
         for (auto& pair: graph.id_to_vertex) {
             prob[pair.second->id] = 1;
@@ -28,7 +25,9 @@ namespace snu {
         while (not_finished && iterations < MAX_ITERATIONS) {
             iterations++;
             not_finished = false;
-            std::fill(mul.begin(), mul.end(), 0);
+            for (auto& pair: graph.id_to_vertex) {
+                mul[pair.first] = 0; // prepare matrix multiplication result
+            }
             for (auto& pair: graph.id_to_vertex) {
                 auto g = pair.second;
                 if (!g->edges.empty()) {
@@ -39,26 +38,23 @@ namespace snu {
                     }
                 }
             }
-            for (int i = 0; i < n; i++) {
-                double next = damper + PAGERANK_DAMPING_FACTOR * mul[i];
-                if (std::abs(next - prob[i]) > CONVERGENCE_TEST) {
+            for (auto& pair: graph.id_to_vertex) {
+                double next = damper + PAGERANK_DAMPING_FACTOR * mul[pair.first];
+                if (std::abs(next - prob[pair.first]) > CONVERGENCE_TEST) {
                     not_finished = true;
                 }
-                prob[i] = next;
+                prob[pair.first] = next;
             }
         }
 
         return !not_finished;
     }
 
-    static bool calcEigenCentrality(Graph &graph, std::vector<double> &prob) {
-        int n = (int) graph.id_to_vertex.size();
-        std::vector<double> mul;
-        prob.resize(n);
-        mul.resize(n);
+    static bool calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob) {
+        std::unordered_map<Graph::Vid, double> mul;
 
-        for (int i = 0; i < n; i++) {
-            prob[i] = 1;
+        for (auto& pair: graph.id_to_vertex) {
+            prob[pair.second->id] = 1;
         }
 
         bool not_finished = true;
@@ -66,7 +62,9 @@ namespace snu {
         while (not_finished && iterations < MAX_ITERATIONS) {
             iterations++;
             not_finished = false;
-            std::fill(mul.begin(), mul.end(), 0);
+            for (auto& pair: graph.id_to_vertex) {
+                mul[pair.first] = 0; // prepare matrix multiplication result
+            }
             for (auto& pair: graph.id_to_vertex) {
                 auto g = pair.second;
                 if (!g->edges.empty()) {
@@ -77,20 +75,21 @@ namespace snu {
                 }
             }
             double sum_sq = 0;
-            for (int i = 0; i < n; i++) {
-                sum_sq += mul[i] * mul[i];
+            for (auto& pair: graph.id_to_vertex) {
+                double m = mul[pair.first];
+                sum_sq += m * m;
             }
             sum_sq = std::sqrt(sum_sq);
             if (sum_sq == 0) {
                 not_finished = true;
                 break;
             }
-            for (int i = 0; i < n; i++) {
-                double next = mul[i] / sum_sq;
-                if (std::abs(prob[i] - next) > CONVERGENCE_TEST) {
+            for (auto& pair: graph.id_to_vertex) {
+                double next = mul[pair.first] / sum_sq;
+                if (std::abs(prob[pair.first] - next) > CONVERGENCE_TEST) {
                     not_finished = true;
                 }
-                prob[i] = next;
+                prob[pair.first] = next;
             }
         }
         if (not_finished) {
@@ -100,20 +99,17 @@ namespace snu {
         return true;
     }
 
-    static void calcKatzCentrality(Graph &graph, std::vector<double> &prob) {
-        int n = (int) graph.id_to_vertex.size();
-        std::vector<double> pow, tmp;
-        prob.resize(n);
-        pow.resize(n);
-        tmp.resize(n);
+    static void calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob) {
+        std::unordered_map<Graph::Vid, double> pow, tmp;
 
         for (auto& pair: graph.id_to_vertex) {
-            auto g = pair.second;
-            pow[g->id] = 1;
+            pow[pair.first] = 1;
         }
 
         for (int it = 0; it < KATZ_ITERATIONS; it++) {
-            std::fill(tmp.begin(), tmp.end(), 0);
+            for (auto& pair: graph.id_to_vertex) {
+                tmp[pair.first] = 0;
+            }
             for (auto& pair: graph.id_to_vertex) {
                 auto g = pair.second;
                 if (!g->edges.empty()) {
@@ -125,23 +121,23 @@ namespace snu {
             }
             pow = tmp;
 
-            for (int i = 0; i < n; i++) {
-                prob[i] += pow[i];
+            for (auto& pair: graph.id_to_vertex) {
+                prob[pair.first] += pow[pair.first];
             }
         }
     }
 
     void eigenCentrality(Graph &graph, StatResult &result) {
         int n = (int) graph.id_to_vertex.size();
-        std::vector<double> prob;
+        std::unordered_map<Graph::Vid, double> prob;
         if (calcEigenCentrality(graph, prob)) {
             normalizeProb(n, prob);
             result.eigencentrality_converged = true;
             result.max_eigencentrality = 0;
-            for (int i = 0; i < n; i++) {
-                if (prob[i] > result.max_eigencentrality) {
-                    result.max_eigencentrality = prob[i];
-                    result.max_eigencentrality_id = i;
+            for (auto& pair: graph.id_to_vertex) {
+                if (prob[pair.first] > result.max_eigencentrality) {
+                    result.max_eigencentrality = prob[pair.first];
+                    result.max_eigencentrality_id = pair.first;
                 }
             }
         }
@@ -150,10 +146,10 @@ namespace snu {
             normalizeProb(n, prob);
             result.pagerank_converged = true;
             result.max_pagerank = 0;
-            for (int i = 0; i < n; i++) {
-                if (prob[i] > result.max_pagerank) {
-                    result.max_pagerank = prob[i];
-                    result.max_pagerank_id = i;
+            for (auto& pair: graph.id_to_vertex) {
+                if (prob[pair.first] > result.max_pagerank) {
+                    result.max_pagerank = prob[pair.first];
+                    result.max_pagerank_id = pair.first;
                 }
             }
         }
@@ -162,10 +158,10 @@ namespace snu {
         normalizeProb(n, prob);
         result.katz_centrality_computed = true;
         result.max_katz_centrality = 0;
-        for (int i = 0; i < n; i++) {
-            if (prob[i] > result.max_katz_centrality) {
-                result.max_katz_centrality = prob[i];
-                result.max_katz_centrality_id = i;
+        for (auto& pair: graph.id_to_vertex) {
+            if (prob[pair.first] > result.max_katz_centrality) {
+                result.max_katz_centrality = prob[pair.first];
+                result.max_katz_centrality_id = pair.first;
             }
         }
 
