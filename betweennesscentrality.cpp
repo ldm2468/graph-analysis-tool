@@ -11,7 +11,8 @@ namespace snu {
     static void augmented_dijkstra(const Graph & graph, Graph::Vertex* start, 
                         std::unordered_map<Graph::Vid, std::set<Graph::Vid>>& out_predecessors,
                         std::unordered_map<Graph::Vid, int64_t>& out_pathcount,
-                        std::unordered_map<Graph::Vid, int64_t>& dist) {
+                        std::unordered_map<Graph::Vid, int64_t>& dist,
+                        bool reversed) {
 
         // initialize output
         dist.clear();
@@ -36,8 +37,9 @@ namespace snu {
                 dist[cur->id] = cur_dist;
                 for (const auto& edge : cur->edges) {
                     auto next_dist = cur_dist + edge->weight;
-                    auto to = edge->to == cur ? edge->from : edge->to;
-                    pq.emplace(next_dist, std::make_pair(cur, to));
+                    bool nextIsTo = (edge->to != cur) ^ (!reversed);
+                    auto nex = nextIsTo ? edge->to : edge->from;
+                    pq.emplace(next_dist, std::make_pair(cur, nex));
                 }
             }
             if (prev && dist[cur->id] == cur_dist) {
@@ -47,13 +49,13 @@ namespace snu {
         }
     }
 
-    static bool applyPartialValue(const Graph &graph, Graph::Vertex* A, std::unordered_map<Graph::Vid, float>& betweennessValue) {
+    static bool applyPartialValue(const Graph &graph, Graph::Vertex* A, std::unordered_map<Graph::Vid, float>& betweennessValue, bool reversed) {
         std::unordered_map<Graph::Vid, std::set<Graph::Vid>> predecessors;
         std::unordered_map<Graph::Vid, int64_t> pathcount;
         std::unordered_map<Graph::Vid, int64_t> dist;
 
         int V = graph.id_to_vertex.size();
-        augmented_dijkstra(graph, A, predecessors, pathcount, dist);
+        augmented_dijkstra(graph, A, predecessors, pathcount, dist, reversed);
         if ((int)pathcount.size() < V) return false; // disconnected graph
 
         typedef std::pair<int64_t, Graph::Vid> dist_info;
@@ -73,9 +75,13 @@ namespace snu {
             auto v = p.second;
             P[v] += 1;
             for (auto w : predecessors[v]) {
+                if (dist[v] == 0 || pathcount[v] == 0) 
+                    continue;
+
                 float sigmaW = pathcount[w];
                 float sigmaV = pathcount[v];
-                P[w] += sigmaW / sigmaV * P[v];
+                float dist_ratio = (float)dist[w] / dist[v];
+                P[w] += dist_ratio * sigmaW / sigmaV * P[v];
             }
             P[v] -= 1;
         }
@@ -97,8 +103,10 @@ namespace snu {
                     sample_sz, std::mt19937{std::random_device{}()});
 
         std::unordered_map<Graph::Vid, float> betweennessValue;
+        bool reversed = false;
         for (auto p : samples) {
-            bool suc = applyPartialValue(graph, p.second, betweennessValue);
+            bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
+            reversed = !reversed;
             if (!suc) return false;
         }
 
