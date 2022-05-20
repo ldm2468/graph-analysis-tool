@@ -37,7 +37,7 @@ namespace snu {
                 dist[cur->id] = cur_dist;
                 for (const auto& edge : cur->edges) {
                     auto next_dist = cur_dist + edge->weight;
-                    bool nextIsTo = (edge->to != cur) ^ (!reversed);
+                    bool nextIsTo = edge->to != cur;
                     auto nex = nextIsTo ? edge->to : edge->from;
                     pq.emplace(next_dist, std::make_pair(cur, nex));
                 }
@@ -71,7 +71,7 @@ namespace snu {
         
         std::unordered_map<Graph::Vid, float> P;
         for (auto p : dist_decreasing) {
-            auto d = p.first;
+            //auto d = p.first;
             auto v = p.second;
             P[v] += 1;
             for (auto w : predecessors[v]) {
@@ -107,7 +107,10 @@ namespace snu {
         for (auto p : samples) {
             bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
             reversed = !reversed;
-            if (!suc) return false;
+        }
+        // adjust constant
+        for (auto [vid, b_val]: betweennessValue) {
+            betweennessValue[vid] *= (float)V/sample_sz;
         }
 
         Graph::Vid centralNodeId = 0;
