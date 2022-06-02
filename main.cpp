@@ -13,16 +13,18 @@ int main(int argc, char* argv[])
     }
 
     bool directed = false;  // suppose given graph is undirected.
+    bool file_output = false; // default: skip output of detailed files
 
     while (true) {
         static struct option long_options[] = {
             {"directed", 0, NULL, 'd'}, 
             {"undirected", 0, NULL, 'u'}, 
             {"help", 0, NULL, 'h'}, 
+            {"file_output", 0, NULL, 'f'}, 
             {0, 0, 0, 0}
         };
 
-        int option = getopt_long(argc, argv, "duh", long_options, NULL);
+        int option = getopt_long(argc, argv, "duhf", long_options, NULL);
 
         if (option < 0) {
             break;
@@ -35,6 +37,10 @@ int main(int argc, char* argv[])
 
           case 'u':
             directed = false;
+            break;
+
+          case 'f':
+            file_output = true;
             break;
 
           case 'h':
@@ -102,8 +108,8 @@ int main(int argc, char* argv[])
         snu::initStat(result);
         snu::basicStat(graph, result);
         snu::eigenCentrality(graph, result);
-        snu::closenessCentrality(graph, result);
-        snu::betweennessCentrality(graph, result);
+        snu::closenessCentrality(graph, result, file_output, graph_name);
+        snu::betweennessCentrality(graph, result, file_output, graph_name);
         snu::connectStat(graph, result);
 
         snu::Plot plot(graph_name);
@@ -144,8 +150,8 @@ int main(int argc, char* argv[])
         snu::connectStat(graph, result);
         snu::eigenCentrality(graph, result);
         snu::biconnectedComponents(graph, result);
-        snu::closenessCentrality(graph, result);
-        snu::betweennessCentrality(graph, result);
+        snu::closenessCentrality(graph, result, file_output, graph_name);
+        snu::betweennessCentrality(graph, result, file_output, graph_name);
         snu::countStat(graph, result);
 
         snu::Plot plot(graph_name);
@@ -165,6 +171,7 @@ void usage(void)
     printf("  options:\n");
     printf("   -d | --directed       set graph directed\n");
     printf("   -u | --undirected     set graph undirected (default)\n");
+    printf("   -f | --file_output    output centrality details as seperate files\n");
     printf("   -h | --help           print this list of help\n");
     printf("\n");
     printf("   e.g. ./main some_path/some_graph.snap --directed\n");
