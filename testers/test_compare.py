@@ -52,6 +52,7 @@ with open(base_file, mode='r') as f_base, open(test_file, mode='r') as f_test, o
     for i, (between, vid) in enumerate(test_lis):
         test_dict[vid] = i
     
+    f_out.write(f'Comparing Stat: {stat_to_compare}\n\n')
     f_out.write(f'{"B-rank" :<8}{"T-rank" :<8}{"vid" :<8}{"B-value" :<16}{"T-value" :<16}{"R-Err" :<8}\n')
     for i in range (min(len(base_lis), len(test_lis))):
         (val, vid) = base_lis[i]
