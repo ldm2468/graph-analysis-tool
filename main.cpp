@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <getopt.h>
+#include <chrono>
 #include "snugal.h"
+
+using namespace std::chrono;
 
 void usage(void);
 
+template<typename T>static void printElapsedTime(const char *msg, T &t) {
+    printf("%10ldms: %s\n", (duration_cast<milliseconds>(high_resolution_clock::now() - t)).count(), msg);
+    t = high_resolution_clock::now();
+}
 
 int main(int argc, char* argv[]) 
 {
@@ -20,7 +27,7 @@ int main(int argc, char* argv[])
             {"directed", 0, NULL, 'd'}, 
             {"undirected", 0, NULL, 'u'}, 
             {"help", 0, NULL, 'h'}, 
-            {"file_output", 0, NULL, 'f'}, 
+            {"file_output", 0, NULL, 'f'},
             {0, 0, 0, 0}
         };
 
@@ -77,6 +84,9 @@ int main(int argc, char* argv[])
     std::string graph_name = input_path.substr(slash+1, dot-(slash+1));
 
     if (directed) {
+        // Measure time
+        auto t = high_resolution_clock::now();
+
         snu::DSGraph graph;
         int parse_status = snu::parseDSGraph(input_path, graph);
         switch (parse_status) {
@@ -103,21 +113,37 @@ int main(int argc, char* argv[])
           default:
             return 1;
         }
+        printElapsedTime("parseDSGraph()", t);
 
         snu::StatResult result;
         snu::initStat(result);
+        printElapsedTime("initStat()", t);
+
         snu::basicStat(graph, result);
+        printElapsedTime("basicStat()", t);
+
         snu::eigenCentrality(graph, result);
+        printElapsedTime("eigenCentrality()", t);
+
         snu::closenessCentrality(graph, result, file_output, graph_name);
+        printElapsedTime("closenessCentrality()", t);
+
         snu::betweennessCentrality(graph, result, file_output, graph_name);
+        printElapsedTime("betweennessCentrality()", t);
+
         snu::connectStat(graph, result);
+        printElapsedTime("connectStat()", t);
 
         snu::Plot plot(graph_name);
         snu::makePlot(graph, plot);
+        printElapsedTime("makePlot()", t);
 
         snu::makeDSHtml(graph_name.c_str(), result, plot);
+        printElapsedTime("makeDSHtml()", t);
     }
     else {
+        auto t = high_resolution_clock::now();
+
         snu::USGraph graph;
         int parse_status = snu::parseUSGraph(input_path, graph);
         switch (parse_status) {
@@ -144,20 +170,39 @@ int main(int argc, char* argv[])
           default:
             return 1;
         }
+        printElapsedTime("parseUSGraph()", t);
+
         snu::StatResult result;
         snu::initStat(result);
+        printElapsedTime("initStat()", t);
+
         snu::basicStat(graph, result);
+        printElapsedTime("basicStat()", t);
+
         snu::connectStat(graph, result);
+        printElapsedTime("connectStat()", t);
+
         snu::eigenCentrality(graph, result);
+        printElapsedTime("eigenCentrality()", t);
+
         snu::biconnectedComponents(graph, result);
+        printElapsedTime("biconnectedComponents()", t);
+
         snu::closenessCentrality(graph, result, file_output, graph_name);
+        printElapsedTime("closenessCentrality()", t);
+
         snu::betweennessCentrality(graph, result, file_output, graph_name);
+        printElapsedTime("betweennessCentrality()", t);
+
         snu::countStat(graph, result);
+        printElapsedTime("countStat()", t);
 
         snu::Plot plot(graph_name);
         snu::makePlot(graph, plot);
+        printElapsedTime("makePlot()", t);
 
         snu::makeUSHtml(graph_name.c_str(), result, plot);
+        printElapsedTime("makeUSHtml()", t);
     }
 	
 	return 0;

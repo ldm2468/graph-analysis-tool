@@ -38,6 +38,7 @@ namespace snu {
         bool katz_centrality_computed = false; // whether katz centrality was computed
         double max_katz_centrality; // maximum katz centrality value
         long long max_katz_centrality_id; // id of max katz centrality vertex
+        double max_eigenvalue; // maximum eigenvalue calculated with eigencentrality
 
         // biconnected components and articulation points
         long long num_arp; // number of articulation points
