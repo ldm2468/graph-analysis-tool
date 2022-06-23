@@ -31,6 +31,7 @@ namespace snu {
         class Vertex {
         public:
             Vid id;
+            size_t order;
             std::list<LabelOfVertices*> labels;
             std::list<Edge*> edges;
             long long indegree;
@@ -64,6 +65,12 @@ namespace snu {
         std::unordered_map<Vlabel, LabelOfVertices*> vlabel_to_class;
         std::unordered_map<Elabel, LabelOfEdges*> elabel_to_class;
 
+        // faster access data structures
+        std::vector<Vid> vid_order;
+        std::vector<Vertex *> vertices;
+
+        size_t V, E; // number of vertices / edges
+
         struct pair_hash {
             inline unsigned long long operator()(const std::pair<Vid, Vid> &v) const {
                 return ((unsigned long long)v.first << 32) + v.second;
@@ -88,6 +95,10 @@ namespace snu {
         // if edge is created normally, then return 0
         // if error occurs, then return 1
         int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+
+        // finalize graph
+        // call only once after graph is generated
+        void finalize();
     };
 
     // directed simple graph

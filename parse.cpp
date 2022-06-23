@@ -58,6 +58,7 @@ namespace snu {
             }
         }
 
+        graph.finalize();
         return PARSE_SUCCESS;
     }
 
@@ -123,6 +124,7 @@ namespace snu {
             }
         }
 
+        graph.finalize();
         return PARSE_SUCCESS;
     }
 
@@ -167,6 +169,7 @@ namespace snu {
             ++eid;
         }
 
+        graph.finalize();
         return PARSE_SUCCESS;
     }
 
@@ -233,6 +236,7 @@ namespace snu {
             }
         }
 
+        graph.finalize();
         return PARSE_SUCCESS;
     }
 
@@ -277,6 +281,7 @@ namespace snu {
             ++eid;
         }
 
+        graph.finalize();
         return PARSE_SUCCESS;
     }
 

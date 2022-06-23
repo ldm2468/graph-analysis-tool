@@ -104,6 +104,24 @@ namespace snu {
         return 0;
     }
 
+    void Graph::finalize()
+    {
+        V = id_to_vertex.size();
+        E = id_to_edge.size();
+
+        vid_order.reserve(V);
+        vertices.reserve(V);
+
+        for (auto& pair: id_to_vertex) {
+            vid_order.push_back(pair.first);
+            vertices.push_back(pair.second);
+        }
+
+        for (size_t i = 0; i < V; i++) {
+            id_to_vertex[vid_order[i]]->order = i;
+        }
+    }
+
     // array version
     int DSGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight)
     {
