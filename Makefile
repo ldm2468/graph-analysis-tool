@@ -4,7 +4,7 @@ MAIN_OBJECTS = main.o graph.o parse.o stat.o basicstat.o connectstat.o biconnect
 TEST = test
 TEST_OBJECTS = test.o graph.o parse.o diameter.o
 PYPLOT_DIR = pyplot
-CXXFLAGS = -std=c++17 -Wall -O0 -g
+CXXFLAGS = -std=c++17 -Wall -O3
 LDFLAGS =
 
 all: $(MAIN) $(TEST) $(PYPLOT_DIR)

@@ -5,6 +5,7 @@
 #include <random>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 
 namespace snu {
     // runs augmented dijkstra
@@ -56,7 +57,9 @@ namespace snu {
 
         int V = graph.id_to_vertex.size();
         augmented_dijkstra(graph, A, predecessors, pathcount, dist, reversed);
-        if ((int)pathcount.size() < V) return false; // disconnected graph
+        if ((int)pathcount.size() < V) {
+            return false; // disconnected graph
+        }
 
         typedef std::pair<int64_t, Graph::Vid> dist_info;
         std::vector<dist_info> dist_decreasing;
@@ -93,7 +96,7 @@ namespace snu {
         return true;
     }
 
-    bool betweennessCentrality(const Graph &graph, StatResult &result) {
+    bool betweennessCentrality(const Graph &graph, StatResult &result, bool file_output, std::string graph_name) {
         const auto& vertices = graph.id_to_vertex;
         int V = vertices.size();
         int sample_sz = std::min(V, MAX_BETWEENNESS_SAMPLE_SZ);
@@ -107,6 +110,10 @@ namespace snu {
         for (auto p : samples) {
             bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
             reversed = !reversed;
+            if (!suc) {
+                std::cout << "disconnected bet\n";
+                return false;
+            }
         }
         // adjust constant
         for (auto [vid, b_val]: betweennessValue) {
@@ -121,6 +128,15 @@ namespace snu {
                 max_betweenness_centrality = p.second;
             }
         }
+
+        if (file_output) {
+            std::string fName = graph_name + "Betweennes.txt";
+            std::ofstream fout(fName.data());
+            for (auto [nodeId, between_val] : betweennessValue) {
+                fout << nodeId << ' ' << between_val << '\n';
+            }
+        }
+
         
         // apply results
         result.betweennessstat = true;
