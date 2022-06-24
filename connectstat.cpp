@@ -205,7 +205,56 @@ namespace snu {
 
 	};
 
-	void connectStat(DSGraph& graph, StatResult& result) {
+	std::string ConnectStat::statName() {
+		return "ConnectStat";
+	}
+
+	bool ConnectStat::calculateStat(Graph& graph) {
+		DSGraph* dsgraph = dynamic_cast<DSGraph*>(&graph);
+		USGraph* usgraph = dynamic_cast<USGraph*>(&graph);
+
+		if (dsgraph)
+			return calcDS(*dsgraph);
+		else if (usgraph)
+			return calcUS(*usgraph);
+		return false;
+	}
+
+	void ConnectStat::writeToHTMLStat(FILE* fp, bool directed) {
+		if (directed)
+			htmlDS(fp);
+		else
+			htmlUS(fp);
+	}
+
+	void ConnectStat::htmlDS(FILE* fp) {
+		fprintf(fp, "\
+			<h2>\
+					Connectivity Statistics\
+			</h2>\
+			<h3>\
+					<p> number of strongly connected components = %lld </p>\
+					<p> size of largest strongly connected component = %lld </p>\
+					<p> number of weakly connected components = %lld </p>\
+					<p> size of largest weakly connected component = %lld </p>\
+			</h3>\
+		", num_scc, size_lscc, num_wcc, size_lwcc);
+	}
+
+	void ConnectStat::htmlUS(FILE* fp) {
+		fprintf(fp, "\
+			<h2>\
+					Connectivity Statistics\
+			</h2>\
+			<h3>\
+					<p> number of connected components = %lld </p>\
+					<p> size of largest connected component = %lld </p>\
+					<p> approximate diameter (largest distance of all shortest path) = %lld </p>\
+			</h3>\
+		", num_cc, size_lcc, diameter);
+	}
+
+	bool ConnectStat::calcDS(DSGraph& graph) {
 
 		// create additional information for BFS and DFS
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++)
@@ -224,8 +273,8 @@ namespace snu {
 				Kosaraju::first(it->second, &s);
 		}
 
-		result.num_scc = 0;
-		result.size_lscc = 0;
+		num_scc = 0;
+		size_lscc = 0;
 
 		long long hab = 0;
 
@@ -235,22 +284,21 @@ namespace snu {
 			VertexInfo *info = (VertexInfo *)v->temp;
 			
 			if(info->visit) {
-				result.num_scc++;
+				num_scc++;
 				long long size_scc = Kosaraju::second(v);
 				hab += size_scc;
-				result.size_lscc = std::max(result.size_lscc, size_scc);
+				size_lscc = std::max(size_lscc, size_scc);
 			}
 		}
 
-
-		result.num_wcc = 0;
-		result.size_lwcc = 0;
+		num_wcc = 0;
+		size_lwcc = 0;
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++) {
 			VertexInfo *info = (VertexInfo *)it->second->temp;
 			if(!info->visit) {
-				result.num_wcc++;
+				num_wcc++;
 				long long size_wcc = WCC::bfs(it->second);
-				result.size_lwcc = std::max(result.size_lwcc, size_wcc);
+				size_lwcc = std::max(size_lwcc, size_wcc);
 			}
 		}
 
@@ -258,39 +306,39 @@ namespace snu {
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++)
 			delete (VertexInfo *)it->second->temp;
 
-		result.connectstat = true;
+		return true;
 	}
 
-	void connectStat(USGraph& graph, StatResult& result) {
+	bool ConnectStat::calcUS(USGraph& graph) {
 
 		// create additional information for BFS
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++)
 			it->second->temp = new USVertexInfo(); // temp as visit
 
-		result.num_cc = 0;
-		result.size_lcc = 0;
+		num_cc = 0;
+		size_lcc = 0;
 		std::vector <Graph::Vertex *> vertices;
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++) {
 			if(!(*(char *)it->second->temp)) {
-				result.num_cc++;
+				num_cc++;
 				FirstInfo info = BFS::first(it->second);
 				vertices.push_back(info.farthest);
-				result.size_lcc = std::max(result.size_lcc, info.size_cc);
+				size_lcc = std::max(size_lcc, info.size_cc);
 			}
 		}
 		
 		//following code computes approximate diameter, which is exact for trees, by conducting BFS twice.
 		//Note that 'vertices' contains a farthest vertex of the first BFS for each connected component.
-		result.diameter = 0;
+		diameter = 0;
 		for(auto it = vertices.begin(); it != vertices.end(); it++) {
 			long long dist = BFS::second(*it);
-			result.diameter = std::max(result.diameter, dist);
+			diameter = std::max(diameter, dist);
 		}
 
 		// delete additional information created before
 		for(auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); it++)
 			delete (USVertexInfo *)it->second->temp;
 		
-		result.connectstat = true;
+		return true;
 	}
 }

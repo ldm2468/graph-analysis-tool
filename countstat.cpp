@@ -2,8 +2,11 @@
 #include <algorithm>
 
 namespace snu {
-	
-	void countStat(USGraph& graph, StatResult& result) {
+	std::string statName() {
+		return "CountStat";
+	}
+
+	bool CountStat::calculateUndirectedStat(USGraph& graph) {
 		unsigned long long s = 0;
 		unsigned long long z = 0;
 		
@@ -16,15 +19,28 @@ namespace snu {
 			vec.push_back(std::make_pair(degree, it->second));
 		}
 
-		result.wedge_count = s;
-		result.claw_count = z;
-		result.triangle_count = TriangleCount(vec);
-		result.countstat = true;
+		wedge_count = s;
+		claw_count = z;
+		triangle_count = TriangleCount(vec);
+		return true;
+	}
+
+	void CountStat::writeToHTMLStat(FILE* fp, bool directed) {
+		fprintf(fp, "\
+			<h2>\
+					Count statistics\
+			</h2>\
+			<h3>\
+					<p> number of wedges = %llu </p>\
+					<p> number of claws = %llu </p>\
+					<p> number of triangles = %llu </p>\
+			</h3>\
+		", wedge_count, claw_count, triangle_count);
 	}
 
 	//O(m^(3/2)) time implementation, where m is the number of edges
 	//http://theory.stanford.edu/~tim/s14/l/l1.pdf
-	long long TriangleCount(std::vector<std::pair<long long, Graph::Vertex *> >& vec)
+	long long CountStat::TriangleCount(std::vector<std::pair<long long, Graph::Vertex *> >& vec)
 	{
 		unsigned long long t = 0;
 

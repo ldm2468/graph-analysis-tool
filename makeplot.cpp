@@ -6,8 +6,17 @@
 
 
 namespace snu {
+    void makePlot(Graph& graph, Plot& plot) {
+        DSGraph* dsgraph = dynamic_cast<DSGraph*>(&graph);
+        USGraph* usgraph = dynamic_cast<USGraph*>(&graph);
 
-    void makePlot(DSGraph& graph, Plot& plot)
+        if (dsgraph)
+            makeDSPlot(*dsgraph, plot);
+        else if (usgraph)
+            makeUSPlot(*usgraph, plot);
+    }
+
+    void makeDSPlot(DSGraph& graph, Plot& plot)
     {
         std::ofstream out;
 
@@ -70,7 +79,7 @@ namespace snu {
         plot.makeplot = true;
     }
 
-    void makePlot(USGraph& graph, Plot& plot)
+    void makeUSPlot(USGraph& graph, Plot& plot)
     {
         std::ofstream out;
 

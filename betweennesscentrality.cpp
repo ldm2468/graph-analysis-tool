@@ -8,8 +8,69 @@
 #include <fstream>
 
 namespace snu {
+    std::string BetweennessCentrality::statName() {
+        return "BetweennessCentrality";
+    }
+
+    bool BetweennessCentrality::calculateStat(Graph &graph) {
+        const auto& vertices = graph.id_to_vertex;
+        int V = vertices.size();
+        int sample_sz = std::min(V, MAX_BETWEENNESS_SAMPLE_SZ);
+
+        std::vector<std::pair<Graph::Vid, Graph::Vertex*>> samples;
+        std::sample(vertices.begin(), vertices.end(), std::back_inserter(samples), 
+                    sample_sz, std::mt19937{std::random_device{}()});
+
+        
+        bool reversed = false;
+        for (auto p : samples) {
+            bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
+            reversed = !reversed;
+            if (!suc) {
+                std::cout << "disconnected bet\n";
+                return false;
+            }
+        }
+        // adjust constant
+        for (auto [vid, b_val]: betweennessValue) {
+            betweennessValue[vid] *= (float)V/sample_sz;
+        }
+
+        Graph::Vid centralNodeId = 0;
+        double max_betweenness_centrality = 0.0;
+        for (auto p : betweennessValue) {
+            if (p.second > max_betweenness_centrality) {
+                centralNodeId = p.first;
+                max_betweenness_centrality = p.second;
+            }
+        }
+
+        max_betweenness_centrality = max_betweenness_centrality;
+        max_betweenness_centrality_id = centralNodeId;
+        return true;
+    }
+
+    void BetweennessCentrality::writeToFileStat(std::string graph_name, bool directed) {
+        std::string fName = graph_name + "_Betweennes.txt";
+        std::ofstream fout(fName.data());
+        for (auto [nodeId, between_val] : betweennessValue) {
+            fout << nodeId << ' ' << between_val << '\n';
+        }
+    }
+
+    void BetweennessCentrality::writeToHTMLStat(FILE* fp, bool directed) {
+        fprintf(fp, "\
+            <h2>\
+                Betweenness Centrality Statistics\
+            </h2>\
+            <h3>\
+                <p> max betweenness centrality value = %lf at ID = %lld </p>\
+            </h3>",
+            max_betweenness_centrality, max_betweenness_centrality_id);
+    }
+
     // runs augmented dijkstra
-    static void augmented_dijkstra(const Graph & graph, Graph::Vertex* start, 
+    void BetweennessCentrality::augmented_dijkstra(const Graph & graph, Graph::Vertex* start, 
                         std::unordered_map<Graph::Vid, std::set<Graph::Vid>>& out_predecessors,
                         std::unordered_map<Graph::Vid, int64_t>& out_pathcount,
                         std::unordered_map<Graph::Vid, int64_t>& dist,
@@ -50,7 +111,7 @@ namespace snu {
         }
     }
 
-    static bool applyPartialValue(const Graph &graph, Graph::Vertex* A, std::unordered_map<Graph::Vid, float>& betweennessValue, bool reversed) {
+    bool BetweennessCentrality::applyPartialValue(const Graph &graph, Graph::Vertex* A, std::unordered_map<Graph::Vid, float>& betweennessValue, bool reversed) {
         std::unordered_map<Graph::Vid, std::set<Graph::Vid>> predecessors;
         std::unordered_map<Graph::Vid, int64_t> pathcount;
         std::unordered_map<Graph::Vid, int64_t> dist;
@@ -96,52 +157,5 @@ namespace snu {
         return true;
     }
 
-    bool betweennessCentrality(const Graph &graph, StatResult &result, bool file_output, std::string graph_name) {
-        const auto& vertices = graph.id_to_vertex;
-        int V = vertices.size();
-        int sample_sz = std::min(V, MAX_BETWEENNESS_SAMPLE_SZ);
-
-        std::vector<std::pair<Graph::Vid, Graph::Vertex*>> samples;
-        std::sample(vertices.begin(), vertices.end(), std::back_inserter(samples), 
-                    sample_sz, std::mt19937{std::random_device{}()});
-
-        std::unordered_map<Graph::Vid, float> betweennessValue;
-        bool reversed = false;
-        for (auto p : samples) {
-            bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
-            reversed = !reversed;
-            if (!suc) {
-                std::cout << "disconnected bet\n";
-                return false;
-            }
-        }
-        // adjust constant
-        for (auto [vid, b_val]: betweennessValue) {
-            betweennessValue[vid] *= (float)V/sample_sz;
-        }
-
-        Graph::Vid centralNodeId = 0;
-        double max_betweenness_centrality = 0.0;
-        for (auto p : betweennessValue) {
-            if (p.second > max_betweenness_centrality) {
-                centralNodeId = p.first;
-                max_betweenness_centrality = p.second;
-            }
-        }
-
-        if (file_output) {
-            std::string fName = graph_name + "Betweennes.txt";
-            std::ofstream fout(fName.data());
-            for (auto [nodeId, between_val] : betweennessValue) {
-                fout << nodeId << ' ' << between_val << '\n';
-            }
-        }
-
-        
-        // apply results
-        result.betweennessstat = true;
-        result.max_betweenness_centrality = max_betweenness_centrality;
-        result.max_betweenness_centrality_id = centralNodeId;
-        return true;
-    }
+    
 }

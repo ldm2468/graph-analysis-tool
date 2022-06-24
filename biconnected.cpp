@@ -2,6 +2,10 @@
 #include <stack>
 
 namespace snu {
+    std::string BiconnectedComponents::statName() {
+        return "BiconnectedComponents";
+    }
+
     typedef struct VertexMetadata {
         bool visited = false;
         long long num_connected_bcc = 1; // number of connected bcc's (1 for non-articulation points)
@@ -16,9 +20,52 @@ namespace snu {
         return (VertexMetadata *) v->temp;
     }
 
+    bool BiconnectedComponents::calculateUndirectedStat(USGraph& graph) {
+        for (auto& pair: graph.id_to_vertex) {
+            pair.second->temp = new VertexMetadata();
+        }
+
+        num_bcc = 0;
+        size_lbcc = 0;
+        countBcc(graph);
+
+        // count articulation points
+        num_arp = 0;
+        max_conn_bcc = 0;
+        for (auto& pair: graph.id_to_vertex) {
+            long long cbcc = getMetadata(pair.second)->num_connected_bcc;
+            if (cbcc > 1) {
+                num_arp++;
+                if (cbcc > max_conn_bcc) {
+                    max_conn_bcc = cbcc;
+                }
+            }
+        }
+
+        for (auto& pair: graph.id_to_vertex) {
+            delete getMetadata(pair.second);
+        }
+        return true;
+    }
+
+	void BiconnectedComponents::writeToHTMLStat(FILE* fp, bool directed) {
+        fprintf(fp, "\
+            <h2>\
+                Biconnected Component Statistics\
+            </h2>\
+            <h3>\
+                <p> number of articulation points (ARP) = %lld </p>\
+                <p> number of biconnected components (BCC) = %lld </p>\
+                <p> size of largest biconnected component = %lld </p>\
+                <p> maximum number of BCC's connected to a single ARP = %lld </p>\
+            </h3>\
+            ", 
+            num_arp, num_bcc, size_lbcc, max_conn_bcc);
+    }
+
     // This is the algorithm presented by Hopcroft and Tarjan (1973).
     // It has been modified to avoid recursion (to prevent stack overflows)
-    static void countBcc(Graph &graph, StatResult &result) {
+    void BiconnectedComponents::countBcc(USGraph &graph) {
         std::stack<Graph::Vertex *> dfs_stack;
 
         // Attempt dfs starting from every vertex:
@@ -68,9 +115,9 @@ namespace snu {
                                       || meta->low_point == meta->depth;
                     if (parent_is_arp) {
                         getMetadata(meta->parent)->num_connected_bcc++;
-                        result.num_bcc++;
-                        if (meta->bcc_size + 1 > result.size_lbcc) {
-                            result.size_lbcc = meta->bcc_size + 1;
+                        num_bcc++;
+                        if (meta->bcc_size + 1 > size_lbcc) {
+                            size_lbcc = meta->bcc_size + 1;
                         }
                     } else { // propagate bcc size to parent
                         getMetadata(meta->parent)->bcc_size += meta->bcc_size;
@@ -82,35 +129,6 @@ namespace snu {
                     dfs_stack.pop();
                 }
             }
-        }
-    }
-
-    void biconnectedComponents(Graph& graph, StatResult& result) {
-        for (auto& pair: graph.id_to_vertex) {
-            pair.second->temp = new VertexMetadata();
-        }
-
-        result.num_bcc = 0;
-        result.size_lbcc = 0;
-        countBcc(graph, result);
-
-        // count articulation points
-        result.num_arp = 0;
-        result.max_conn_bcc = 0;
-        for (auto& pair: graph.id_to_vertex) {
-            long long cbcc = getMetadata(pair.second)->num_connected_bcc;
-            if (cbcc > 1) {
-                result.num_arp++;
-                if (cbcc > result.max_conn_bcc) {
-                    result.max_conn_bcc = cbcc;
-                }
-            }
-        }
-
-        result.biconnectedstat = true;
-
-        for (auto& pair: graph.id_to_vertex) {
-            delete getMetadata(pair.second);
         }
     }
 }

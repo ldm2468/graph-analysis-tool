@@ -6,35 +6,14 @@
 #include <fstream>
 #include <chrono>
 #include <iostream>
+#include <sstream>
 
 namespace snu {
-    // calculates single-source shortest-path for all nodes connected to start.
-    static std::map<Graph::Vid, int64_t> dijkstra(const Graph & graph, Graph::Vertex* start) {
-        std::map<Graph::Vid, int64_t> dist;
-
-        typedef std::pair<int64_t, Graph::Vertex*> elem;
-        std::priority_queue<elem, std::vector<elem>, std::greater<elem>> pq;
-        pq.emplace(0, start);
-
-        while(!pq.empty()) {
-            elem cur = pq.top();
-            pq.pop();
-
-            auto cur_dist = cur.first;
-            auto V = cur.second;
-            if (!dist.count(V->id)) {
-                dist[V->id] = cur_dist;
-                for (const auto& edge : V->edges) {
-                    auto next_dist = cur_dist + edge->weight;
-                    auto to = edge->to == V ? edge->from : edge->to;
-                    pq.emplace(next_dist, to);
-                }
-            }
-        }
-        return dist;
+    std::string ClosenessCentrality::statName() {
+        return "ClosenessCentrality";
     }
 
-    static bool calcClosenessCentrality(const Graph &graph, StatResult &result, bool file_output, std::string graph_name) {
+    bool ClosenessCentrality::calculateStat(Graph &graph) {
         const auto& vertices = graph.id_to_vertex;
         int V = vertices.size();
         int sample_sz = std::min(V, MAX_CLOSENESS_SAMPLE_SZ);
@@ -76,32 +55,55 @@ namespace snu {
                 max_closeness_centrality = closeness_val;
             }
         }
-
-
-        // output all values in a file
-        if (file_output) {
-            std::string fName = graph_name + "_Closeness.txt";
-            std::ofstream fout(fName.data());
-            for (auto [nodeId, closeness_val] : inv_dist_sum) {
-                fout << nodeId << ' ' << closeness_val << '\n';
-            }
-        }
         
-        
-        // apply results
-        result.closenessstat = true;
-        result.max_closeness_centrality = max_closeness_centrality / total_inv_sum;
-        result.max_closeness_centrality_id = centralNodeId;
+        max_closeness_centrality = max_closeness_centrality / total_inv_sum;
+        max_closeness_centrality_id = centralNodeId;
         return true;
     }
 
-    bool closenessCentrality(const Graph &graph, StatResult &result, bool file_output, std::string graph_name) {
-        //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        bool ret = calcClosenessCentrality(graph, result, file_output, graph_name);
-        //std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    // calculates single-source shortest-path for all nodes connected to start.
+    std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph & graph, Graph::Vertex* start) {
+        std::map<Graph::Vid, int64_t> dist;
 
-        //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-        //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
-        return ret;
+        typedef std::pair<int64_t, Graph::Vertex*> elem;
+        std::priority_queue<elem, std::vector<elem>, std::greater<elem>> pq;
+        pq.emplace(0, start);
+
+        while(!pq.empty()) {
+            elem cur = pq.top();
+            pq.pop();
+
+            auto cur_dist = cur.first;
+            auto V = cur.second;
+            if (!dist.count(V->id)) {
+                dist[V->id] = cur_dist;
+                for (const auto& edge : V->edges) {
+                    auto next_dist = cur_dist + edge->weight;
+                    auto to = edge->to == V ? edge->from : edge->to;
+                    pq.emplace(next_dist, to);
+                }
+            }
+        }
+        return dist;
+    }
+
+
+	void ClosenessCentrality::writeToFileStat(std::string graph_name, bool directed) {
+        std::string fName = graph_name + "_Closeness.txt";
+        std::ofstream fout(fName.data());
+        for (auto [nodeId, closeness_val] : closeness_centrality) {
+            fout << nodeId << ' ' << closeness_val << '\n';
+        }
+    }
+
+    void ClosenessCentrality::writeToHTMLStat(FILE* fp, bool directed) {
+        fprintf(fp, "\
+            <h2>\
+                Closeness Centrality Statistics\
+            </h2>\
+            <h3>\
+                <p> max closeness centrality value = %lf at ID = %lld </p>\
+            </h3>",
+            max_closeness_centrality, max_closeness_centrality_id);
     }
 }

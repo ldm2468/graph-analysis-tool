@@ -5,7 +5,6 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include "stat.h"
 #include "plot.h"
 
 
@@ -78,6 +77,8 @@ namespace snu {
         Graph();   // prevent from creating Graph class and allow creating graph in subclass
         ~Graph();  // destructor
 
+        virtual int parseGraph(std::string file_path) = 0;
+
         // add vertex
         // if vertex is created normally, then return 0
         // if error occurs, then return 1
@@ -87,20 +88,23 @@ namespace snu {
         // directed form of addEdge
         // if edge is created normally, then return 0
         // if error occurs, then return 1
-        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) = 0;
+        int addDirectedEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
     };
 
     // directed simple graph
     class DSGraph: public Graph {
     public:
-        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        virtual int parseGraph(std::string file_path) override;
+        virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) override;  // array version
         int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 
     // undirected simple graph
     class USGraph: public Graph {
     public:
-        int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+        virtual int parseGraph(std::string file_path) override;
+        virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) override;  // array version
         int addEdge(Eid id, std::vector <Elabel> *label, Vid from, Vid to, Weight weight);       // vector version
     };
 }

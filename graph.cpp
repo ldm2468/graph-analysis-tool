@@ -1,5 +1,5 @@
 #include "graph.h"
-
+#include "parse.h"
 
 namespace snu {
 
@@ -61,7 +61,7 @@ namespace snu {
     }
 
     // base addEdge function, DSGraph version
-    int Graph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) 
+    int Graph::addDirectedEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) 
     {
         // error: already have edge having same id or no from or to vertex
         if (id_to_edge.count(id) || !id_to_vertex.count(from) || !id_to_vertex.count(to))
@@ -103,11 +103,15 @@ namespace snu {
 
         return 0;
     }
+    
+    int DSGraph::parseGraph(std::string file_path) {
+        return parseDSGraph(file_path, *this);
+    }
 
     // array version
     int DSGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight)
     {
-        return Graph::addEdge(id, num, label, from, to, weight);
+        return addDirectedEdge(id, num, label, from, to, weight);
     }
 
     // vector version
@@ -116,11 +120,15 @@ namespace snu {
         return addEdge(id, label->size(), label->data(), from, to, weight);
     }
 
+    int USGraph::parseGraph(std::string file_path) {
+        return parseUSGraph(file_path, *this);
+    }
+
     // array version
     int USGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight)
     {
         // there is an error
-        if (Graph::addEdge(id, num, label, from, to, weight)) return 1;
+        if (addDirectedEdge(id, num, label, from, to, weight)) return 1;
 
         Edge *e = id_to_edge[id];
         e->to->edges.push_back(e);

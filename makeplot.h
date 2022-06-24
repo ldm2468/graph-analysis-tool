@@ -6,9 +6,9 @@
 
 
 namespace snu {
-
-    void makePlot(DSGraph& graph, Plot& plot);
-    void makePlot(USGraph& graph, Plot& plot);
+    void makePlot(Graph& graph, Plot& plot);
+    void makeDSPlot(DSGraph& graph, Plot& plot);
+    void makeUSPlot(USGraph& graph, Plot& plot);
 }
 
 #endif // MAKEPLOT_H

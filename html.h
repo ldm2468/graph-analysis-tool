@@ -4,11 +4,15 @@
 #include "stat.h"
 #include "plot.h"
 
-
 namespace snu {
+    // open file, add title & set styles
+    FILE* openHtml(const char *name, bool directed);
 
-    void makeDSHtml(const char *name, StatResult& result, Plot& plot);
-    void makeUSHtml(const char *name, StatResult& result, Plot& plot);
+    // add stat to html
+    void addStatToHtml(FILE* fp, Stat* stat, bool directed);
+
+    // add plot, close file
+    void closeHtml(FILE* fp, Plot& plot);
 }
 
 #endif // HTML_H
