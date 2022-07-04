@@ -6,25 +6,27 @@
 #include "stat.h"
 
 /*
- * Calculate stats that were added 
+ * Calculate stats that were added
  */
 
-namespace snu {
-  class StatAnalyzer {
+namespace snu
+{
+  class StatAnalyzer
+  {
   public:
     StatAnalyzer(std::string _graph_name,
-                std::shared_ptr<Graph> _graph_shptr,
-                bool _file_output, 
-                bool _display_time);
+                 std::shared_ptr<Graph> _graph_shptr,
+                 bool _file_output,
+                 bool _display_time);
     bool run();
-    void addCommonStats(std::vector<CommonStat*> vec);
-    void addDirectedStats(std::vector<DirectedStat*> vec);
-    void addUndirectedStats(std::vector<UndirectedStat*> vec);
+    void addCommonStats(std::vector<CommonStat *> vec);
+    void addDirectedStats(std::vector<DirectedStat *> vec);
+    void addUndirectedStats(std::vector<UndirectedStat *> vec);
 
-  private: 
-    std::vector<CommonStat*> common_stats;
-    std::vector<snu::DirectedStat*> directed_only_stats;
-    std::vector<snu::UndirectedStat*> undirected_only_stats;
+  private:
+    std::vector<CommonStat *> common_stats;
+    std::vector<snu::DirectedStat *> directed_only_stats;
+    std::vector<snu::UndirectedStat *> undirected_only_stats;
 
     std::string graph_name;
     std::shared_ptr<Graph> graph_shptr;
