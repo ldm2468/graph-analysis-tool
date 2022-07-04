@@ -41,19 +41,17 @@ namespace snu
       betweennessValue[vid] *= (float)V / sample_sz;
     }
 
-    Graph::Vid centralNodeId = 0;
-    double max_betweenness_centrality = 0.0;
+    max_betweenness_centrality_id = 0;
+    max_betweenness_centrality = 0.0;
     for (auto p : betweennessValue)
     {
       if (p.second > max_betweenness_centrality)
       {
-        centralNodeId = p.first;
+        max_betweenness_centrality_id = p.first;
         max_betweenness_centrality = p.second;
       }
     }
 
-    max_betweenness_centrality = max_betweenness_centrality;
-    max_betweenness_centrality_id = centralNodeId;
     return true;
   }
 

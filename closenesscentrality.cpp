@@ -51,18 +51,17 @@ namespace snu
     if (total_inv_sum == 0.0)
       return false;
 
-    Graph::Vid centralNodeId = 0;
-    double max_closeness_centrality = 0.0;
+    max_closeness_centrality_id = 0;
+    max_closeness_centrality = 0.0;
     for (auto [nodeId, closeness_val] : closeness_centrality)
     {
       if (closeness_val > max_closeness_centrality)
       {
-        centralNodeId = nodeId;
+        max_closeness_centrality_id = nodeId;
         max_closeness_centrality = closeness_val;
       }
     }
 
-    max_closeness_centrality_id = centralNodeId;
     return true;
   }
 
