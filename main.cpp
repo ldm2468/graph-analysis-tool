@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <chrono>
-#include <memory>
 
 #include "snugal.h"
-
-using namespace std::chrono;
-
-void usage(void);
+#include "statanalyzer.h"
 
 template<typename T>static void printElapsedTime(const char *msg, T &t) {
+  using namespace std::chrono;
   printf("%10ldms: %s\n", (duration_cast<milliseconds>(high_resolution_clock::now() - t)).count(), msg);
   t = high_resolution_clock::now();
 }
+
+void usage(void);
 
 int main(int argc, char* argv[]) 
 {
@@ -23,6 +22,7 @@ int main(int argc, char* argv[])
 
   bool directed = false;  // suppose given graph is undirected.
   bool file_output = false; // default: skip output of detailed files
+  bool display_time = true; // always: show time statistics
 
   while (true) {
     static struct option long_options[] = {
@@ -85,6 +85,10 @@ int main(int argc, char* argv[])
 
   std::string graph_name = input_path.substr(slash+1, dot-(slash+1));
 
+  // parse graph from file
+  std::shared_ptr<snu::Graph> graph_shptr = snu::parseFile(input_path, directed);
+  snu::Graph& graph = *graph_shptr.get();
+
   std::vector<snu::Stat*> all_stats;
   std::vector<snu::CommonStat*> common_stats;
   std::vector<snu::DirectedStat*> directed_only_stats;
@@ -100,7 +104,7 @@ int main(int argc, char* argv[])
   auto countStat = snu::CountStat();
   auto biconnectedComponents = snu::BiconnectedComponents();
 
-  /* -- Add Common Stats Here (support both directed & undirected) -- */
+  /* -- Add Common Stats To Run (support both directed & undirected) -- */
   common_stats = {
     &basicStat,
     &connectStat,
@@ -109,102 +113,25 @@ int main(int argc, char* argv[])
     &betweennessCentrality,
   };
 
-  /* -- Add Directed Stats Here -- */
+  /* -- Add Directed Stats To Run -- */
   directed_only_stats = {
   };
 
-  /* -- Add Undirected Stats Here -- */
+  /* -- Add Undirected Stats To Run -- */
   undirected_only_stats = {
     &countStat,
     &biconnectedComponents,
   };
 
-  for (auto p : common_stats)
-    all_stats.push_back(p);
-  if (directed) {
-    for (auto p : directed_only_stats)
-      all_stats.push_back(p);
-  }
-  else {
-    for (auto p : undirected_only_stats)
-      all_stats.push_back(p);
-  }
-
-  auto t = high_resolution_clock::now();
-
-  std::shared_ptr<snu::Graph> graph_shptr;
-  std::shared_ptr<snu::DSGraph> dsgraph_shptr;
-  std::shared_ptr<snu::USGraph> usgraph_shptr;
-
-  if (directed) {
-    graph_shptr = dsgraph_shptr = std::make_shared<snu::DSGraph>();
-  }
-  else {
-    graph_shptr = usgraph_shptr = std::make_shared<snu::USGraph>();
-  }
-  auto& graph = *graph_shptr.get();
-
-  int parse_status = graph.parseGraph(input_path);
-  switch (parse_status) {
-    case snu::PARSE_SUCCESS:
-      break;
-
-    case snu::PARSE_FAILURE_NO_INPUT:
-      fprintf(stderr, "input file is not locatable.\n");
-      return 1;
-
-    case snu::PARSE_FAILURE_INVALID_INPUT:
-      fprintf(stderr, "input data is invalid.\n");
-      return 1;
-
-    case snu::PARSE_FAILURE_INVALID_FILETYPE:
-      fprintf(stderr, "this filetype is not supported.\n");
-      return 1;
-
-    case snu::PARSE_FAILURE_ADD_VERTEX:
-    case snu::PARSE_FAILURE_ADD_EDGE:
-      fprintf(stderr, "internal error\n");
-      return 1;
-
-    default:
-      return 1;
-  }
-  printElapsedTime("parseGraph()", t);
-
-  // calculate common stats
-  for (auto commonStat : common_stats) {
-    commonStat->calculate(graph);
-    printElapsedTime(commonStat->statName().c_str(), t);
-  }
-
-  // calculate directed stats
-  if (directed) {
-    auto& dsgraph = *dsgraph_shptr.get();
-    for (auto dirStat : directed_only_stats) {
-      dirStat->calculateDirected(dsgraph);
-      printElapsedTime(dirStat->statName().c_str(), t);
-    }
-  }
-  // calculate undirected stats
-  else {
-    auto& usgraph = *usgraph_shptr.get();
-    for (auto undirStat : undirected_only_stats) {
-      undirStat->calculateUndirected(usgraph);
-      printElapsedTime(undirStat->statName().c_str(), t);
-    }
-  }
-
-  // file output
-  if (file_output) {
-    for (auto stat : all_stats) {
-      if (stat->getSuccess()) {
-        stat->writeToFile(graph_name, directed);
-        printElapsedTime(("File output: " + stat->statName()).c_str(), t);
-      }
-    }
-  }
+  // run all stats using the graph
+  auto analyzer = snu::StatAnalyzer(graph_name, graph_shptr, file_output, display_time);
+  analyzer.addCommonStats(common_stats);
+  analyzer.addDirectedStats(directed_only_stats);
+  analyzer.addUndirectedStats(undirected_only_stats);
+  analyzer.run();
 
   // plot
+  auto t = std::chrono::high_resolution_clock::now();
   snu::Plot plot(graph_name);
   snu::makePlot(graph, plot);
   printElapsedTime("makePlot()", t);

@@ -3,6 +3,59 @@
 
 #include "graph.h"
 
+/*
+ * --- Class Stat ---
+ * CommonStat / DirectedStat / UndirectedStat
+ * 
+ * Analyze stats for a given graph, then store its results.
+ * Stored results can be written to an HTML file using 'writeToHTML(...)'
+ * or exported to a separate file using 'writeToFile(...)'
+ * 
+ * --- BASIC USAGE ---
+ * 
+ * calculate() -> writeToHTML() or writeToFile()
+ * 
+ * 
+ * --- HOW TO CREATE A NEW STAT ---
+ * 
+ * 1. Determine base class to derive from
+ *    - DirectedStat: The stat can only be calculated for directed graphs
+ *    - UndirectedStat: The stat can only be calculated for undirected graphs
+ * 		- CommonStat: The stat can be calculated for both directed and undirected graphs
+ * 
+ * 2. Create a new class that inherits the chosen base class
+ * 		- refer to 'ClosenessCentrality.h' for an example
+ * 
+ * 3. Override 'statName()' to return a name for the stat
+ * 		- used for debug logging purposes.  
+ * 
+ * 4. Override 'calculateStat(...)' to analyze the graph and store the results
+ * 		in the class's private members. 
+ * 		(Name of the function to override can vary depending on the base class - check list below)
+ * 		- CommonStat:			calculateStat()
+ * 		- DirectedStat: 	calculateDirectedStat()
+ * 		- UndirectedStat: calculateUndirectedStat()
+ * 
+ * 5. Override 'writeToHTMLStat(...)' to write results into an HTML file.
+ * 		- Note that basic header/footer can be omitted.
+ * 			writeToHTML() only writes a portion of the whole HTML file.
+ * 
+ * 6. Override 'writeToFileStat(...)' to write results into a separate file. (optional)
+ * 		- Useful for unit testing.
+ * 		- For centrality measures, testers/test_centrality.py can be used for comparison with
+ * 			SNAP. (stanford's graph analysis library)
+ * 
+ * 7. Add the new stat to a StatAnalyzer
+ * 		- StatAnalyzer will call 'calculate(...) & writeToFile(...)' for the input graph. 
+ * 		- currently being handled at main.cpp (2022.07.04)
+ * 		- (at main.cpp) add to 'common_stats' or 'directed_only_stats' or 'undirected_only_stats'
+ * 
+ * 8. Add the new stat to HTML
+ * 		- currently being handled at main.cpp (2022.07.04)
+ * 		- (at main.cpp) add to 'html_order'
+ * 
+ */
+
 namespace snu {
 	class Stat {
 		public:

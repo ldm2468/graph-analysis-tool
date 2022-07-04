@@ -2,7 +2,7 @@
 #include <algorithm>
 
 namespace snu {
-	std::string statName() {
+	std::string CountStat::statName() {
 		return "CountStat";
 	}
 

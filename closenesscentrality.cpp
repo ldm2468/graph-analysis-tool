@@ -32,31 +32,29 @@ namespace snu {
             }
         }
 
-        std::map<Graph::Vid, double> inv_dist_sum;
 
         // Consider nodes that do not connect anywhere to have closeness centrality of 1.0
         // This is to match SNAP's definition of closeness centrality.
 
         for (auto [vid, vert] : vertices)
-            inv_dist_sum[vid] = 1.0; 
+            closeness_centrality[vid] = 1.0; 
 
         for (auto p : dist_sum)
-            inv_dist_sum[p.first] = (p.second != 0) ? (100.0 / p.second) : 1.0;
+            closeness_centrality[p.first] = (p.second != 0) ? (100.0 / p.second) : 1.0;
         double total_inv_sum = 0;
-        for (auto p : inv_dist_sum)
+        for (auto p : closeness_centrality)
             total_inv_sum += p.second;
         if (total_inv_sum == 0.0) return false;
 
         Graph::Vid centralNodeId = 0;
         double max_closeness_centrality = 0.0;
-        for (auto [nodeId, closeness_val] : inv_dist_sum) {
+        for (auto [nodeId, closeness_val] : closeness_centrality) {
             if (closeness_val > max_closeness_centrality) {
                 centralNodeId = nodeId;
                 max_closeness_centrality = closeness_val;
             }
         }
         
-        max_closeness_centrality = max_closeness_centrality / total_inv_sum;
         max_closeness_centrality_id = centralNodeId;
         return true;
     }
