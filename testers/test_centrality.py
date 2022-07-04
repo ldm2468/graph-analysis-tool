@@ -7,7 +7,6 @@ if (len(sys.argv) != 4):
     print("usage: python3 test_compare.py <Stat to compare> <SNAP centrality result> <OUR result>")
     exit()
 
-
 stat_to_compare = sys.argv[1]
 base_file = sys.argv[2]
 test_file = sys.argv[3]
