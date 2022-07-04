@@ -8,7 +8,6 @@
 #define CONVERGENCE_TEST 1E-5
 #define MAX_ITERATIONS 100
 #define KATZ_ITERATIONS 100
-#define KATZ_ATTENUATION_FACTOR 0.5
 
 namespace snu
 {
@@ -24,8 +23,8 @@ namespace snu
   private:
     void normalizeProb(int n, std::unordered_map<Graph::Vid, double> &prob);
     bool calcPageRank(Graph &graph, std::unordered_map<Graph::Vid, double> &prob);
-    bool calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob);
-    void calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob);
+    double calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob);
+    void calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob, double eigenvalue);
 
     bool pagerank_converged = false;        // whether pagerank converged
     double max_pagerank;                    // maximum pagerank value
@@ -36,6 +35,7 @@ namespace snu
     bool katz_centrality_computed = false;  // whether katz centrality was computed
     double max_katz_centrality;             // maximum katz centrality value
     long long max_katz_centrality_id;       // id of max katz centrality vertex
+    double max_eigenvalue;                  // maximum eigenvalue calculated with eigencentrality
   };
 }
 

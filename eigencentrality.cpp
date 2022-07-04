@@ -12,7 +12,7 @@ namespace snu
   {
     int n = (int)graph.id_to_vertex.size();
     std::unordered_map<Graph::Vid, double> prob;
-    if (calcEigenCentrality(graph, prob))
+    if ((max_eigenvalue = calcEigenCentrality(graph, prob)) >= 1E-12)
     {
       normalizeProb(n, prob);
       eigencentrality_converged = true;
@@ -42,7 +42,7 @@ namespace snu
       }
     }
 
-    calcKatzCentrality(graph, prob);
+    calcKatzCentrality(graph, prob, max_eigenvalue);
     normalizeProb(n, prob);
     katz_centrality_computed = true;
     max_katz_centrality = 0;
@@ -64,7 +64,9 @@ namespace snu
                 <h2>\
                     Eigenvector Centrality Statistics\
                 </h2>\
-                <h3>");
+                <h3>\
+                <p> max eigenvalue = %lf</p>",
+            max_eigenvalue);
     if (eigencentrality_converged)
     {
       fprintf(fp, "<p> max eigenvector centrality value = %lf at ID = %lld </p>",
@@ -151,9 +153,10 @@ namespace snu
     return !not_finished;
   }
 
-  bool EigenCentrality::calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob)
+  double EigenCentrality::calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob)
   {
     std::unordered_map<Graph::Vid, double> mul;
+    double eigenvalue;
 
     for (auto &pair : graph.id_to_vertex)
     {
@@ -182,21 +185,21 @@ namespace snu
           }
         }
       }
-      double sum_sq = 0;
+      eigenvalue = 0;
       for (auto &pair : graph.id_to_vertex)
       {
         double m = mul[pair.first];
-        sum_sq += m * m;
+        eigenvalue += m * m;
       }
-      sum_sq = std::sqrt(sum_sq);
-      if (sum_sq == 0)
+      eigenvalue = std::sqrt(eigenvalue);
+      if (eigenvalue <= 1E-12)
       {
-        not_finished = true;
+        eigenvalue = 0;
         break;
       }
       for (auto &pair : graph.id_to_vertex)
       {
-        double next = mul[pair.first] / sum_sq;
+        double next = mul[pair.first] / eigenvalue;
         if (std::abs(prob[pair.first] - next) > CONVERGENCE_TEST)
         {
           not_finished = true;
@@ -204,17 +207,15 @@ namespace snu
         prob[pair.first] = next;
       }
     }
-    if (not_finished)
-    {
-      return false;
-    }
 
-    return true;
+    return eigenvalue;
   }
 
-  void EigenCentrality::calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob)
+  void EigenCentrality::calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob, double eigenvalue)
   {
     std::unordered_map<Graph::Vid, double> pow, tmp;
+
+    double att = eigenvalue <= 0 ? 0.8 : std::min(1. / eigenvalue, 1.) * 0.8;
 
     for (auto &pair : graph.id_to_vertex)
     {
@@ -235,7 +236,7 @@ namespace snu
           for (auto &edge : g->edges)
           {
             auto to = edge->to == g ? edge->from : edge->to;
-            tmp[to->id] += pow[g->id] * KATZ_ATTENUATION_FACTOR;
+            tmp[to->id] += pow[g->id] * att;
           }
         }
       }
