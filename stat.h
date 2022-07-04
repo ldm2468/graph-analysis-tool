@@ -64,13 +64,30 @@ namespace snu
     // Name of the stat used for filenames, logs ...
     virtual std::string statName() = 0;
 
+    // Has the stat been successfully analyzed?
+    // Contains result from calculate(...)
     bool getSuccess();
+
+    // Append analysis result information to an HTML file.
     void writeToHTML(FILE *fp, bool directed);
-    void writeToFile(std::string graph_name, bool directed);
+
+    // Write results into a separate file. (Optional)
+    // Used for unit testing purposes.
+    // This method is optional - just return false to skip this operation. (don't override)
+    // return value: true  - if this operation wrote to a file.
+    //               false - if this operation was skipped.
+    bool writeToFile(std::string graph_name, bool directed);
+
+    // Analyze the graph and store the results.
+    // - Implemented in derived classes.
+    // bool calculate(Graph &graph)
 
   protected:
+    // Override this function to set behaviour of 'writeToHTML(...)'
     virtual void writeToHTMLStat(FILE *fp, bool directed) = 0;
-    virtual void writeToFileStat(std::string graph_name, bool directed) {}
+
+    // Override this function to set behaviour of 'writeToFile(...)'
+    virtual bool writeToFileStat(std::string graph_name, bool directed) { return false; }
     bool success = false;
   };
 
@@ -78,10 +95,12 @@ namespace snu
   class CommonStat : public Stat
   {
   public:
-    // returns true on success
+    // Analyze the graph and store the results.
+    // return value: true on success
     bool calculate(Graph &graph);
 
   protected:
+    // Override this function to set behaviour of 'calculate(...)'
     virtual bool calculateStat(Graph &graph) = 0;
   };
 
@@ -89,20 +108,24 @@ namespace snu
   class DirectedStat : public Stat
   {
   public:
-    // returns true on success
+    // Analyze the graph and store the results.
+    // return value: true on success
     bool calculateDirected(DSGraph &graph);
 
   protected:
+    // Override this function to set behaviour of 'calculateDirected(...)'
     virtual bool calculateDirectedStat(DSGraph &graph) = 0;
   };
 
   class UndirectedStat : public Stat
   {
   public:
-    // returns true on success
+    // Analyze the graph and store the results.
+    // return value: true on success
     bool calculateUndirected(USGraph &graph);
 
   protected:
+    // Override this function to set behaviour of 'calculateUndirected(...)'
     virtual bool calculateUndirectedStat(USGraph &graph) = 0;
   };
 }

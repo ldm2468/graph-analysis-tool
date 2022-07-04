@@ -95,7 +95,7 @@ namespace snu
     return dist;
   }
 
-  void ClosenessCentrality::writeToFileStat(std::string graph_name, bool directed)
+  bool ClosenessCentrality::writeToFileStat(std::string graph_name, bool directed)
   {
     std::string fName = graph_name + "_Closeness.txt";
     std::ofstream fout(fName.data());
@@ -103,6 +103,7 @@ namespace snu
     {
       fout << nodeId << ' ' << closeness_val << '\n';
     }
+    return true;
   }
 
   void ClosenessCentrality::writeToHTMLStat(FILE *fp, bool directed)

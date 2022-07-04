@@ -17,7 +17,7 @@ namespace snu
   protected:
     virtual bool calculateStat(Graph &graph) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
-    virtual void writeToFileStat(std::string graph_name, bool directed) override;
+    virtual bool writeToFileStat(std::string graph_name, bool directed) override;
 
   private:
     void augmented_dijkstra(const Graph &graph, Graph::Vertex *start,

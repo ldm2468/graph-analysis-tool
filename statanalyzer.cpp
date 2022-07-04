@@ -80,10 +80,9 @@ namespace snu
     {
       for (auto stat : all_stats)
       {
-        if (stat->getSuccess())
+        if (stat->getSuccess() && stat->writeToFile(graph_name, directed))
         {
-          stat->writeToFile(graph_name, directed);
-          printElapsedTime(("File output: " + stat->statName()).c_str(), t);
+          printElapsedTime(("Writing to file: " + stat->statName()).c_str(), t);
         }
       }
     }

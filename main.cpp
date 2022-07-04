@@ -95,6 +95,8 @@ int main(int argc, char *argv[])
 
   // parse graph from file
   std::shared_ptr<snu::Graph> graph_shptr = snu::parseFile(input_path, directed);
+  if (!graph_shptr)
+    return 1;
   snu::Graph &graph = *graph_shptr.get();
 
   std::vector<snu::Stat *> all_stats;

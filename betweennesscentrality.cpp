@@ -55,7 +55,7 @@ namespace snu
     return true;
   }
 
-  void BetweennessCentrality::writeToFileStat(std::string graph_name, bool directed)
+  bool BetweennessCentrality::writeToFileStat(std::string graph_name, bool directed)
   {
     std::string fName = graph_name + "_Betweennes.txt";
     std::ofstream fout(fName.data());
@@ -63,6 +63,7 @@ namespace snu
     {
       fout << nodeId << ' ' << between_val << '\n';
     }
+    return true;
   }
 
   void BetweennessCentrality::writeToHTMLStat(FILE *fp, bool directed)
