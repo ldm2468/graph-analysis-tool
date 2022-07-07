@@ -14,7 +14,9 @@ std::string ClosenessCentrality::statName() {
     return "ClosenessCentrality";
 }
 
-bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
+bool ClosenessCentrality::calculate(Graph &graph, bool inbound,
+                                    std::map<Graph::Vid, double> &cc, double &max, long long &max_id) {
+
     const auto &vertices = graph.id_to_vertex;
     int V = vertices.size();
     int sample_sz = std::min(V, MAX_CLOSENESS_SAMPLE_SZ);
@@ -25,7 +27,7 @@ bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
 
     std::map<Graph::Vid, int64_t> dist_sum;
     for (auto vid : samples) {
-        auto dist = dijkstra(graph, vid.second);
+        auto dist = dijkstra(graph, vid.second, inbound);
         // if ((int)dist.size() != V) return false; // disconnected graph
 
         for (auto p : dist) {
@@ -37,30 +39,35 @@ bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
     // This is to match SNAP's definition of closeness centrality.
 
     for (auto [vid, vert] : vertices)
-        closeness_centrality[vid] = 1.0;
+        cc[vid] = 1.0;
 
     for (auto p : dist_sum)
-        closeness_centrality[p.first] = (p.second != 0) ? (100.0 / p.second) : 1.0;
+        cc[p.first] = (p.second != 0) ? (100.0 / p.second) : 1.0;
     double total_inv_sum = 0;
-    for (auto p : closeness_centrality)
+    for (auto p : cc)
         total_inv_sum += p.second;
     if (total_inv_sum == 0.0)
         return false;
 
-    max_closeness_centrality_id = 0;
-    max_closeness_centrality = 0.0;
-    for (auto [nodeId, closeness_val] : closeness_centrality) {
-        if (closeness_val > max_closeness_centrality) {
-            max_closeness_centrality_id = nodeId;
-            max_closeness_centrality = closeness_val;
+    max_id = 0;
+    max = 0.0;
+    for (auto [nodeId, closeness_val] : cc) {
+        if (closeness_val > max) {
+            max_id = nodeId;
+            max = closeness_val;
         }
     }
-
     return true;
 }
 
+bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
+    return calculate(graph, false, closeness_centrality, max_closeness_centrality, max_closeness_centrality_id) &&
+        calculate(graph, true, inbound_closeness_centrality, max_inbound_closeness_centrality,
+                  max_inbound_closeness_centrality_id);
+}
+
 // calculates single-source shortest-path for all nodes connected to start.
-std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, Graph::Vertex *start) {
+std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, Graph::Vertex *start, bool inbound) {
     std::map<Graph::Vid, int64_t> dist;
 
     typedef std::pair<int64_t, Graph::Vertex *> elem;
@@ -75,7 +82,7 @@ std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, 
         auto V = cur.second;
         if (!dist.count(V->id)) {
             dist[V->id] = cur_dist;
-            for (const auto &edge : V->edges) {
+            for (const auto &edge : (inbound ? V->inbound_edges : V->edges)) {
                 auto next_dist = cur_dist + edge->weight;
                 auto to = edge->to == V ? edge->from : edge->to;
                 pq.emplace(next_dist, to);
@@ -85,11 +92,17 @@ std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, 
     return dist;
 }
 
+void ClosenessCentrality::writeMap(std::string fname, std::map<Graph::Vid, double> map) {
+    std::ofstream fout(fname.data());
+    for (auto [nodeId, val] : map) {
+        fout << nodeId << ' ' << val << '\n';
+    }
+}
+
 bool ClosenessCentrality::writeToFileStat(std::string graph_name, bool directed) {
-    std::string fName = graph_name + "_Closeness.txt";
-    std::ofstream fout(fName.data());
-    for (auto [nodeId, closeness_val] : closeness_centrality) {
-        fout << nodeId << ' ' << closeness_val << '\n';
+    writeMap(graph_name + "_Closeness.txt", closeness_centrality);
+    if (directed) {
+        writeMap(graph_name + "_InboundCloseness.txt", inbound_closeness_centrality);
     }
     return true;
 }
@@ -101,8 +114,13 @@ void ClosenessCentrality::writeToHTMLStat(FILE *fp, bool directed) {
                 Closeness Centrality Statistics\
             </h2>\
             <h3>\
-                <p> max closeness centrality value = %lf at ID = %lld </p>\
-            </h3>",
+                <p> max closeness centrality value = %lf at ID = %lld </p>",
             max_closeness_centrality, max_closeness_centrality_id);
+    if (directed) {
+        fprintf(fp,
+                "<p> max inbound closeness centrality value = %lf at ID = %lld </p>",
+                max_inbound_closeness_centrality, max_inbound_closeness_centrality_id);
+    }
+    fprintf(fp, "</h3>");
 }
 }  // namespace snu
