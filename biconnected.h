@@ -10,11 +10,13 @@ class BiconnectedComponents : public UndirectedStat {
     virtual std::string statName() override;
 
    protected:
-    virtual bool calculateUndirectedStat(USGraph &graph) override;
+    virtual bool calculateUndirectedStat(USGraph &graph, bool verify) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
 
    private:
     void countBcc(USGraph &graph);
+    void resetVisited(USGraph &graph); // reset visited
+    bool verifyArticulationPoints(USGraph &graph); // for verification, O(V^2)
 
     long long num_arp;       // number of articulation points
     long long num_bcc;       // number of biconnected components

@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     bool directed = false;     // suppose given graph is undirected.
     bool file_output = false;  // default: skip output of detailed files
     bool display_time = true;  // always: show time statistics
+    bool verify = false;       // verify results (default: skip verification)
 
     while (true) {
         static struct option long_options[] = {
@@ -31,9 +32,11 @@ int main(int argc, char *argv[]) {
             {"undirected", 0, NULL, 'u'},
             {"help", 0, NULL, 'h'},
             {"file_output", 0, NULL, 'f'},
-            {0, 0, 0, 0}};
+            {"verify", 0, NULL, 'v'},
+            {0, 0, 0, 0}
+        };
 
-        int option = getopt_long(argc, argv, "duhf", long_options, NULL);
+        int option = getopt_long(argc, argv, "duhfv", long_options, NULL);
 
         if (option < 0) {
             break;
@@ -50,6 +53,10 @@ int main(int argc, char *argv[]) {
 
             case 'f':
                 file_output = true;
+                break;
+
+            case 'v':
+                verify = true;
                 break;
 
             case 'h':
@@ -125,7 +132,7 @@ int main(int argc, char *argv[]) {
     };
 
     // run all stats using the graph
-    auto analyzer = snu::StatAnalyzer(graph_name, graph_shptr, file_output, display_time);
+    auto analyzer = snu::StatAnalyzer(graph_name, graph_shptr, file_output, display_time, verify);
     analyzer.addCommonStats(common_stats);
     analyzer.addDirectedStats(directed_only_stats);
     analyzer.addUndirectedStats(undirected_only_stats);

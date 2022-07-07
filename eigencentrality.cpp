@@ -7,7 +7,7 @@ std::string EigenCentrality::statName() {
     return "EigenCentrality";
 }
 
-bool EigenCentrality::calculateStat(Graph &graph) {
+bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
     std::vector<double> probv;
     probv.resize(graph.V);
 
@@ -46,7 +46,7 @@ bool EigenCentrality::calculateStat(Graph &graph) {
         }
     }
 
-    return true;
+    return eigencentrality_converged && pagerank_converged;
 }
 
 void EigenCentrality::writeToHTMLStat(FILE *fp, bool directed) {

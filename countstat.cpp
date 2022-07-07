@@ -7,7 +7,7 @@ std::string CountStat::statName() {
     return "CountStat";
 }
 
-bool CountStat::calculateUndirectedStat(USGraph &graph) {
+bool CountStat::calculateUndirectedStat(USGraph &graph, bool verify) {
     unsigned long long s = 0;
     unsigned long long z = 0;
 

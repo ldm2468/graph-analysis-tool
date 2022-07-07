@@ -21,7 +21,8 @@ static VertexMetadata *getMetadata(Graph::Vertex *v) {
     return (VertexMetadata *)v->temp;
 }
 
-bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph) {
+bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph, bool verify) {
+    bool success = true;
     for (auto &pair : graph.id_to_vertex) {
         pair.second->temp = new VertexMetadata();
     }
@@ -43,10 +44,15 @@ bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph) {
         }
     }
 
+    if (verify) {
+        success = verifyArticulationPoints(graph);
+    }
+
     for (auto &pair : graph.id_to_vertex) {
         delete getMetadata(pair.second);
     }
-    return true;
+
+    return success;
 }
 
 void BiconnectedComponents::writeToHTMLStat(FILE *fp, bool directed) {
@@ -130,5 +136,63 @@ void BiconnectedComponents::countBcc(USGraph &graph) {
             }
         }
     }
+}
+
+void BiconnectedComponents::resetVisited(USGraph &graph) {
+    for (auto &pair : graph.id_to_vertex) {
+        getMetadata(pair.second)->visited = false;
+    }
+}
+
+// verify that the articulation points are correct, O(V^2) (slow!)
+bool BiconnectedComponents::verifyArticulationPoints(USGraph &graph) {
+    // assume metadata is properly initialized
+
+    std::vector<Graph::Vertex *> dfs_stack;
+
+    for (auto &pair : graph.id_to_vertex) {
+        Graph::Vertex *root = pair.second;
+        VertexMetadata *root_meta = getMetadata(root);
+        if (root->edges.empty()) {
+            continue; // do not consider non-connected vertices as of now
+        }
+        // perform dfs on each vertex connected to the root
+        resetVisited(graph);
+        dfs_stack.clear();
+        root_meta->visited = true;
+
+        long long true_bcc_count = 0;
+        for (auto &root_edge : root->edges) {
+            Graph::Vertex *root_vertex = root_edge->to == root ? root_edge->from : root_edge->to;
+            VertexMetadata *rv_meta = getMetadata(root_vertex);
+            if (rv_meta->visited) { // already visited from a previous bcc probe
+                continue;
+            } else {
+                true_bcc_count++;
+                // perform dfs on the vertex
+                dfs_stack.push_back(root_vertex);
+                while (!dfs_stack.empty()) {
+                    Graph::Vertex *v = dfs_stack.back();
+                    dfs_stack.pop_back();
+
+                    VertexMetadata *meta = getMetadata(v);
+                    meta->visited = true;
+
+                    for (auto &e : v->edges) {
+                        Graph::Vertex *to = e->to == v ? e->from : e->to;
+                        VertexMetadata *to_meta = getMetadata(to);
+                        if (!to_meta->visited) {
+                            dfs_stack.push_back(to);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (true_bcc_count != root_meta->num_connected_bcc) {
+            return false;
+        }
+    }
+    return true;
 }
 }  // namespace snu

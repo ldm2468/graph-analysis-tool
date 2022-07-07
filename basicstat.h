@@ -12,7 +12,7 @@ class BasicStat : public CommonStat {
     virtual std::string statName() override;
 
    protected:
-    virtual bool calculateStat(Graph &graph) override;
+    virtual bool calculateStat(Graph &graph, bool verify) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
 
    private:
