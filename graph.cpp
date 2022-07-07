@@ -101,13 +101,30 @@ int Graph::addDirectedEdge(Eid id, long long num, Elabel label[], Vid from, Vid 
     return 0;
 }
 
-int DSGraph::parseGraph(std::string file_path) {
-    return parseDSGraph(file_path, *this);
+void Graph::finalize() {
+    V = id_to_vertex.size();
+    E = id_to_edge.size();
+
+    vid_order.reserve(V);
+    vertices.reserve(V);
+
+    for (auto& pair: id_to_vertex) {
+        vid_order.push_back(pair.first);
+        vertices.push_back(pair.second);
+    }
+
+    for (size_t i = 0; i < V; i++) {
+        id_to_vertex[vid_order[i]]->order = i;
+    }
 }
 
 // array version
 int DSGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) {
     return addDirectedEdge(id, num, label, from, to, weight);
+}
+
+int DSGraph::parseGraph(std::string file_path) {
+    return parseDSGraph(file_path, *this);
 }
 
 // vector version
@@ -129,7 +146,7 @@ int USGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, We
     e->to->edges.push_back(e);
     e->from->indegree++;
     is_connected.insert(std::make_pair(to, from));  // insert reverse
-                                                    // be careful of switching from and to in this case
+    // be careful of switching from and to in this case
 
     return 0;
 }

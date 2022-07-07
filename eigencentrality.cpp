@@ -8,40 +8,41 @@ std::string EigenCentrality::statName() {
 }
 
 bool EigenCentrality::calculateStat(Graph &graph) {
-    int n = (int)graph.id_to_vertex.size();
-    std::unordered_map<Graph::Vid, double> prob;
-    if ((max_eigenvalue = calcEigenCentrality(graph, prob)) >= 1E-12) {
-        normalizeProb(n, prob);
+    std::vector<double> probv;
+    probv.resize(graph.V);
+
+    if ((max_eigenvalue = calcEigenCentrality(graph, probv)) >= 1E-12) {
+        normalizeProb((double) graph.V, probv);
         eigencentrality_converged = true;
         max_eigencentrality = 0;
-        for (auto &pair : graph.id_to_vertex) {
-            if (prob[pair.first] > max_eigencentrality) {
-                max_eigencentrality = prob[pair.first];
-                max_eigencentrality_id = pair.first;
+        for (size_t i = 0; i < graph.V; i++) {
+            if (probv[i] > max_eigencentrality) {
+                max_eigencentrality = probv[i];
+                max_eigencentrality_id = graph.vid_order[i];
             }
         }
     }
 
-    if (calcPageRank(graph, prob)) {
-        normalizeProb(n, prob);
+    if (calcPageRank(graph, probv)) {
+        normalizeProb((double) graph.V, probv);
         pagerank_converged = true;
         max_pagerank = 0;
-        for (auto &pair : graph.id_to_vertex) {
-            if (prob[pair.first] > max_pagerank) {
-                max_pagerank = prob[pair.first];
-                max_pagerank_id = pair.first;
+        for (size_t i = 0; i < graph.V; i++) {
+            if (probv[i] > max_pagerank) {
+                max_pagerank = probv[i];
+                max_pagerank_id = graph.vid_order[i];
             }
         }
     }
 
-    calcKatzCentrality(graph, prob, max_eigenvalue);
-    normalizeProb(n, prob);
+    calcKatzCentrality(graph, probv, max_eigenvalue);
+    normalizeProb((double) graph.V, probv);
     katz_centrality_computed = true;
     max_katz_centrality = 0;
-    for (auto &pair : graph.id_to_vertex) {
-        if (prob[pair.first] > max_katz_centrality) {
-            max_katz_centrality = prob[pair.first];
-            max_katz_centrality_id = pair.first;
+    for (size_t i = 0; i < graph.V; i++) {
+        if (probv[i] > max_katz_centrality) {
+            max_katz_centrality = probv[i];
+            max_katz_centrality_id = graph.vid_order[i];
         }
     }
 
@@ -51,11 +52,11 @@ bool EigenCentrality::calculateStat(Graph &graph) {
 void EigenCentrality::writeToHTMLStat(FILE *fp, bool directed) {
     fprintf(fp,
             "\
-                <h2>\
-                    Eigenvector Centrality Statistics\
-                </h2>\
-                <h3>\
-                <p> max eigenvalue = %lf</p>",
+            <h2>\
+                Eigenvector Centrality Statistics\
+            </h2>\
+            <h3>\
+            <p> max eigenvalue = %lf</p>",
             max_eigenvalue);
     if (eigencentrality_converged) {
         fprintf(fp, "<p> max eigenvector centrality value = %lf at ID = %lld </p>",
@@ -76,22 +77,21 @@ void EigenCentrality::writeToHTMLStat(FILE *fp, bool directed) {
     fprintf(fp, "</h3>");
 }
 
-void EigenCentrality::normalizeProb(int n, std::unordered_map<Graph::Vid, double> &prob) {
+void EigenCentrality::normalizeProb(double n, std::vector<double> &probv) {
     double sum = 0;
-    for (auto &pair : prob) {
-        sum += pair.second;
+    for (double p: probv) {
+        sum += p;
     }
-    for (auto &pair : prob) {
-        pair.second *= n / sum;
+    for (double& p: probv) {
+        p *= n / sum;
     }
 }
 
-bool EigenCentrality::calcPageRank(Graph &graph, std::unordered_map<Graph::Vid, double> &prob) {
-    std::unordered_map<Graph::Eid, double> mul;  // matrix multiplication result
+bool EigenCentrality::calcPageRank(Graph &graph, std::vector<double> &probv) {
+    std::vector<double> mulv;
+    mulv.resize(graph.V);
 
-    for (auto &pair : graph.id_to_vertex) {
-        prob[pair.second->id] = 1;
-    }
+    std::fill(probv.begin(), probv.end(), 1);
 
     bool not_finished = true;
     int iterations = 0;
@@ -99,59 +99,53 @@ bool EigenCentrality::calcPageRank(Graph &graph, std::unordered_map<Graph::Vid, 
     while (not_finished && iterations < MAX_ITERATIONS) {
         iterations++;
         not_finished = false;
-        for (auto &pair : graph.id_to_vertex) {
-            mul[pair.first] = 0;  // prepare matrix multiplication result
-        }
-        for (auto &pair : graph.id_to_vertex) {
-            auto g = pair.second;
+        std::fill(mulv.begin(), mulv.end(), 0); // prepare matrix multiplication result
+        for (size_t i = 0; i < graph.V; i++) {
+            auto g = graph.vertices[i];
             if (!g->edges.empty()) {
-                double w = 1. / (double)g->edges.size();
-                for (auto &edge : g->edges) {
+                double w = 1. / (double) g->edges.size();
+                for (auto& edge: g->edges) {
                     auto to = edge->to == g ? edge->from : edge->to;
-                    mul[to->id] += w * prob[g->id];
+                    mulv[to->order] += w * probv[g->order];
                 }
             }
         }
-        for (auto &pair : graph.id_to_vertex) {
-            double next = damper + PAGERANK_DAMPING_FACTOR * mul[pair.first];
-            if (std::abs(next - prob[pair.first]) > CONVERGENCE_TEST) {
+        for (size_t i = 0; i < graph.V; i++) {
+            double next = damper + PAGERANK_DAMPING_FACTOR * mulv[i];
+            if (std::abs(next - probv[i]) > CONVERGENCE_TEST) {
                 not_finished = true;
             }
-            prob[pair.first] = next;
+            probv[i] = next;
         }
     }
 
     return !not_finished;
 }
 
-double EigenCentrality::calcEigenCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob) {
-    std::unordered_map<Graph::Vid, double> mul;
+double EigenCentrality::calcEigenCentrality(Graph &graph, std::vector<double> &probv) {
+    std::vector<double> mulv;
+    mulv.resize(graph.V);
     double eigenvalue;
 
-    for (auto &pair : graph.id_to_vertex) {
-        prob[pair.second->id] = 1;
-    }
+    std::fill(probv.begin(), probv.end(), 1);
 
     bool not_finished = true;
     int iterations = 0;
     while (not_finished && iterations < MAX_ITERATIONS) {
         iterations++;
         not_finished = false;
-        for (auto &pair : graph.id_to_vertex) {
-            mul[pair.first] = 0;  // prepare matrix multiplication result
-        }
-        for (auto &pair : graph.id_to_vertex) {
-            auto g = pair.second;
+        std::fill(mulv.begin(), mulv.end(), 0); // prepare matrix multiplication result
+        for (size_t i = 0; i < graph.V; i++) {
+            auto g = graph.vertices[i];
             if (!g->edges.empty()) {
-                for (auto &edge : g->edges) {
+                for (auto& edge: g->edges) {
                     auto to = edge->to == g ? edge->from : edge->to;
-                    mul[to->id] += prob[g->id];
+                    mulv[to->order] += probv[g->order];
                 }
             }
         }
         eigenvalue = 0;
-        for (auto &pair : graph.id_to_vertex) {
-            double m = mul[pair.first];
+        for (double m: mulv) {
             eigenvalue += m * m;
         }
         eigenvalue = std::sqrt(eigenvalue);
@@ -159,44 +153,40 @@ double EigenCentrality::calcEigenCentrality(Graph &graph, std::unordered_map<Gra
             eigenvalue = 0;
             break;
         }
-        for (auto &pair : graph.id_to_vertex) {
-            double next = mul[pair.first] / eigenvalue;
-            if (std::abs(prob[pair.first] - next) > CONVERGENCE_TEST) {
+        for (size_t i = 0; i < graph.V; i++) {
+            double next = mulv[i] / eigenvalue;
+            if (std::abs(probv[i] - next) > CONVERGENCE_TEST) {
                 not_finished = true;
             }
-            prob[pair.first] = next;
+            probv[i] = next;
         }
     }
 
     return eigenvalue;
 }
 
-void EigenCentrality::calcKatzCentrality(Graph &graph, std::unordered_map<Graph::Vid, double> &prob, double eigenvalue) {
-    std::unordered_map<Graph::Vid, double> pow, tmp;
+void EigenCentrality::calcKatzCentrality(Graph &graph, std::vector<double> &probv, double eigenvalue) {
+    std::vector<double> powv, tmpv;
+    powv.resize(graph.V, 1);
+    tmpv.resize(graph.V);
 
     double att = eigenvalue <= 0 ? 0.8 : std::min(1. / eigenvalue, 1.) * 0.8;
 
-    for (auto &pair : graph.id_to_vertex) {
-        pow[pair.first] = 1;
-    }
-
     for (int it = 0; it < KATZ_ITERATIONS; it++) {
-        for (auto &pair : graph.id_to_vertex) {
-            tmp[pair.first] = 0;
-        }
-        for (auto &pair : graph.id_to_vertex) {
-            auto g = pair.second;
+        std::fill(tmpv.begin(), tmpv.end(), 0);
+        for (size_t i = 0; i < graph.V; i++) {
+            auto g = graph.vertices[i];
             if (!g->edges.empty()) {
-                for (auto &edge : g->edges) {
+                for (auto& edge: g->edges) {
                     auto to = edge->to == g ? edge->from : edge->to;
-                    tmp[to->id] += pow[g->id] * att;
+                    tmpv[to->order] += powv[g->order] * att;
                 }
             }
         }
-        pow = tmp;
+        std::swap(powv, tmpv);
 
-        for (auto &pair : graph.id_to_vertex) {
-            prob[pair.first] += pow[pair.first];
+        for (size_t i = 0; i < graph.V; i++) {
+            probv[i] += powv[i];
         }
     }
 }

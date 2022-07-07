@@ -15,7 +15,7 @@ class DSGraph;  // directed simple graph
 class USGraph;  // undirected simple graph
 
 class Graph {
-   public:
+public:
     typedef long long Vid;       // vertex id
     typedef long long Eid;       // edge id
     typedef std::string Vlabel;  // vertex label
@@ -28,8 +28,9 @@ class Graph {
     class LabelOfEdges;
 
     class Vertex {
-       public:
+    public:
         Vid id;
+        size_t order;
         std::list<LabelOfVertices *> labels;
         std::list<Edge *> edges;
         long long indegree;
@@ -37,7 +38,7 @@ class Graph {
     };
 
     class Edge {
-       public:
+    public:
         Eid id;
         std::list<LabelOfEdges *> labels;
         Vertex *from;  // In case of undirected graphs, there is no difference between from and to.
@@ -46,13 +47,13 @@ class Graph {
     };
 
     class LabelOfVertices {
-       public:
+    public:
         Vlabel label;
         std::list<Vertex *> vertices;
     };
 
     class LabelOfEdges {
-       public:
+    public:
         Elabel label;
         std::list<Edge *> edges;
     };
@@ -62,6 +63,12 @@ class Graph {
 
     std::unordered_map<Vlabel, LabelOfVertices *> vlabel_to_class;
     std::unordered_map<Elabel, LabelOfEdges *> elabel_to_class;
+
+    // faster access data structures
+    std::vector<Vid> vid_order;
+    std::vector<Vertex *> vertices;
+
+    size_t V, E; // number of vertices / edges
 
     struct pair_hash {
         inline unsigned long long operator()(const std::pair<Vid, Vid> &v) const {
@@ -90,11 +97,15 @@ class Graph {
     // if error occurs, then return 1
     virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) = 0;
     int addDirectedEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight);  // array version
+
+    // finalize graph
+    // call only once after graph is generated
+    void finalize();
 };
 
 // directed simple graph
 class DSGraph : public Graph {
-   public:
+public:
     virtual int parseGraph(std::string file_path) override;
     virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) override;  // array version
     int addEdge(Eid id, std::vector<Elabel> *label, Vid from, Vid to, Weight weight);                      // vector version
@@ -102,7 +113,7 @@ class DSGraph : public Graph {
 
 // undirected simple graph
 class USGraph : public Graph {
-   public:
+public:
     virtual int parseGraph(std::string file_path) override;
     virtual int addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) override;  // array version
     int addEdge(Eid id, std::vector<Elabel> *label, Vid from, Vid to, Weight weight);                      // vector version

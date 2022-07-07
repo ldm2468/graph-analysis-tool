@@ -20,28 +20,28 @@ std::shared_ptr<Graph> parseFile(std::string input_path, bool directed) {
 
     int parse_status = graph.parseGraph(input_path);
     switch (parse_status) {
-        case snu::PARSE_SUCCESS:
-            break;
+    case snu::PARSE_SUCCESS:
+        break;
 
-        case snu::PARSE_FAILURE_NO_INPUT:
-            fprintf(stderr, "input file is not locatable.\n");
-            return nullptr;
+    case snu::PARSE_FAILURE_NO_INPUT:
+        fprintf(stderr, "input file is not locatable.\n");
+        return nullptr;
 
-        case snu::PARSE_FAILURE_INVALID_INPUT:
-            fprintf(stderr, "input data is invalid.\n");
-            return nullptr;
+    case snu::PARSE_FAILURE_INVALID_INPUT:
+        fprintf(stderr, "input data is invalid.\n");
+        return nullptr;
 
-        case snu::PARSE_FAILURE_INVALID_FILETYPE:
-            fprintf(stderr, "this filetype is not supported.\n");
-            return nullptr;
+    case snu::PARSE_FAILURE_INVALID_FILETYPE:
+        fprintf(stderr, "this filetype is not supported.\n");
+        return nullptr;
 
-        case snu::PARSE_FAILURE_ADD_VERTEX:
-        case snu::PARSE_FAILURE_ADD_EDGE:
-            fprintf(stderr, "internal error\n");
-            return nullptr;
+    case snu::PARSE_FAILURE_ADD_VERTEX:
+    case snu::PARSE_FAILURE_ADD_EDGE:
+        fprintf(stderr, "internal error\n");
+        return nullptr;
 
-        default:
-            return nullptr;
+    default:
+        return nullptr;
     }
     return graph_shptr;
 }
@@ -95,6 +95,7 @@ int parseDSGraphSNU(std::string file_path, DSGraph &graph) {
         }
     }
 
+    graph.finalize();
     return PARSE_SUCCESS;
 }
 
@@ -159,6 +160,7 @@ int parseDSGraphNET(std::string file_path, DSGraph &graph) {
         }
     }
 
+    graph.finalize();
     return PARSE_SUCCESS;
 }
 
@@ -202,6 +204,7 @@ int parseDSGraphSNAP(std::string file_path, DSGraph &graph) {
         ++eid;
     }
 
+    graph.finalize();
     return PARSE_SUCCESS;
 }
 
@@ -264,6 +267,7 @@ int parseUSGraphSNU(std::string file_path, USGraph &graph) {
         }
     }
 
+    graph.finalize();
     return PARSE_SUCCESS;
 }
 
@@ -307,6 +311,7 @@ int parseUSGraphSNAP(std::string file_path, USGraph &graph) {
         ++eid;
     }
 
+    graph.finalize();
     return PARSE_SUCCESS;
 }
 
