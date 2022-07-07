@@ -183,7 +183,8 @@ void usage(void) {
     printf("  options:\n");
     printf("   -d | --directed       set graph directed\n");
     printf("   -u | --undirected     set graph undirected (default)\n");
-    printf("   -f | --file_output    output centrality details as seperate files\n");
+    printf("   -f | --file_output    output centrality details as separate files\n");
+    printf("   -v | --verify         verify correctness of results (slower)\n");
     printf("   -h | --help           print this list of help\n");
     printf("\n");
     printf("   e.g. ./main some_path/some_graph.snap --directed\n");
