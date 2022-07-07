@@ -14,7 +14,7 @@ std::string ClosenessCentrality::statName() {
     return "ClosenessCentrality";
 }
 
-bool ClosenessCentrality::calculateStat(Graph &graph) {
+bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
     const auto &vertices = graph.id_to_vertex;
     int V = vertices.size();
     int sample_sz = std::min(V, MAX_CLOSENESS_SAMPLE_SZ);

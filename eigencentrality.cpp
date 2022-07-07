@@ -7,7 +7,7 @@ std::string EigenCentrality::statName() {
     return "EigenCentrality";
 }
 
-bool EigenCentrality::calculateStat(Graph &graph) {
+bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
     std::vector<double> probv;
     probv.resize(graph.V);
 

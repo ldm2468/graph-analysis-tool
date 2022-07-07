@@ -13,7 +13,7 @@ std::string BetweennessCentrality::statName() {
     return "BetweennessCentrality";
 }
 
-bool BetweennessCentrality::calculateStat(Graph &graph) {
+bool BetweennessCentrality::calculateStat(Graph &graph, bool verify) {
     const auto &vertices = graph.id_to_vertex;
     int V = vertices.size();
     int sample_sz = std::min(V, MAX_BETWEENNESS_SAMPLE_SZ);

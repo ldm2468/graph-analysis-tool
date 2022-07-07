@@ -5,7 +5,7 @@ std::string BasicStat::statName() {
     return "BasicStat";
 }
 
-bool BasicStat::calculateStat(Graph &graph) {
+bool BasicStat::calculateStat(Graph &graph, bool verify) {
     const DSGraph *dsgraph = dynamic_cast<const DSGraph *>(&graph);
     const USGraph *usgraph = dynamic_cast<const USGraph *>(&graph);
 

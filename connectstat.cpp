@@ -208,7 +208,7 @@ std::string ConnectStat::statName() {
     return "ConnectStat";
 }
 
-bool ConnectStat::calculateStat(Graph &graph) {
+bool ConnectStat::calculateStat(Graph &graph, bool verify) {
     DSGraph *dsgraph = dynamic_cast<DSGraph *>(&graph);
     USGraph *usgraph = dynamic_cast<USGraph *>(&graph);
 

@@ -21,7 +21,7 @@ static VertexMetadata *getMetadata(Graph::Vertex *v) {
     return (VertexMetadata *)v->temp;
 }
 
-bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph) {
+bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph, bool verify) {
     for (auto &pair : graph.id_to_vertex) {
         pair.second->temp = new VertexMetadata();
     }

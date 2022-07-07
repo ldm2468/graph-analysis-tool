@@ -58,7 +58,7 @@
 
 namespace snu {
 class Stat {
-   public:
+public:
     // Name of the stat used for filenames, logs ...
     virtual std::string statName() = 0;
 
@@ -80,7 +80,7 @@ class Stat {
     // - Implemented in derived classes.
     // bool calculate(Graph &graph)
 
-   protected:
+protected:
     // Override this function to set behaviour of 'writeToHTML(...)'
     virtual void writeToHTMLStat(FILE *fp, bool directed) = 0;
 
@@ -91,37 +91,40 @@ class Stat {
 
 // stats that apply to both USGraph and DSGraph
 class CommonStat : public Stat {
-   public:
+public:
     // Analyze the graph and store the results.
-    // return value: true on success
-    bool calculate(Graph &graph);
+    // param verify: whether to check the results
+    // return value: true on success (if verification is enabled, true if verification passes)
+    bool calculate(Graph &graph, bool verify);
 
-   protected:
+protected:
     // Override this function to set behaviour of 'calculate(...)'
-    virtual bool calculateStat(Graph &graph) = 0;
+    virtual bool calculateStat(Graph &graph, bool verify) = 0;
 };
 
 // stats that apply to only DSGraph
 class DirectedStat : public Stat {
-   public:
+public:
     // Analyze the graph and store the results.
-    // return value: true on success
-    bool calculateDirected(DSGraph &graph);
+    // param verify: whether to check the results
+    // return value: true on success (if verification is enabled, true if verification passes)
+    bool calculateDirected(DSGraph &graph, bool verify);
 
-   protected:
+protected:
     // Override this function to set behaviour of 'calculateDirected(...)'
-    virtual bool calculateDirectedStat(DSGraph &graph) = 0;
+    virtual bool calculateDirectedStat(DSGraph &graph, bool verify) = 0;
 };
 
 class UndirectedStat : public Stat {
-   public:
+public:
     // Analyze the graph and store the results.
-    // return value: true on success
-    bool calculateUndirected(USGraph &graph);
+    // param verify: whether to check the results
+    // return value: true on success (if verification is enabled, true if verification passes)
+    bool calculateUndirected(USGraph &graph, bool verify);
 
-   protected:
+protected:
     // Override this function to set behaviour of 'calculateUndirected(...)'
-    virtual bool calculateUndirectedStat(USGraph &graph) = 0;
+    virtual bool calculateUndirectedStat(USGraph &graph, bool verify) = 0;
 };
 }  // namespace snu
 

@@ -19,8 +19,9 @@ static void printElapsedTime(const char *msg, T &t) {
 StatAnalyzer::StatAnalyzer(std::string _graph_name,
                            std::shared_ptr<Graph> _graph_shptr,
                            bool _file_output,
-                           bool _display_time)
-    : graph_name(_graph_name), graph_shptr(_graph_shptr), file_output(_file_output), display_time(_display_time) {
+                           bool _display_time,
+                           bool _verify)
+    : graph_name(_graph_name), graph_shptr(_graph_shptr), file_output(_file_output), display_time(_display_time), verify(_verify) {
 }
 
 bool StatAnalyzer::run() {
@@ -46,21 +47,21 @@ bool StatAnalyzer::run() {
 
     // calculate common stats
     for (auto commonStat : common_stats) {
-        commonStat->calculate(graph);
+        commonStat->calculate(graph, verify);
         printElapsedTime(commonStat->statName().c_str(), t);
     }
 
     // calculate directed stats
     if (directed) {
         for (auto dirStat : directed_only_stats) {
-            dirStat->calculateDirected(*dsgraph_ptr);
+            dirStat->calculateDirected(*dsgraph_ptr, verify);
             printElapsedTime(dirStat->statName().c_str(), t);
         }
     }
     // calculate undirected stats
     else {
         for (auto undirStat : undirected_only_stats) {
-            undirStat->calculateUndirected(*usgraph_ptr);
+            undirStat->calculateUndirected(*usgraph_ptr, verify);
             printElapsedTime(undirStat->statName().c_str(), t);
         }
     }

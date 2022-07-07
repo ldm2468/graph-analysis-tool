@@ -10,7 +10,7 @@ class BiconnectedComponents : public UndirectedStat {
     virtual std::string statName() override;
 
    protected:
-    virtual bool calculateUndirectedStat(USGraph &graph) override;
+    virtual bool calculateUndirectedStat(USGraph &graph, bool verify) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
 
    private:
