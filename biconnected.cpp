@@ -1,6 +1,7 @@
 #include "biconnected.h"
 
 #include <stack>
+#include <fstream>
 
 namespace snu {
 std::string BiconnectedComponents::statName() {
@@ -36,6 +37,7 @@ bool BiconnectedComponents::calculateUndirectedStat(USGraph &graph, bool verify)
     max_conn_bcc = 0;
     for (auto &pair : graph.id_to_vertex) {
         long long cbcc = getMetadata(pair.second)->num_connected_bcc;
+        connected_bcc[pair.first] = cbcc;
         if (cbcc > 1) {
             num_arp++;
             if (cbcc > max_conn_bcc) {
@@ -69,6 +71,14 @@ void BiconnectedComponents::writeToHTMLStat(FILE *fp, bool directed) {
             </h3>\
             ",
             num_arp, num_bcc, size_lbcc, max_conn_bcc);
+}
+
+bool BiconnectedComponents::writeToFileStat(std::string graph_name, bool directed) {
+    std::ofstream fout(graph_name + "_Biconnected.txt");
+    for (auto [nodeId, val] : connected_bcc) {
+        fout << nodeId << ' ' << val << '\n';
+    }
+    return true;
 }
 
 // This is the algorithm presented by Hopcroft and Tarjan (1973).

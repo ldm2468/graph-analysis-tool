@@ -1,6 +1,7 @@
 #ifndef BICONNECTED_H
 #define BICONNECTED_H
 
+#include <map>
 #include "graph.h"
 #include "stat.h"
 
@@ -12,6 +13,7 @@ class BiconnectedComponents : public UndirectedStat {
    protected:
     virtual bool calculateUndirectedStat(USGraph &graph, bool verify) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
+    virtual bool writeToFileStat(std::string graph_name, bool directed) override;
 
    private:
     void countBcc(USGraph &graph);
@@ -22,6 +24,8 @@ class BiconnectedComponents : public UndirectedStat {
     long long num_bcc;       // number of biconnected components
     long long max_conn_bcc;  // maximum number of bcc's connected to a single arp
     long long size_lbcc;     // largest size of biconnected components
+
+    std::map<Graph::Vid, long long> connected_bcc;
 };
 }  // namespace snu
 
