@@ -14,7 +14,7 @@ std::string ClosenessCentrality::statName() {
     return "ClosenessCentrality";
 }
 
-bool ClosenessCentrality::calculate(Graph &graph, bool inbound,
+bool ClosenessCentrality::calculate(Graph &graph, bool outbound,
                                     std::map<Graph::Vid, double> &cc, double &max, long long &max_id) {
 
     const auto &vertices = graph.id_to_vertex;
@@ -27,7 +27,7 @@ bool ClosenessCentrality::calculate(Graph &graph, bool inbound,
 
     std::map<Graph::Vid, int64_t> dist_sum;
     for (auto vid : samples) {
-        auto dist = dijkstra(graph, vid.second, inbound);
+        auto dist = dijkstra(graph, vid.second, outbound);
         // if ((int)dist.size() != V) return false; // disconnected graph
 
         for (auto p : dist) {
@@ -62,12 +62,12 @@ bool ClosenessCentrality::calculate(Graph &graph, bool inbound,
 
 bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
     return calculate(graph, false, closeness_centrality, max_closeness_centrality, max_closeness_centrality_id) &&
-        calculate(graph, true, inbound_closeness_centrality, max_inbound_closeness_centrality,
-                  max_inbound_closeness_centrality_id);
+        calculate(graph, true, outbound_closeness_centrality, max_outbound_closeness_centrality,
+                  max_outbound_closeness_centrality_id);
 }
 
 // calculates single-source shortest-path for all nodes connected to start.
-std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, Graph::Vertex *start, bool inbound) {
+std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, Graph::Vertex *start, bool outbound) {
     std::map<Graph::Vid, int64_t> dist;
 
     typedef std::pair<int64_t, Graph::Vertex *> elem;
@@ -82,7 +82,9 @@ std::map<Graph::Vid, int64_t> ClosenessCentrality::dijkstra(const Graph &graph, 
         auto V = cur.second;
         if (!dist.count(V->id)) {
             dist[V->id] = cur_dist;
-            for (const auto &edge : (inbound ? V->inbound_edges : V->edges)) {
+            // this may be confusing, but note that the sampling is done in *reverse*
+            // (from the viewpoint of the destination, not the source)
+            for (const auto &edge : (outbound ? V->inbound_edges : V->edges)) {
                 auto next_dist = cur_dist + edge->weight;
                 auto to = edge->to == V ? edge->from : edge->to;
                 pq.emplace(next_dist, to);
@@ -102,7 +104,7 @@ void ClosenessCentrality::writeMap(std::string fname, std::map<Graph::Vid, doubl
 bool ClosenessCentrality::writeToFileStat(std::string graph_name, bool directed) {
     writeMap(graph_name + "_Closeness.txt", closeness_centrality);
     if (directed) {
-        writeMap(graph_name + "_InboundCloseness.txt", inbound_closeness_centrality);
+        writeMap(graph_name + "_OutboundCloseness.txt", outbound_closeness_centrality);
     }
     return true;
 }
@@ -118,8 +120,8 @@ void ClosenessCentrality::writeToHTMLStat(FILE *fp, bool directed) {
             max_closeness_centrality, max_closeness_centrality_id);
     if (directed) {
         fprintf(fp,
-                "<p> max inbound closeness centrality value = %lf at ID = %lld </p>",
-                max_inbound_closeness_centrality, max_inbound_closeness_centrality_id);
+                "<p> max outbound closeness centrality value = %lf at ID = %lld </p>",
+                max_outbound_closeness_centrality, max_outbound_closeness_centrality_id);
     }
     fprintf(fp, "</h3>");
 }
