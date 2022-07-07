@@ -47,21 +47,27 @@ bool StatAnalyzer::run() {
 
     // calculate common stats
     for (auto commonStat : common_stats) {
-        commonStat->calculate(graph, verify);
+        if (!commonStat->calculate(graph, verify)) {
+            printf("%s failed\n", commonStat->statName().c_str());
+        }
         printElapsedTime(commonStat->statName().c_str(), t);
     }
 
     // calculate directed stats
     if (directed) {
         for (auto dirStat : directed_only_stats) {
-            dirStat->calculateDirected(*dsgraph_ptr, verify);
+            if (!dirStat->calculateDirected(*dsgraph_ptr, verify)) {
+                printf("%s failed\n", dirStat->statName().c_str());
+            }
             printElapsedTime(dirStat->statName().c_str(), t);
         }
     }
     // calculate undirected stats
     else {
         for (auto undirStat : undirected_only_stats) {
-            undirStat->calculateUndirected(*usgraph_ptr, verify);
+            if (!undirStat->calculateUndirected(*usgraph_ptr, verify)) {
+                printf("%s failed\n", undirStat->statName().c_str());
+            }
             printElapsedTime(undirStat->statName().c_str(), t);
         }
     }
