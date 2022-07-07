@@ -3,17 +3,15 @@
 
 #include <string>
 
-namespace snu
-{
+namespace snu {
 
-  class Plot
-  {
-  public:
+class Plot {
+   public:
     std::string name;
     bool makeplot;
 
     Plot(std::string _name, bool _makeplot = false) : name(_name), makeplot(_makeplot) {}
-  };
-}
+};
+}  // namespace snu
 
-#endif // PLOT_H
+#endif  // PLOT_H

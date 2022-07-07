@@ -4,24 +4,22 @@
 #include "graph.h"
 #include "stat.h"
 
-namespace snu
-{
-  class CountStat : public UndirectedStat
-  {
-  public:
+namespace snu {
+class CountStat : public UndirectedStat {
+   public:
     virtual std::string statName() override;
 
-  protected:
+   protected:
     virtual bool calculateUndirectedStat(USGraph &graph) override;
     virtual void writeToHTMLStat(FILE *fp, bool directed) override;
 
-  private:
+   private:
     long long TriangleCount(std::vector<std::pair<long long, Graph::Vertex *>> &vec);
 
-    unsigned long long wedge_count;    // number of wedges
-    unsigned long long claw_count;     // number of claws
-    unsigned long long triangle_count; // number of triangles
-  };
-}
+    unsigned long long wedge_count;     // number of wedges
+    unsigned long long claw_count;      // number of claws
+    unsigned long long triangle_count;  // number of triangles
+};
+}  // namespace snu
 
-#endif // COUNTSTAT_H
+#endif  // COUNTSTAT_H

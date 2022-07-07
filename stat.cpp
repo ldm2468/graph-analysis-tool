@@ -1,45 +1,38 @@
 #include "stat.h"
 
-namespace snu
-{
+namespace snu {
 
-  bool Stat::getSuccess()
-  {
+bool Stat::getSuccess() {
     return success;
-  }
+}
 
-  void Stat::writeToHTML(FILE *fp, bool directed)
-  {
+void Stat::writeToHTML(FILE *fp, bool directed) {
     if (success)
-      writeToHTMLStat(fp, directed);
+        writeToHTMLStat(fp, directed);
     else
-      fprintf(stderr, "writeToHTML called on failed stat %s\n", statName().c_str());
-  }
+        fprintf(stderr, "writeToHTML called on failed stat %s\n", statName().c_str());
+}
 
-  bool Stat::writeToFile(std::string graph_name, bool directed)
-  {
+bool Stat::writeToFile(std::string graph_name, bool directed) {
     if (success)
-      return writeToFileStat(graph_name, directed);
+        return writeToFileStat(graph_name, directed);
     else
-      fprintf(stderr, "writeToFile called on failed stat %s\n", statName().c_str());
+        fprintf(stderr, "writeToFile called on failed stat %s\n", statName().c_str());
     return false;
-  }
+}
 
-  bool CommonStat::calculate(Graph &graph)
-  {
+bool CommonStat::calculate(Graph &graph) {
     success = calculateStat(graph);
     return success;
-  }
+}
 
-  bool DirectedStat::calculateDirected(DSGraph &graph)
-  {
+bool DirectedStat::calculateDirected(DSGraph &graph) {
     success = calculateDirectedStat(graph);
     return success;
-  }
+}
 
-  bool UndirectedStat::calculateUndirected(USGraph &graph)
-  {
+bool UndirectedStat::calculateUndirected(USGraph &graph) {
     success = calculateUndirectedStat(graph);
     return success;
-  }
 }
+}  // namespace snu

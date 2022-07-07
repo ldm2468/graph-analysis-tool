@@ -56,11 +56,9 @@
  *
  */
 
-namespace snu
-{
-  class Stat
-  {
-  public:
+namespace snu {
+class Stat {
+   public:
     // Name of the stat used for filenames, logs ...
     virtual std::string statName() = 0;
 
@@ -82,52 +80,49 @@ namespace snu
     // - Implemented in derived classes.
     // bool calculate(Graph &graph)
 
-  protected:
+   protected:
     // Override this function to set behaviour of 'writeToHTML(...)'
     virtual void writeToHTMLStat(FILE *fp, bool directed) = 0;
 
     // Override this function to set behaviour of 'writeToFile(...)'
     virtual bool writeToFileStat(std::string graph_name, bool directed) { return false; }
     bool success = false;
-  };
+};
 
-  // stats that apply to both USGraph and DSGraph
-  class CommonStat : public Stat
-  {
-  public:
+// stats that apply to both USGraph and DSGraph
+class CommonStat : public Stat {
+   public:
     // Analyze the graph and store the results.
     // return value: true on success
     bool calculate(Graph &graph);
 
-  protected:
+   protected:
     // Override this function to set behaviour of 'calculate(...)'
     virtual bool calculateStat(Graph &graph) = 0;
-  };
+};
 
-  // stats that apply to only DSGraph
-  class DirectedStat : public Stat
-  {
-  public:
+// stats that apply to only DSGraph
+class DirectedStat : public Stat {
+   public:
     // Analyze the graph and store the results.
     // return value: true on success
     bool calculateDirected(DSGraph &graph);
 
-  protected:
+   protected:
     // Override this function to set behaviour of 'calculateDirected(...)'
     virtual bool calculateDirectedStat(DSGraph &graph) = 0;
-  };
+};
 
-  class UndirectedStat : public Stat
-  {
-  public:
+class UndirectedStat : public Stat {
+   public:
     // Analyze the graph and store the results.
     // return value: true on success
     bool calculateUndirected(USGraph &graph);
 
-  protected:
+   protected:
     // Override this function to set behaviour of 'calculateUndirected(...)'
     virtual bool calculateUndirectedStat(USGraph &graph) = 0;
-  };
-}
+};
+}  // namespace snu
 
-#endif // STAT_H
+#endif  // STAT_H

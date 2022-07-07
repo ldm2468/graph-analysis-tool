@@ -1,24 +1,23 @@
 #include "makeplot.h"
-#include <fstream>
-#include <vector>
-#include <algorithm>
+
 #include <stdlib.h>
 
-namespace snu
-{
-  void makePlot(Graph &graph, Plot &plot)
-  {
+#include <algorithm>
+#include <fstream>
+#include <vector>
+
+namespace snu {
+void makePlot(Graph &graph, Plot &plot) {
     DSGraph *dsgraph = dynamic_cast<DSGraph *>(&graph);
     USGraph *usgraph = dynamic_cast<USGraph *>(&graph);
 
     if (dsgraph)
-      makeDSPlot(*dsgraph, plot);
+        makeDSPlot(*dsgraph, plot);
     else if (usgraph)
-      makeUSPlot(*usgraph, plot);
-  }
+        makeUSPlot(*usgraph, plot);
+}
 
-  void makeDSPlot(DSGraph &graph, Plot &plot)
-  {
+void makeDSPlot(DSGraph &graph, Plot &plot) {
     std::ofstream out;
 
     // label-vertex
@@ -28,17 +27,15 @@ namespace snu
     typedef std::pair<std::string *, long long> label_vertex;
     std::vector<label_vertex> lv;
     lv.reserve(n);
-    for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it)
-    {
-      auto vlabel = it->second;
-      lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
+    for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
+        auto vlabel = it->second;
+        lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
     }
 
-    std::sort(lv.begin(), lv.end(), [](label_vertex a, label_vertex b)
-              { return a.second > b.second; });
+    std::sort(lv.begin(), lv.end(), [](label_vertex a, label_vertex b) { return a.second > b.second; });
 
     for (auto it = lv.begin(); it != lv.end(); ++it)
-      out << *(it->first) << " " << it->second << std::endl;
+        out << *(it->first) << " " << it->second << std::endl;
 
     out.close();
 
@@ -51,11 +48,11 @@ namespace snu
     std::vector<long long> degree;
     degree.reserve(n);
     for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
-      degree.push_back((*it->second).indegree);
+        degree.push_back((*it->second).indegree);
 
     std::sort(degree.begin(), degree.end());
     for (auto it = degree.begin(); it != degree.end(); ++it)
-      out << *it << " ";
+        out << *it << " ";
 
     out.close();
 
@@ -68,11 +65,11 @@ namespace snu
     degree.clear();
     degree.reserve(n);
     for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
-      degree.push_back((*it->second).edges.size());
+        degree.push_back((*it->second).edges.size());
 
     std::sort(degree.begin(), degree.end());
     for (auto it = degree.begin(); it != degree.end(); ++it)
-      out << *it << " ";
+        out << *it << " ";
 
     out.close();
 
@@ -80,10 +77,9 @@ namespace snu
     system(cmd.c_str());
 
     plot.makeplot = true;
-  }
+}
 
-  void makeUSPlot(USGraph &graph, Plot &plot)
-  {
+void makeUSPlot(USGraph &graph, Plot &plot) {
     std::ofstream out;
 
     // label-vertex
@@ -93,17 +89,15 @@ namespace snu
     typedef std::pair<std::string *, long long> label_vertex;
     std::vector<label_vertex> lv;
     lv.reserve(n);
-    for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it)
-    {
-      auto vlabel = it->second;
-      lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
+    for (auto it = graph.vlabel_to_class.begin(); it != graph.vlabel_to_class.end(); ++it) {
+        auto vlabel = it->second;
+        lv.push_back(make_pair(&(vlabel->label), vlabel->vertices.size()));
     }
 
-    std::sort(lv.begin(), lv.end(), [](label_vertex a, label_vertex b)
-              { return a.second > b.second; });
+    std::sort(lv.begin(), lv.end(), [](label_vertex a, label_vertex b) { return a.second > b.second; });
 
     for (auto it = lv.begin(); it != lv.end(); ++it)
-      out << *(it->first) << " " << it->second << std::endl;
+        out << *(it->first) << " " << it->second << std::endl;
 
     out.close();
 
@@ -116,11 +110,11 @@ namespace snu
     std::vector<long long> degree;
     degree.reserve(n);
     for (auto it = graph.id_to_vertex.begin(); it != graph.id_to_vertex.end(); ++it)
-      degree.push_back((*it->second).indegree);
+        degree.push_back((*it->second).indegree);
 
     std::sort(degree.begin(), degree.end());
     for (auto it = degree.begin(); it != degree.end(); ++it)
-      out << *it << " ";
+        out << *it << " ";
 
     out.close();
 
@@ -129,5 +123,5 @@ namespace snu
 
     // pyplot
     plot.makeplot = true;
-  }
 }
+}  // namespace snu

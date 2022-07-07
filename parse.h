@@ -1,23 +1,23 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-#include "graph.h"
-#include <string>
 #include <memory>
+#include <string>
 
-namespace snu
-{
+#include "graph.h"
 
-  const int PARSE_SUCCESS = 0;
-  const int PARSE_FAILURE_NO_INPUT = 1;
-  const int PARSE_FAILURE_INVALID_INPUT = 2;
-  const int PARSE_FAILURE_INVALID_FILETYPE = 3;
-  const int PARSE_FAILURE_ADD_VERTEX = 4;
-  const int PARSE_FAILURE_ADD_EDGE = 5;
+namespace snu {
 
-  std::shared_ptr<Graph> parseFile(std::string input_path, bool directed);
-  int parseDSGraph(std::string file_path, DSGraph &graph);
-  int parseUSGraph(std::string file_path, USGraph &graph);
-}
+const int PARSE_SUCCESS = 0;
+const int PARSE_FAILURE_NO_INPUT = 1;
+const int PARSE_FAILURE_INVALID_INPUT = 2;
+const int PARSE_FAILURE_INVALID_FILETYPE = 3;
+const int PARSE_FAILURE_ADD_VERTEX = 4;
+const int PARSE_FAILURE_ADD_EDGE = 5;
 
-#endif // PARSE_H
+std::shared_ptr<Graph> parseFile(std::string input_path, bool directed);
+int parseDSGraph(std::string file_path, DSGraph &graph);
+int parseUSGraph(std::string file_path, USGraph &graph);
+}  // namespace snu
+
+#endif  // PARSE_H

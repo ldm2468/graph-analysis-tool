@@ -1,19 +1,18 @@
 #ifndef STATANALYZER_H
 #define STATANALYZER_H
 
-#include <vector>
 #include <memory>
+#include <vector>
+
 #include "stat.h"
 
 /*
  * Calculate stats that were added
  */
 
-namespace snu
-{
-  class StatAnalyzer
-  {
-  public:
+namespace snu {
+class StatAnalyzer {
+   public:
     StatAnalyzer(std::string _graph_name,
                  std::shared_ptr<Graph> _graph_shptr,
                  bool _file_output,
@@ -23,7 +22,7 @@ namespace snu
     void addDirectedStats(std::vector<DirectedStat *> vec);
     void addUndirectedStats(std::vector<UndirectedStat *> vec);
 
-  private:
+   private:
     std::vector<CommonStat *> common_stats;
     std::vector<snu::DirectedStat *> directed_only_stats;
     std::vector<snu::UndirectedStat *> undirected_only_stats;
@@ -32,7 +31,7 @@ namespace snu
     std::shared_ptr<Graph> graph_shptr;
     bool file_output;
     bool display_time;
-  };
-}
+};
+}  // namespace snu
 
-#endif // STATANALYZER_H
+#endif  // STATANALYZER_H
