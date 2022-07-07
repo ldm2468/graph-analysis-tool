@@ -1,6 +1,8 @@
 #include "eigencentrality.h"
 
 #include <cmath>
+#include <fstream>
+#include <iostream>
 
 namespace snu {
 std::string EigenCentrality::statName() {
@@ -20,6 +22,7 @@ bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
                 max_eigencentrality = probv[i];
                 max_eigencentrality_id = graph.vid_order[i];
             }
+            eigencentrality[graph.vid_order[i]] = probv[i];
         }
     }
 
@@ -32,6 +35,7 @@ bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
                 max_pagerank = probv[i];
                 max_pagerank_id = graph.vid_order[i];
             }
+            pagerank[graph.vid_order[i]] = probv[i];
         }
     }
 
@@ -44,6 +48,7 @@ bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
             max_katz_centrality = probv[i];
             max_katz_centrality_id = graph.vid_order[i];
         }
+        katz_centrality[graph.vid_order[i]] = probv[i];
     }
 
     return eigencentrality_converged && pagerank_converged;
@@ -75,6 +80,26 @@ void EigenCentrality::writeToHTMLStat(FILE *fp, bool directed) {
                 max_katz_centrality, max_katz_centrality_id);
     }
     fprintf(fp, "</h3>");
+}
+
+void EigenCentrality::writeMap(std::string fname, std::map<Graph::Vid, double> map) {
+    std::ofstream fout(fname.data());
+    for (auto [nodeId, val] : map) {
+        fout << nodeId << ' ' << val << '\n';
+    }
+}
+
+bool EigenCentrality::writeToFileStat(std::string graph_name, bool directed) {
+    if (eigencentrality_converged) {
+        writeMap(graph_name + "_EigenCentrality.txt", eigencentrality);
+    }
+    if (pagerank_converged) {
+        writeMap(graph_name + "_PageRank.txt", pagerank);
+    }
+    if (katz_centrality_computed) {
+        writeMap(graph_name + "_KatzCentrality.txt", katz_centrality);
+    }
+    return true;
 }
 
 void EigenCentrality::normalizeProb(double n, std::vector<double> &probv) {
