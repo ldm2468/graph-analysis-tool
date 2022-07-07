@@ -120,7 +120,7 @@ void Graph::finalize() {
 
 // array version
 int DSGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, Weight weight) {
-    return Graph::addEdge(id, num, label, from, to, weight);
+    return addDirectedEdge(id, num, label, from, to, weight);
 }
 
 int DSGraph::parseGraph(std::string file_path) {
