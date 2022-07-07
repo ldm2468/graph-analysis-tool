@@ -46,7 +46,7 @@ bool EigenCentrality::calculateStat(Graph &graph, bool verify) {
         }
     }
 
-    return true;
+    return eigencentrality_converged && pagerank_converged;
 }
 
 void EigenCentrality::writeToHTMLStat(FILE *fp, bool directed) {
