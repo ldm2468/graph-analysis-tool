@@ -15,8 +15,8 @@ class BiconnectedComponents : public UndirectedStat {
 
    private:
     void countBcc(USGraph &graph);
-    void resetVisited(USGraph &graph);
-    bool verifyArticulationPoints(USGraph &graph);
+    void resetVisited(USGraph &graph); // reset visited
+    bool verifyArticulationPoints(USGraph &graph); // for verification, O(V^2)
 
     long long num_arp;       // number of articulation points
     long long num_bcc;       // number of biconnected components

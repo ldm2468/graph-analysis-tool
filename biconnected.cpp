@@ -144,7 +144,7 @@ void BiconnectedComponents::resetVisited(USGraph &graph) {
     }
 }
 
-// verify that the articulation points are correct
+// verify that the articulation points are correct, O(V^2) (slow!)
 bool BiconnectedComponents::verifyArticulationPoints(USGraph &graph) {
     // assume metadata is properly initialized
 
