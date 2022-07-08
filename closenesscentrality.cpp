@@ -16,7 +16,6 @@ std::string ClosenessCentrality::statName() {
 
 bool ClosenessCentrality::calculate(Graph &graph, bool outbound,
                                     std::map<Graph::Vid, double> &cc, double &max, long long &max_id) {
-
     const auto &vertices = graph.id_to_vertex;
     int V = vertices.size();
     int sample_sz = std::min(V, MAX_CLOSENESS_SAMPLE_SZ);
@@ -42,7 +41,7 @@ bool ClosenessCentrality::calculate(Graph &graph, bool outbound,
         cc[vid] = 1.0;
 
     for (auto p : dist_sum)
-        cc[p.first] = (p.second != 0) ? (100.0 / p.second) : 1.0;
+        cc[p.first] = (p.second != 0) ? ((double)(std::min(sample_sz - 1, (int)dist_sum.size() - 1)) / p.second) : 1.0;
     double total_inv_sum = 0;
     for (auto p : cc)
         total_inv_sum += p.second;
@@ -62,8 +61,8 @@ bool ClosenessCentrality::calculate(Graph &graph, bool outbound,
 
 bool ClosenessCentrality::calculateStat(Graph &graph, bool verify) {
     return calculate(graph, false, closeness_centrality, max_closeness_centrality, max_closeness_centrality_id) &&
-        calculate(graph, true, outbound_closeness_centrality, max_outbound_closeness_centrality,
-                  max_outbound_closeness_centrality_id);
+           calculate(graph, true, outbound_closeness_centrality, max_outbound_closeness_centrality,
+                     max_outbound_closeness_centrality_id);
 }
 
 // calculates single-source shortest-path for all nodes connected to start.

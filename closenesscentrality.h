@@ -6,7 +6,7 @@
 #include "graph.h"
 #include "stat.h"
 
-#define MAX_CLOSENESS_SAMPLE_SZ 100
+#define MAX_CLOSENESS_SAMPLE_SZ 50
 
 namespace snu {
 class ClosenessCentrality : public CommonStat {
