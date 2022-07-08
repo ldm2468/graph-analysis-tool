@@ -1,3 +1,9 @@
+/**
+    @file   closenesscentrality.cpp
+    @author Gyeonghyo Min
+    @date   7/8/2022
+*/
+
 #include "closenesscentrality.h"
 
 #include <algorithm>
