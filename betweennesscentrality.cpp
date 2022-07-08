@@ -1,9 +1,3 @@
-/**
-    @file   betweennesscentrality.cpp
-    @author Gyeonghyo Min
-    @date   7/8/2022
-*/
-
 #include "betweennesscentrality.h"
 
 #include <algorithm>
