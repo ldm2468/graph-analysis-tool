@@ -2,12 +2,9 @@ from matplotlib import pyplot as plt
 import math
 import sys
 
-# Stat to compare refers to statname in node_centrality.tab
-# ex) NodeId, Closeness, Betweenes, EigenVector ...
-
 if (len(sys.argv) != 4):
     print("argument count is incorrect!")
-    print("usage: python3 test_centrality.py <Stat to compare> <SNAP centrality result> <OUR result>")
+    print("usage: python3 test_compare.py <Stat to compare> <SNAP centrality result> <OUR result>")
     exit()
 
 stat_to_compare = sys.argv[1]
