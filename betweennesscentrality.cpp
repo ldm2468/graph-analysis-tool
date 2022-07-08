@@ -27,7 +27,7 @@ bool BetweennessCentrality::calculateStat(Graph &graph, bool verify) {
         bool suc = applyPartialValue(graph, p.second, betweennessValue, reversed);
         reversed = !reversed;
         if (!suc) {
-            std::cout << "-- skipping betweenness centrality for disconnected graph\n";
+            std::cout << "disconnected bet\n";
             return false;
         }
     }
@@ -100,10 +100,6 @@ void BetweennessCentrality::augmented_dijkstra(const Graph &graph, Graph::Vertex
                 auto next_dist = cur_dist + edge->weight;
                 bool nextIsTo = edge->to != cur;
                 auto nex = nextIsTo ? edge->to : edge->from;
-
-                // prevent going to parent
-                if (dist.count(nex->id) > 0 && dist[nex->id] < cur_dist)
-                    continue;
                 pq.emplace(next_dist, std::make_pair(cur, nex));
             }
         }
@@ -128,16 +124,18 @@ bool BetweennessCentrality::applyPartialValue(const Graph &graph, Graph::Vertex 
     typedef std::pair<int64_t, Graph::Vid> dist_info;
     std::vector<dist_info> dist_decreasing;
     dist_decreasing.reserve(V);
-    for (auto p : dist) {
+    for (auto p : pathcount) {
         dist_decreasing.emplace_back(p.second, p.first);
     }
     std::sort(dist_decreasing.begin(), dist_decreasing.end(), std::greater<dist_info>());
+    // for (auto p : pathcount_decreasing) {
+    //     std::cout << p.first << " " << p.second << '\n';
+    // }
 
     std::unordered_map<Graph::Vid, float> P;
     for (auto p : dist_decreasing) {
         // auto d = p.first;
         auto v = p.second;
-
         P[v] += 1;
         for (auto w : predecessors[v]) {
             if (dist[v] == 0 || pathcount[v] == 0)
