@@ -33,6 +33,7 @@ public:
         size_t order;
         std::list<LabelOfVertices *> labels;
         std::list<Edge *> edges;
+        std::list<Edge *> inbound_edges;
         long long indegree;
         void *temp;
     };

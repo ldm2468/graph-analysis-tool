@@ -92,6 +92,7 @@ int Graph::addDirectedEdge(Eid id, long long num, Elabel label[], Vid from, Vid 
     e->to->indegree++;
     e->weight = weight;
     e->from->edges.push_back(e);
+    e->to->inbound_edges.push_back(e);
 
     is_connected.insert(std::make_pair(from, to));
 
@@ -144,6 +145,7 @@ int USGraph::addEdge(Eid id, long long num, Elabel label[], Vid from, Vid to, We
 
     Edge *e = id_to_edge[id];
     e->to->edges.push_back(e);
+    e->from->inbound_edges.push_back(e);
     e->from->indegree++;
     is_connected.insert(std::make_pair(to, from));  // insert reverse
     // be careful of switching from and to in this case
