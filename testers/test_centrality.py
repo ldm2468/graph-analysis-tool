@@ -55,12 +55,12 @@ with open(base_file, mode='r') as f_base, open(test_file, mode='r') as f_test, o
         test_dict[vid] = i
     
     f_out.write(f'Comparing Stat: {stat_to_compare}\n\n')
-    f_out.write(f'{"B-rank" :<8}{"T-rank" :<8}{"vid" :<8}{"B-value" :<16}{"T-value" :<16}{"R-Err" :<8}\n')
+    f_out.write(f'{"SNAP-rank" :<14}{"OUR-rank" :<14}{"vid" :<8}{"SNAP-value" :<16}{"OUR-value" :<16}{"R-Err" :<8}\n')
     for i in range (min(len(base_lis), len(test_lis))):
         (val, vid) = base_lis[i]
         t_idx = test_dict[vid]
         t_val = test_lis[t_idx][0]
         err = str(t_val/val - 1) if (val > 0 and t_val > 0) else "A:" + str(abs(t_val - val))
-        l = f'{i :<8}{t_idx :<8}{vid :<8}{val :<16}{t_val :<16}{err :<8}\n'
+        l = f'{i :<14}{t_idx :<14}{vid :<8}{val :<16}{t_val :<16}{err :<8}\n'
         f_out.write(l)
 
