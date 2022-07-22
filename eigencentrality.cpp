@@ -1,3 +1,26 @@
+/**
+    @file   eigencentrality.cpp
+    @author Dongmin Lee
+    @date   7/8/2022
+*/
+
+/*
+    Approximation of eigenvector that corresponds to the greatest eigenvalue:
+    Power iteration, a good overview is available in:
+    Booth, T. E. (2006).
+    Power iteration method for the several largest eigenvalues and eigenfunctions.
+    Nuclear science and engineering, 154(1), 48-62.
+
+    PageRank:
+    Page, L., Brin, S., Motwani, R., & Winograd, T. (1999).
+    The PageRank citation ranking: Bringing order to the web.
+    Stanford InfoLab.
+
+    Katz Centrality:
+    Katz, L. (1953).
+    A new status index derived from sociometric analysis.
+    Psychometrika, 18(1), 39-43.
+*/
 #include "eigencentrality.h"
 
 #include <cmath>

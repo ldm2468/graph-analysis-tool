@@ -1,3 +1,16 @@
+/**
+    @file   biconnected.cpp
+    @author Dongmin Lee
+    @date   7/8/2022
+*/
+
+/*
+    Biconnected components algorithm:
+    Hopcroft, J., & Tarjan, R. (1973).
+    Algorithm 447: efficient algorithms for graph manipulation.
+    Communications of the ACM, 16(6), 372-378.
+*/
+
 #include "biconnected.h"
 
 #include <stack>
