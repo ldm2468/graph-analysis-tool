@@ -36,6 +36,10 @@ def calc_correlation(data):
 
 if len(sys.argv) != 5:
     print('usage: test_correlation.py <file 1> <column> <file 2> <column>')
+    print('example:')
+    print('$ ./main -uf sample-data/p2p-Gnutella08.snap')
+    print('$ ./testers/test_correlation.py sample-data/centrality/p2p-Gnutella08.snap.tab 4')
+    print('      p2p-Gnutella08_EigenCentrality.txt 1')
     exit(1)
 
 files = [sys.argv[1:3], sys.argv[3:5]]
