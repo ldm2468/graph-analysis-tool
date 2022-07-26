@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from matplotlib import pyplot as plt
 import math
 import sys
@@ -8,6 +10,7 @@ import sys
 if (len(sys.argv) != 4):
     print("argument count is incorrect!")
     print("usage: python3 test_centrality.py <Stat to compare> <SNAP centrality result> <OUR result>")
+    print("example: ./testers/test_centrality.py Betweennes sample-data/centrality/p2p-Gnutella04.snap.tab p2p-Gnutella04_Betweennes.txt")
     exit()
 
 stat_to_compare = sys.argv[1]
