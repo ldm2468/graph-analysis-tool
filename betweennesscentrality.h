@@ -6,7 +6,7 @@
 #include "graph.h"
 #include "stat.h"
 
-#define MAX_BETWEENNESS_SAMPLE_SZ 300
+#define MAX_BETWEENNESS_SAMPLE_SZ 600
 
 namespace snu {
 class BetweennessCentrality : public CommonStat {
