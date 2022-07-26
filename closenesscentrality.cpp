@@ -3,7 +3,11 @@
     @author Gyeonghyo Min
     @date   7/8/2022
 */
-
+/*
+    Closeness Centrality:
+    David Eppstein, Joseph Wang. (2000).
+    Fast Approximation of Centrality.
+*/
 #include "closenesscentrality.h"
 
 #include <algorithm>

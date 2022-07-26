@@ -3,6 +3,14 @@
     @author Gyeonghyo Min
     @date   7/8/2022
 */
+/*
+    Betweenness Centrality:
+    Ulrik Brandes. (2001).
+    A Faster Algorithm for Betweenness Centrality
+
+    Robert Geisberger, Peter Sanders, Dominik Schultes (2008)
+    Better Approximation of Betweenness Centrality
+*/
 
 #include "betweennesscentrality.h"
 
